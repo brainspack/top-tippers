@@ -74,7 +74,7 @@ export const InputWrapper = styled(Box)(() => ({
 }));
 export const InputBox = styled(Box)(() => ({
     width:"100%",
-    height:"180px",
+    height:"190px",
     // backgroundColor:"yellow",
     display:"flex",
     flexDirection:"column",

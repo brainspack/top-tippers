@@ -14,9 +14,12 @@ import {
   LogoImageWrapper,
   MainContainer,
 } from "./loginStyled";
+import { useForm } from "react-hook-form";
+
 import {
   Box,
   FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -27,6 +30,7 @@ import {
 } from "@mui/material";
 import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { LOGIN_DATA } from "../../utils/contant";
 
 function LoginPage(props) {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -36,6 +40,13 @@ function LoginPage(props) {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ mode: "onChange" });
 
   return (
     <MainContainer>
@@ -62,20 +73,35 @@ function LoginPage(props) {
             </LoginHeadingWrapper>
             <InputWrapper>
               <InputBox>
-                <TextField
-                  disableUnderline={false}
-                  className="email-input input"
-                  id="outlined-multiline-flexible"
-                  label="Email"
-                  placeholder="Enter Email Address"
-                />{" "}
+              <form sm={{ width: "100%" }}>
+              {LOGIN_DATA?.map((ele, index) => {
+        const options = {};
+
+        options.pattern = {
+          value: ele.REGEX,
+          message: ele.RXMESSAGE,
+        };
+        return (
+          <Box key={ele.NAME} height={"90px"}>
+            {ele.NAME === "password"?(
+                
                 <FormControl sx={{ width: "100%" }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
                   <OutlinedInput
                     className="input"
-                    id="outlined-adornment-password"
+                    fullWidth
+                  id={ele.NAME}
+                  label={ele.LABEL}
+                //   variant="standard"
+                  error={Boolean(errors?.[ele.NAME])}
+                  name={ele.NAME}
+                  {...register(`${ele.NAME}`, {
+                    required: ele.RMESSAGE,
+                    ...options,
+                })}
+                    // id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     endAdornment={
                       <InputAdornment position="end">
@@ -89,9 +115,51 @@ function LoginPage(props) {
                         </IconButton>
                       </InputAdornment>
                     }
-                    label="Password"
-                  />
+                    // label="Password"
+                    />
+                    {errors?.[ele.NAME]?.message ? (
+                  <FormHelperText sx={{color:"red", margin:"3px 0px !important"}}>
+                    {errors?.[ele.NAME]?.message}
+                  </FormHelperText>
+                ) : (
+                  ""
+                )}
                 </FormControl>
+
+            ):(
+                <>
+                <TextField
+
+                className="email-input"
+                  fullWidth
+                  id={ele.NAME}
+                  label={ele.LABEL}
+                //   variant="standard"
+                  error={Boolean(errors?.[ele.NAME])}
+                  name={ele.NAME}
+                  {...register(`${ele.NAME}`, {
+                    required: ele.RMESSAGE,
+                    ...options,
+                })}
+                />
+                {errors?.[ele.NAME]?.message ? (
+                  <FormHelperText sx={{color:"red"}}>
+                    {errors?.[ele.NAME]?.message}
+                  </FormHelperText>
+                ) : (
+                  ""
+                )}
+                </>
+
+            )}
+          </Box>
+        );
+      })}
+
+
+
+              
+                    </form>
               </InputBox>
             </InputWrapper>
             <ForgotPasswordWrapper>
