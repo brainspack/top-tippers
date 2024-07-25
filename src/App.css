@@ -1,5 +1,8 @@
-.App {
-  text-align: center;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
 }
 
 .App-logo {
@@ -35,4 +38,21 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ======================== LOGIN STYLING ============================= */
+
+.email-input:hover{
+  color:#69b1ff !important;
+  border-radius: 6px;
+}
+
+.email-input{
+  outline: none;
+}
+.input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
+  border-color: #69b1ff;
+}
+.input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
+  border-color: #69b1ff;
 }
