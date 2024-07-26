@@ -40,7 +40,7 @@ export const LogoImageWrapper = styled(Box)(() => ({
   alignItems: "center",
 }));
 export const LogoImageBox = styled(Box)(() => ({
-  width: "80%",
+  width: "90%",
   height: "40px",
   backgroundImage: `url(${LogoImage})`,
   backgroundRepeat: "no-repeat",
