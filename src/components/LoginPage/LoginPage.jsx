@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ForgotPassword,
   ForgotPasswordWrapper,
@@ -15,6 +15,8 @@ import {
   MainContainer,
 } from "./loginStyled";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { increment } from "../../slices/Snackbar";
 
 import {
   Box,
@@ -31,9 +33,18 @@ import {
 import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LOGIN_DATA } from "../../utils/constant";
+import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function LoginPage(props) {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const location = useLocation();
+  const path = location.pathname;
+  const dispatch = useDispatch();
+  const [logIn, { data, isLoading, error }] = useGetAdminLoginByNameMutation();
+  console.log(data, "DATA");
+  const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -47,6 +58,57 @@ function LoginPage(props) {
     formState: { errors },
     reset,
   } = useForm({ mode: "onChange" });
+  const onHandleNavigate = () => {
+    let token = localStorage.getItem("token");
+
+    if (token) {
+      if (path === "/") {
+        navigate("/dashboard");
+      }
+    }
+  };
+
+  const onHandleSubmit = async (data) => {
+    try {
+      logIn({ body: data });
+    } catch (err) {
+      console.log(err, "ERROR");
+    }
+  };
+  const onSubmit = (data) => {
+    onHandleSubmit(data);
+    onHandleNavigate();
+    reset();
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (data) {
+      if (data?.token) {
+        let token = data.token;
+        let userId = data.userId;
+        localStorage.setItem("token", token);
+        localStorage.setItem("usesrId", userId);
+        // navigate("/dashboard");
+
+        dispatch(
+          increment({
+            state: true,
+            message: data?.message,
+            severity: data?.role,
+          })
+        );
+      } else {
+        dispatch(
+          increment({
+            state: true,
+            message: data?.message,
+            severity: data?.status,
+          })
+        );
+      }
+    }
+  }, [data, isLoading]);
 
   return (
     <MainContainer>
@@ -65,15 +127,15 @@ function LoginPage(props) {
       <LoginContainerWrapper>
         <LoginContainer>
           <LoginContainerInnerWrapper>
-            <LogoImageWrapper>
-              <LogoImageBox></LogoImageBox>
-            </LogoImageWrapper>
-            <LoginHeadingWrapper>
-              <LoginHeading>Login</LoginHeading>
-            </LoginHeadingWrapper>
-            <InputWrapper>
-              <InputBox>
-                <form sm={{ width: "100%" }}>
+            <form sm={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
+              <LogoImageWrapper>
+                <LogoImageBox></LogoImageBox>
+              </LogoImageWrapper>
+              <LoginHeadingWrapper>
+                <LoginHeading>Login</LoginHeading>
+              </LoginHeadingWrapper>
+              <InputWrapper>
+                <InputBox>
                   {LOGIN_DATA?.map((ele, index) => {
                     const options = {};
 
@@ -85,7 +147,7 @@ function LoginPage(props) {
                       <Box key={ele.NAME} height={"90px"}>
                         {ele.NAME === "password" ? (
                           <FormControl
-                            sx={{ width: "100%", height: "50px" }}
+                            sx={{ width: "100%" }}
                             variant="outlined"
                           >
                             <InputLabel htmlFor="outlined-adornment-password">
@@ -94,17 +156,14 @@ function LoginPage(props) {
                             <OutlinedInput
                               className="input"
                               fullWidth
-                              required
                               id={ele.NAME}
                               label={ele.LABEL}
-                              //   variant="standard"
                               error={Boolean(errors?.[ele.NAME])}
                               name={ele.NAME}
                               {...register(`${ele.NAME}`, {
                                 required: ele.RMESSAGE,
                                 ...options,
                               })}
-                              // id="outlined-adornment-password"
                               type={showPassword ? "text" : "password"}
                               endAdornment={
                                 <InputAdornment position="end">
@@ -165,13 +224,13 @@ function LoginPage(props) {
                       </Box>
                     );
                   })}
-                </form>
-              </InputBox>
-            </InputWrapper>
-            <ForgotPasswordWrapper>
-              <ForgotPassword>Forgot Password?</ForgotPassword>
-            </ForgotPasswordWrapper>
-            <LoginButton>Login</LoginButton>
+                </InputBox>
+              </InputWrapper>
+              <ForgotPasswordWrapper>
+                <ForgotPassword>Forgot Password?</ForgotPassword>
+              </ForgotPasswordWrapper>
+              <LoginButton type="submit">Login</LoginButton>
+            </form>
           </LoginContainerInnerWrapper>
         </LoginContainer>
         `
