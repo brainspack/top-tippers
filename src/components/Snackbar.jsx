@@ -6,10 +6,6 @@ export const SuccessSnackbar = () => {
   const dispatch = useDispatch();
   const count = useSelector((state) => state.snackbar.value);
   const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
     dispatch(
       increment({
         state: false,
@@ -26,7 +22,7 @@ export const SuccessSnackbar = () => {
     >
       <Alert
         onClose={handleSnackbarClose}
-        severity={count.severity === "admin" ? "success" : "error"}
+        severity={count.severity === 200 ? "success" : "error"}
         variant="filled"
         sx={{ width: "100%" }}
       >

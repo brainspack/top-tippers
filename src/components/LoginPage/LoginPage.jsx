@@ -40,8 +40,9 @@ function LoginPage(props) {
   const location = useLocation();
   const path = location.pathname;
   const dispatch = useDispatch();
-  const [logIn, { data, isLoading, error }] = useGetAdminLoginByNameMutation();
-  console.log(data, "DATA");
+  const [logIn, { data: responseData, isLoading, error }] =
+    useGetAdminLoginByNameMutation();
+  // console.log(data, "DATA");
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -58,57 +59,43 @@ function LoginPage(props) {
     formState: { errors },
     reset,
   } = useForm({ mode: "onChange" });
-  const onHandleNavigate = () => {
-    let token = localStorage.getItem("token");
-
-    if (token) {
-      if (path === "/") {
-        navigate("/dashboard");
-      }
-    }
-  };
 
   const onHandleSubmit = async (data) => {
     try {
-      logIn({ body: data });
+      const result = await logIn({ body: data }).unwrap();
+      console.log(result, "RESULT");
+      if (result) {
+        if (result.data) {
+          let token = result.data.token;
+          localStorage.setItem("token", token);
+          navigate("/dashboard");
+          dispatch(
+            increment({
+              state: true,
+              message: result?.message,
+              severity: result?.code,
+            })
+          );
+        } else {
+          dispatch(
+            increment({
+              state: true,
+              message: result?.message,
+              severity: result?.code,
+            })
+          );
+        }
+      }
+      console.log(logIn(), "log");
     } catch (err) {
       console.log(err, "ERROR");
     }
+    await responseData;
+    console.log("in the handle change", responseData);
   };
   const onSubmit = (data) => {
     onHandleSubmit(data);
-    onHandleNavigate();
-    reset();
   };
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (data) {
-      if (data?.token) {
-        let token = data.token;
-        let userId = data.userId;
-        localStorage.setItem("token", token);
-        localStorage.setItem("usesrId", userId);
-        // navigate("/dashboard");
-
-        dispatch(
-          increment({
-            state: true,
-            message: data?.message,
-            severity: data?.role,
-          })
-        );
-      } else {
-        dispatch(
-          increment({
-            state: true,
-            message: data?.message,
-            severity: data?.status,
-          })
-        );
-      }
-    }
-  }, [data, isLoading]);
 
   return (
     <MainContainer>
