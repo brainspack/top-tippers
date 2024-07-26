@@ -1,7 +1,7 @@
 import React from "react";
 import {
-    ForgotPassword,
-    ForgotPasswordWrapper,
+  ForgotPassword,
+  ForgotPasswordWrapper,
   InputBox,
   InputWrapper,
   LoginButton,
@@ -30,7 +30,7 @@ import {
 } from "@mui/material";
 import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { LOGIN_DATA } from "../../utils/contant";
+import { LOGIN_DATA } from "../../utils/constant";
 
 function LoginPage(props) {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -54,10 +54,10 @@ function LoginPage(props) {
         sx={{
           position: "absolute",
           zIndex: "1",
-          top: "-80px",
+          top: "-70px",
           left: "0px",
           width: "60%",
-          height: "790px",
+          height: "700px",
         }}
         component={"img"}
         src={loginArt}
@@ -73,97 +73,103 @@ function LoginPage(props) {
             </LoginHeadingWrapper>
             <InputWrapper>
               <InputBox>
-              <form sm={{ width: "100%" }}>
-              {LOGIN_DATA?.map((ele, index) => {
-        const options = {};
+                <form sm={{ width: "100%" }}>
+                  {LOGIN_DATA?.map((ele, index) => {
+                    const options = {};
 
-        options.pattern = {
-          value: ele.REGEX,
-          message: ele.RXMESSAGE,
-        };
-        return (
-          <Box key={ele.NAME} height={"90px"}>
-            {ele.NAME === "password"?(
-                
-                <FormControl sx={{ width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    className="input"
-                    fullWidth
-                  id={ele.NAME}
-                  label={ele.LABEL}
-                //   variant="standard"
-                  error={Boolean(errors?.[ele.NAME])}
-                  name={ele.NAME}
-                  {...register(`${ele.NAME}`, {
-                    required: ele.RMESSAGE,
-                    ...options,
-                })}
-                    // id="outlined-adornment-password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    // label="Password"
-                    />
-                    {errors?.[ele.NAME]?.message ? (
-                  <FormHelperText sx={{color:"red", margin:"3px 0px !important"}}>
-                    {errors?.[ele.NAME]?.message}
-                  </FormHelperText>
-                ) : (
-                  ""
-                )}
-                </FormControl>
-
-            ):(
-                <>
-                <TextField
-
-                className="email-input"
-                  fullWidth
-                  id={ele.NAME}
-                  label={ele.LABEL}
-                //   variant="standard"
-                  error={Boolean(errors?.[ele.NAME])}
-                  name={ele.NAME}
-                  {...register(`${ele.NAME}`, {
-                    required: ele.RMESSAGE,
-                    ...options,
-                })}
-                />
-                {errors?.[ele.NAME]?.message ? (
-                  <FormHelperText sx={{color:"red"}}>
-                    {errors?.[ele.NAME]?.message}
-                  </FormHelperText>
-                ) : (
-                  ""
-                )}
-                </>
-
-            )}
-          </Box>
-        );
-      })}
-
-
-
-              
-                    </form>
+                    options.pattern = {
+                      value: ele.REGEX,
+                      message: ele.RXMESSAGE,
+                    };
+                    return (
+                      <Box key={ele.NAME} height={"90px"}>
+                        {ele.NAME === "password" ? (
+                          <FormControl
+                            sx={{ width: "100%", height: "50px" }}
+                            variant="outlined"
+                          >
+                            <InputLabel htmlFor="outlined-adornment-password">
+                              Password
+                            </InputLabel>
+                            <OutlinedInput
+                              className="input"
+                              fullWidth
+                              required
+                              id={ele.NAME}
+                              label={ele.LABEL}
+                              //   variant="standard"
+                              error={Boolean(errors?.[ele.NAME])}
+                              name={ele.NAME}
+                              {...register(`${ele.NAME}`, {
+                                required: ele.RMESSAGE,
+                                ...options,
+                              })}
+                              // id="outlined-adornment-password"
+                              type={showPassword ? "text" : "password"}
+                              endAdornment={
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                  >
+                                    {showPassword ? (
+                                      <VisibilityOff />
+                                    ) : (
+                                      <Visibility />
+                                    )}
+                                  </IconButton>
+                                </InputAdornment>
+                              }
+                              // label="Password"
+                            />
+                            {errors?.[ele.NAME]?.message ? (
+                              <FormHelperText
+                                sx={{
+                                  color: "red",
+                                  margin: "3px 0px !important",
+                                }}
+                              >
+                                {errors?.[ele.NAME]?.message}
+                              </FormHelperText>
+                            ) : (
+                              ""
+                            )}
+                          </FormControl>
+                        ) : (
+                          <>
+                            <TextField
+                              className="email-input"
+                              fullWidth
+                              required
+                              id={ele.NAME}
+                              label={ele.LABEL}
+                              //   variant="standard"
+                              error={Boolean(errors?.[ele.NAME])}
+                              name={ele.NAME}
+                              {...register(`${ele.NAME}`, {
+                                required: ele.RMESSAGE,
+                                ...options,
+                              })}
+                            />
+                            {errors?.[ele.NAME]?.message ? (
+                              <FormHelperText sx={{ color: "red" }}>
+                                {errors?.[ele.NAME]?.message}
+                              </FormHelperText>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        )}
+                      </Box>
+                    );
+                  })}
+                </form>
               </InputBox>
             </InputWrapper>
             <ForgotPasswordWrapper>
-                <ForgotPassword>Forgot Password?</ForgotPassword>
+              <ForgotPassword>Forgot Password?</ForgotPassword>
             </ForgotPasswordWrapper>
             <LoginButton>Login</LoginButton>
           </LoginContainerInnerWrapper>
