@@ -32,9 +32,12 @@ import {
 } from "@mui/material";
 import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { LOGIN_DATA } from "../../utils/constant";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 import { useLocation, useNavigate } from "react-router-dom";
+// import { LOGIN_DATA } from "../../utils/contant";
+import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LOGIN_DATA } from "../../utils/constant";
 
 function LoginPage(props) {
   const location = useLocation();
