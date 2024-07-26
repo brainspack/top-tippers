@@ -1,6 +1,7 @@
 import { Box, Button, Paper, styled, Typography } from "@mui/material";
 import bannerImage from "../../images/login-banner.6b372104.png";
 import LogoImage from "../../images/logo.svg";
+import { LoadingButton } from "@mui/lab";
 
 export const MainContainer = styled(Box)(() => ({
   width: "100%",
@@ -76,7 +77,6 @@ export const InputBox = styled(Box)(() => ({
 export const LoginButton = styled(Button)(({ theme }) => ({
   width: "100%",
   height: "40px",
-  // backgroundColor:"blue",
   backgroundColor: theme.palette.primary.main,
 
   color: "white",
