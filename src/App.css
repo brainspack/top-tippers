@@ -56,3 +56,19 @@
 .input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
   border-color: #69b1ff;
 }
+
+
+
+/* ======================== PROFILE STYLING ================== */
+
+.css-12bv7yg-MuiButtonBase-root-MuiButton-root{
+  background-color: white !important;
+}
+.css-12bv7yg-MuiButtonBase-root-MuiButton-root:hover{
+  background-color: #ddd !important;
+}
+
+.css-1yo9slo-MuiToolbar-root{
+  width: 98%;
+  justify-content: space-between;
+}

@@ -201,7 +201,6 @@ function LoginPage(props) {
                             <TextField
                               className="email-input"
                               fullWidth
-                              required
                               id={ele.NAME}
                               label={ele.LABEL}
                               //   variant="standard"

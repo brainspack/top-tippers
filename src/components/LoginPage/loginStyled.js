@@ -12,14 +12,14 @@ export const MainContainer = styled(Box)(() => ({
   alignItems: "center",
 }));
 export const LoginContainerWrapper = styled(Box)(() => ({
-  width: "74%",
+  width: "84%",
   height: "540px",
   zIndex: 2,
   display: "flex",
   justifyContent: "flex-end",
 }));
 export const LoginContainer = styled(Paper)(() => ({
-  width: "45%",
+  width: "40%",
   height: "540px",
   backgroundColor: "white",
   display: "flex",
