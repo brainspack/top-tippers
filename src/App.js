@@ -2,8 +2,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import LoginPage from "./components/LoginPage/LoginPage";
 import { Route, Routes } from "react-router-dom";
-import DashboardComp from "./components/Dashboard";
 import { SuccessSnackbar } from "./components/Snackbar";
+import DashboardComp from "../src/components/Dashboard/Dashboard.jsx";
 
 function App() {
   return (
