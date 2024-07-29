@@ -1,13 +1,13 @@
 import { Alert, Snackbar } from "@mui/material";
 // import { ERROR } from "./Constant";
 import { useDispatch, useSelector } from "react-redux";
-import { increment } from "../slices/Snackbar";
-export const SuccessSnackbar = () => {
+import { handleNotification,  } from "../slices/Snackbar";
+export const OpenNotification = () => {
   const dispatch = useDispatch();
   const count = useSelector((state) => state.snackbar.value);
   const handleSnackbarClose = (event, reason) => {
     dispatch(
-      increment({
+      handleNotification({
         state: false,
         message: null,
         severity: null,
