@@ -2,7 +2,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import DashboardComp from "../src/components/Dashboard/Dashboard.jsx";
-import { Login } from "@mui/icons-material";
+import Login from "./components/LoginPage/LoginPage.jsx";
+
 
 function App() {
   return (

@@ -101,7 +101,14 @@ function Login(props) {
   return (
     <MainContainer>
       <Box
-        
+        sx={{
+          position: "absolute",
+          zIndex: "1",
+          top: "-70px",
+          left: "0px",
+          width: "60%",
+          height: "700px",
+        }}
         component={"img"}
         src={loginArt}
       />
