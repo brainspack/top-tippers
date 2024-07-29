@@ -1,5 +1,5 @@
 import React from 'react';
-import { DashboardCard, DashboardCardBox, DashboardCardWrapper, DashboardHeading, DashboardMainContainer } from './dashboardContentStyled';
+import { DashboardCard, DashboardCardBox, DashboardCardInnerBox, DashboardCardWrapper, DashboardHeading, DashboardMainContainer } from './dashboardContentStyled';
 
 function DashboardContent(props) {
     return (
@@ -12,9 +12,10 @@ function DashboardContent(props) {
 
                     </DashboardHeading>
                     <DashboardCardBox>
-                        <DashboardCard>
+                        <DashboardCardInnerBox>
 
-                        </DashboardCard>
+
+                        </DashboardCardInnerBox>
 
                     </DashboardCardBox>
 

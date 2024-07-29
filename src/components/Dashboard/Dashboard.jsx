@@ -155,6 +155,8 @@ export default function DashboardComponent() {
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>
         <DrawerHeader />
+        {/* {route = 'dasalksnasd' && <DashboardContent />}
+        {route = 'manageUser' && <ManageUser />} */}
         {/* <DashboardContent /> */}
       </Main>
     </Box>
