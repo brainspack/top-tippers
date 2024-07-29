@@ -20,6 +20,8 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import BasicMenu from "./ProfileMenu";
 import DashboardContent from "../DashboardContent/DashboardContent";
+import { adminList } from "../../utils/constant";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -69,6 +71,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function DashboardComponent() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -125,29 +128,19 @@ export default function DashboardComponent() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+
         <List>
-          {["Dashboard", "Manage User", "Messaging", "Masters"].map(
-            (text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            )
-          )}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
+          {adminList.map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  navigate(text.route);
+                }}
+              >
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={text.label} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -155,7 +148,7 @@ export default function DashboardComponent() {
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>
         <DrawerHeader />
-        {/* <DashboardContent /> */}
+        <Outlet />
       </Main>
     </Box>
   );
