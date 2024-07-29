@@ -29,8 +29,14 @@ export const DashboardCardBox = styled(Typography)(() => ({
   backgroundColor:"orange"
 
 }));
-export const DashboardCard = styled(Typography)(() => ({
-  width:"30%",
+export const DashboardCardInnerBox = styled(Typography)(() => ({
+  width:"70%",
+  height:"inherit",
+  backgroundColor:"yellow"
+
+}));
+export const DashboardCardContent = styled(Typography)(() => ({
+  width:"80%",
   height:"inherit",
   backgroundColor:"white"
 
