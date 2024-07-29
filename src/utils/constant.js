@@ -1,3 +1,4 @@
+export const BASE_URL = "http://54.201.160.69:3019/";
 export const LOGIN_DATA = [{
     ID: 0,
     NAME: "email",
@@ -13,8 +14,8 @@ export const LOGIN_DATA = [{
     LABEL: "Password",
     RMESSAGE: "Please  Enter the Password",
     REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-    RXMESSAGE:
-      "Password should be of at least  8 characters, one capital letter, and one number. and one special character.",
+    // RXMESSAGE:
+    //   "Password should be of at least  8 characters, one capital letter, and one number. and one special character.",
   
 }
 ]
