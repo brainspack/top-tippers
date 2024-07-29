@@ -12,7 +12,7 @@ export const counterSlice = createSlice({
   name: "snackbar",
   initialState,
   reducers: {
-    increment: (state, { payload }) => {
+    handleNotification: (state, { payload }) => {
       state.value.state = payload.state;
       state.value.message = payload.message;
       state.value.severity = payload.severity;
@@ -20,6 +20,6 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { increment } = counterSlice.actions;
+export const { handleNotification } = counterSlice.actions;
 
 export default counterSlice.reducer;

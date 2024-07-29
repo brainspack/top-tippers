@@ -16,7 +16,7 @@ import {
 } from "./loginStyled";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { increment } from "../../slices/Snackbar";
+import { handleNotification } from "../../slices/Snackbar";
 
 import {
   Box,
@@ -33,19 +33,17 @@ import {
 import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
-import { useLocation, useNavigate } from "react-router-dom";
 // import { LOGIN_DATA } from "../../utils/contant";
-import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_DATA } from "../../utils/constant";
+import { OpenNotification } from "../Snackbar";
 
-function LoginPage(props) {
+function Login(props) {
   const location = useLocation();
   const path = location.pathname;
   const dispatch = useDispatch();
   const [logIn, { data: responseData, isLoading, error }] =
     useGetAdminLoginByNameMutation();
-  // console.log(data, "DATA");
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -63,7 +61,7 @@ function LoginPage(props) {
     reset,
   } = useForm({ mode: "onChange" });
 
-  const onHandleSubmit = async (data) => {
+  const HandleSubmit = async (data) => {
     try {
       const result = await logIn({ body: data }).unwrap();
       console.log(result, "RESULT");
@@ -73,7 +71,7 @@ function LoginPage(props) {
           localStorage.setItem("token", token);
           navigate("/dashboard");
           dispatch(
-            increment({
+            handleNotification({
               state: true,
               message: result?.message,
               severity: result?.code,
@@ -81,7 +79,7 @@ function LoginPage(props) {
           );
         } else {
           dispatch(
-            increment({
+            handleNotification({
               state: true,
               message: result?.message,
               severity: result?.code,
@@ -97,20 +95,13 @@ function LoginPage(props) {
     console.log("in the handle change", responseData);
   };
   const onSubmit = (data) => {
-    onHandleSubmit(data);
+    HandleSubmit(data);
   };
 
   return (
     <MainContainer>
       <Box
-        sx={{
-          position: "absolute",
-          zIndex: "1",
-          top: "-70px",
-          left: "0px",
-          width: "60%",
-          height: "700px",
-        }}
+        
         component={"img"}
         src={loginArt}
       />
@@ -224,8 +215,10 @@ function LoginPage(props) {
         </LoginContainer>
         `
       </LoginContainerWrapper>
+      <OpenNotification />
     </MainContainer>
+
   );
 }
 
-export default LoginPage;
+export default Login;
