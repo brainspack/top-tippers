@@ -5,6 +5,8 @@ import Login from "./components/LoginPage/LoginPage.jsx";
 import { OpenNotification } from "./components/Snackbar.jsx";
 import DashboardComponent from "../src/components/Dashboard/Dashboard.jsx";
 import DashboardPage from "./components/Dashboard/DashBoardpage.jsx";
+import { DashboardCard } from "./components/DashboardContent/dashboardContentStyled.js";
+import DashboardContent from "./components/DashboardContent/DashboardContent.jsx";
 
 function App() {
   return (
@@ -12,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<DashboardPage />}>
-          <Route index element={<NavbarHome />} />
+          <Route index element={<DashboardContent />} />
         </Route>
       </Routes>
       <OpenNotification />

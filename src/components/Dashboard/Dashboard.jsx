@@ -155,7 +155,7 @@ export default function DashboardComponent() {
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>
         <DrawerHeader />
-        <DashboardContent />
+        {/* <DashboardContent /> */}
       </Main>
     </Box>
   );

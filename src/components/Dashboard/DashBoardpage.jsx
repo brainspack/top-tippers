@@ -8,7 +8,6 @@ const DashboardPage = () => {
     <>
       <Grid container>
         <Grid xs={2}>
-          {/* <MiniDrawer /> */}
           <DashboardComponent />
         </Grid>
         <Grid xs={10} mt={10}>
