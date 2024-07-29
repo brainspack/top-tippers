@@ -16,7 +16,6 @@ import {
 } from "./loginStyled";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { handleNotification } from "../../slices/Snackbar";
 
 import {
   Box,
@@ -42,7 +41,7 @@ function Login(props) {
   const location = useLocation();
   const path = location.pathname;
   const dispatch = useDispatch();
-  const [logIn, { data: responseData, isLoading, error }] =
+  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
     useGetAdminLoginByNameMutation();
   const navigate = useNavigate();
 
@@ -68,6 +67,7 @@ function Login(props) {
       if (result) {
         if (result.data) {
           let token = result.data.token;
+
           localStorage.setItem("token", token);
           navigate("/dashboard");
           dispatch(
@@ -222,7 +222,6 @@ function Login(props) {
         </LoginContainer>
         `
       </LoginContainerWrapper>
-      <OpenNotification />
     </MainContainer>
   );
 }

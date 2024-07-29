@@ -14,7 +14,10 @@ export default function BasicMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const logOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
   return (
     <div>
       <Button
@@ -37,7 +40,7 @@ export default function BasicMenu() {
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={() => navigate("/")}>Logout</MenuItem>
+        <MenuItem onClick={logOut}>Logout</MenuItem>
       </Menu>
     </div>
   );

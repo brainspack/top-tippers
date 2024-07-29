@@ -3,7 +3,7 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import DashboardComp from "../src/components/Dashboard/Dashboard.jsx";
 import Login from "./components/LoginPage/LoginPage.jsx";
-
+import { OpenNotification } from "./components/Snackbar.jsx";
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<DashboardComp />} />
       </Routes>
+      <OpenNotification />
     </div>
   );
 }
