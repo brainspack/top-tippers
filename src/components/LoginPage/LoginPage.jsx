@@ -35,7 +35,7 @@ import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 // import { LOGIN_DATA } from "../../utils/contant";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_DATA } from "../../utils/constant";
-import { OpenNotification } from "../Snackbar";
+import { handleNotification } from "../../slices/Snackbar";
 
 function Login(props) {
   const location = useLocation();
@@ -88,11 +88,8 @@ function Login(props) {
         }
       }
       console.log(logIn(), "log");
-    } catch (err) {
-      console.log(err, "ERROR");
-    }
+    } catch (err) {}
     await responseData;
-    console.log("in the handle change", responseData);
   };
   const onSubmit = (data) => {
     HandleSubmit(data);
@@ -220,7 +217,6 @@ function Login(props) {
             </form>
           </LoginContainerInnerWrapper>
         </LoginContainer>
-        `
       </LoginContainerWrapper>
     </MainContainer>
   );
