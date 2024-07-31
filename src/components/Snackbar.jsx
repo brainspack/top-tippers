@@ -1,7 +1,6 @@
 import { Alert, Snackbar } from "@mui/material";
-// import { ERROR } from "./Constant";
 import { useDispatch, useSelector } from "react-redux";
-import { handleNotification,  } from "../slices/Snackbar";
+import { handleNotification } from "../slices/Snackbar";
 export const OpenNotification = () => {
   const dispatch = useDispatch();
   const count = useSelector((state) => state.snackbar.value);
