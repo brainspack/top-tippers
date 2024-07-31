@@ -18,6 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import LogoImage from "../../images/logo.svg";
 import BasicMenu from "./ProfileMenu";
 import DashboardContent from "../DashboardContent/DashboardContent";
 import { adminList } from "../../utils/constant";
@@ -89,6 +90,7 @@ export default function DashboardComponent() {
       <AppBar position="fixed" open={open}>
         <Box sx={{ display: "flex", padding: "0px 20px !important" }}>
           <IconButton
+          className="icon-bar"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -98,9 +100,7 @@ export default function DashboardComponent() {
             <MenuIcon />
           </IconButton>
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <Typography variant="h6" noWrap component="div">
-              Persistent drawer
-            </Typography>
+            <Typography variant="h6" noWrap component="div"/>
             <BasicMenu />
           </Toolbar>
         </Box>
@@ -119,6 +119,18 @@ export default function DashboardComponent() {
         open={open}
       >
         <DrawerHeader>
+          <Box sx={{
+            width:"100%",
+            height:"19px",
+            backgroundImage: `url(${LogoImage})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "100%",
+            display: "flex",
+            alignItems: "center",
+            
+          }}>
+
+          </Box>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
