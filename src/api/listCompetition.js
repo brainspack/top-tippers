@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../utils/constant";
-export const userListApi = createApi({
-  reducerPath: "userListApi",
+export const userListCompetitionApi = createApi({
+  reducerPath: "userListCompetitionApi",
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
-    getUserListByName: builders.mutation({
+    getUserListCompetitionApiByName: builders.mutation({
       query: ({ body }) => ({
-        url: "/api/user/listUser",
+        url: "/api/competition/listCompetition",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.getItem("token")}` },
@@ -14,5 +14,5 @@ export const userListApi = createApi({
     }),
   }),
 });
-export const { useGetUserListByNameMutation } = userListApi;
-export default userListApi;
+export const { useGetUserListCompetitionApiByNameMutation } = userListCompetitionApi;
+export default userListCompetitionApi;
