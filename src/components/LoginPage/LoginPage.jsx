@@ -67,7 +67,8 @@ function Login(props) {
       if (result) {
         if (result.data) {
           let token = result.data.token;
-
+          console.log(token,'token')
+          
           localStorage.setItem("token", token);
           navigate("/dashboard");
           dispatch(
