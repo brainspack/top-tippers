@@ -26,11 +26,22 @@ import { useDispatch, useSelector } from "react-redux";
 import ControlledSwitches from "../SwitchComponent";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
 import { updateUserData } from "../../slices/userSlice/user";
-
+import CustomModal from "../reuse/CustomModal";
+import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
+import BasicMenu from "../Dashboard/ProfileMenu";
+import { useNavigate } from "react-router-dom";
 const ManageUsers = () => {
+  const navigate = useNavigate();
+  const [view, setView] = useState("");
+  const [modal, setModal] = useState(false);
+  const openModal = (id) => {
+    setModal(true);
+    setView(id);
+  };
+  const closeModal = () => {
+    setModal(false);
+  };
   const dispatch = useDispatch();
-  const [isActive, setIsActive] = useState(true);
-  console.log(isActive, "ACTIVE");
   const [userList, { data, isLoading, error, isSuccess: userListSuccess }] =
     useGetUserListByNameMutation();
   const { data: userData } = useSelector(userDataSelector);
@@ -44,29 +55,30 @@ const ManageUsers = () => {
       isSuccess: deactivateUserSuccess,
     },
   ] = useDeactivateUserByNameMutation();
-  const onHandleSwitchChange = (event) => {
-    const newStatus = event.target.checked;
-    setIsActive(newStatus);
-  };
-  const onHandleOpen = (id) => {
-    console.log(id, "VIEW");
-  };
+  const [
+    userDeleteApi,
+    {
+      data: userDeleteData,
+      isLoading: userDeleteLoading,
+      error: userDeleteError,
+      isSuccess: userDeleteSuccess,
+    },
+  ] = useDeleteUserByNameMutation();
+
   useEffect(() => {
     if (data && data.data) dispatch(updateUserData(data?.data));
   }, [data, userListSuccess]);
-
   useEffect(() => {
     const reqParams = {
       search_string: "",
       page: 0,
       sortValue: "",
       sortOrder: "",
+      pageSize: 40,
     };
     userList(reqParams);
-  }, [deactivateUserSuccess]);
-  const handleUserStatus = (data) => {
-    console.log(data, "dataInfunction");
-  };
+  }, [deactivateUserSuccess, userDeleteSuccess]);
+
   const columns = [
     {
       name: "name",
@@ -75,7 +87,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e08300", color: "black" },
+          style: { backgroundColor: "#E08300", color: "black" },
         }),
       },
     },
@@ -86,7 +98,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e08300", color: "black" },
+          style: { backgroundColor: "#E08300", color: "black" },
         }),
       },
     },
@@ -97,7 +109,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e08300", color: "black" },
+          style: { backgroundColor: "#E08300", color: "black" },
         }),
       },
     },
@@ -108,7 +120,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e08300", color: "black" },
+          style: { backgroundColor: "#E08300", color: "black" },
         }),
       },
     },
@@ -120,7 +132,7 @@ const ManageUsers = () => {
         sort: true,
         setCellHeaderProps: () => ({
           style: {
-            backgroundColor: "#e08300",
+            backgroundColor: "#E08300",
             color: "black",
             display: "flex",
             justifyContent: "center",
@@ -141,7 +153,6 @@ const ManageUsers = () => {
         },
       },
     },
-
     {
       name: "_id",
       label: "Actions",
@@ -150,18 +161,23 @@ const ManageUsers = () => {
         sort: true,
         setCellHeaderProps: () => ({
           style: {
-            backgroundColor: "#e08300",
+            backgroundColor: "#E08300",
             color: "black",
           },
         }),
-        customBodyRender: (data) => (
+        customBodyRender: (value, rowData) => (
           <>
+            {console.log(
+              data?.data?.isVerified,
+              userData,
+              value,
+              "data?.data?.isVerified"
+            )}
             <Box display="flex" gap="10px">
               <VisibilityIcon
-                onClick={() => onHandleOpen(data)}
+                onClick={() => navigate(`/userprofile/${value}`)}
               ></VisibilityIcon>
-              <DeleteIcon />
-              {!data?.data?.isVerified ? <EmailIcon /> : ""}
+              <DeleteIcon onClick={() => openModal(value)} />
             </Box>
           </>
         ),
@@ -176,6 +192,36 @@ const ManageUsers = () => {
     viewColumns: false,
     selectableRows: false,
   };
+  const permanentDelete = async () => {
+    try {
+      userDeleteApi({ userId: view });
+    } catch (error) {
+      console.log(" Error", error);
+    }
+  };
+  useEffect(() => {
+    if (userDeleteLoading) return;
+    if (userDeleteData?.code === 200) {
+      if (userDeleteData) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: userDeleteData?.message,
+            severity: userDeleteData?.code,
+          })
+        );
+        closeModal();
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: userDeleteData?.message,
+            severity: userDeleteData?.status,
+          })
+        );
+      }
+    }
+  }, [userDeleteData, userDeleteLoading]);
   return (
     <>
       <ManageUsersContainer>
@@ -205,10 +251,19 @@ const ManageUsers = () => {
               </Box>
               <DropDownBox>
                 <MenuOpenIcon />
+                {/* <BasicMenu /> */}
               </DropDownBox>
             </Box>
-            {console.log(data?.data[0], "data?.data?.name")}
             <MUIDataTable data={userData} columns={columns} options={options} />
+            <CustomModal
+              modal={modal}
+              closeModal={closeModal}
+              userid={view}
+              userDeleteApi={userDeleteApi}
+              userDeleteData={userDeleteData}
+              userDeleteLoading={userDeleteLoading}
+              permanentDelete={permanentDelete}
+            />
           </Box>
         </ManageUsersWrapper>
       </ManageUsersContainer>

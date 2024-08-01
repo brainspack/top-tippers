@@ -8,6 +8,7 @@ import DashboardPage from "./components/Dashboard/DashBoardpage.jsx";
 import { DashboardCard } from "./components/DashboardContent/dashboardContentStyled.js";
 import DashboardContent from "./components/DashboardContent/DashboardContent.jsx";
 import ManageUsers from "./components/ManageUsers/ManageUsers.jsx";
+import UserProfile from "./components/UserProfile.jsx";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<DashboardContent />} />
           <Route path="users" element={<ManageUsers />} />
         </Route>
+        <Route path="/userprofile/:userId" element={<UserProfile />} />
       </Routes>
       <OpenNotification />
     </div>

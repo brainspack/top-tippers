@@ -1,6 +1,6 @@
-import GroupsIcon from '@mui/icons-material/Groups';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import GroupsIcon from "@mui/icons-material/Groups";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 export const BASE_URL = "http://54.201.160.69:3019/";
 export const LOGIN_DATA = [
   {
@@ -23,7 +23,7 @@ export const LOGIN_DATA = [
 ];
 
 export const adminList = [
-  { label: "Dashboard", route: "/dashboard" },
+  { label: "Dashboard", route: "dashboard" },
   { label: "Manage Users", route: "users" },
   { label: "Messaging", route: "messaging" },
   { label: "Master", route: "master" },
@@ -31,34 +31,35 @@ export const adminList = [
 
 export const DASHBOARD_CARD_DATA = [
   {
-    icons:<GroupsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Users",
-    countNumber:"4,42,236",
-    subHeading :"20% From last year"
+    icons: <GroupsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Users",
+    countNumber: "4,42,236",
+    subHeading: "20% From last year",
   },
   {
-    icons:<SportsSoccerIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Sports",
-    countNumber:"5",
-    subHeading :"20% From last year"
-  },{
-    icons:<EmojiEventsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Competitions",
-    countNumber:"17",
-    subHeading :"20% From last year"
-  }
-]
+    icons: <SportsSoccerIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Sports",
+    countNumber: "5",
+    subHeading: "20% From last year",
+  },
+  {
+    icons: <EmojiEventsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Competitions",
+    countNumber: "17",
+    subHeading: "20% From last year",
+  },
+];
 export const ANALYSIS_CARD_DATA = [
   {
-    icons:<SportsSoccerIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Sports",
-    countNumber:"24,895",
-    subHeading :"20% From last year"
+    icons: <SportsSoccerIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Sports",
+    countNumber: "24,895",
+    subHeading: "20% From last year",
   },
   {
-    icons:<EmojiEventsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Competitions",
-    countNumber:"24,895",
-    subHeading :"20% From last year"
-  }
-]
+    icons: <EmojiEventsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Competitions",
+    countNumber: "24,895",
+    subHeading: "20% From last year",
+  },
+];
