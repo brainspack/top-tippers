@@ -27,9 +27,7 @@ export const store = configureStore({
       userListApi.middleware,
       deactivateUserApi.middleware,
       userListCompetitionApi.middleware,
-      userListSportApi.middleware
-      
-
+      userListSportApi.middleware,
       deleteUserApi.middleware,
       userDetailsApi.middleware
     ),
