@@ -18,8 +18,6 @@ export const store = configureStore({
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
     [userListCompetitionApi.reducerPath]: userListCompetitionApi.reducer,
     [userListSportApi.reducerPath]: userListSportApi.reducer,
-    [deleteUserApi.reducerPath]: deleteUserApi.reducer,
-    [userDetailsApi.reducerPath]: userDetailsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -30,8 +28,6 @@ export const store = configureStore({
       userListSportApi.middleware
       
 
-      deleteUserApi.middleware,
-      userDetailsApi.middleware
     ),
 });
 setupListeners(store.dispatch);
