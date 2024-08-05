@@ -28,8 +28,6 @@ export const store = configureStore({
       deactivateUserApi.middleware,
       userListCompetitionApi.middleware,
       userListSportApi.middleware,
-      
-
       deleteUserApi.middleware,
       userDetailsApi.middleware
     ),

@@ -33,18 +33,18 @@ export const DASHBOARD_CARD_DATA = [
   {
     icons:<GroupsIcon sx={{fontSize:"40px"}} />,
     heading:"Total Users",
-    countNumber:"",
+    countNumber:"0",
     subHeading :"20% From last year"
   },
   {
     icons:<SportsSoccerIcon sx={{fontSize:"40px"}} />,
     heading:"Total Sports",
-    countNumber:"",
+    countNumber:"0",
     subHeading :"20% From last year"
   },{
     icons:<EmojiEventsIcon sx={{fontSize:"40px"}} />,
     heading:"Total Competitions",
-    countNumber:"",
+    countNumber:"0",
     subHeading :"20% From last year"
   }
 ]
@@ -62,3 +62,5 @@ export const ANALYSIS_CARD_DATA = [
     subHeading: "20% From last year",
   },
 ];
+
+
