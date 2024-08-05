@@ -12,6 +12,9 @@ import {
   ManageUsersHeading,
   ManageUsersWrapper,
 } from "./ManangeUsersStyled";
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import LinearProgress from '@mui/material/LinearProgress';
 import SearchIcon from "@mui/icons-material/Search";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MUIDataTable from "mui-datatables";
@@ -224,7 +227,76 @@ const ManageUsers = () => {
   }, [userDeleteData, userDeleteLoading]);
   return (
     <>
+    
       <ManageUsersContainer>
+      <ManageUsersWrapper
+        sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
+      >
+        <Box>
+          <ManageUsersHeading>Manage User</ManageUsersHeading>
+        </Box>
+        <Box border={"1px solid rgba(0, 0, 0, 0.1)"}>
+          <Box
+            padding={"15px"}
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Box
+              className="inputbox"
+              sx={{
+                display: "flex",
+                border: "1px solid rgba(0,0,0,0.1)",
+                width: "40%",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <SearchIcon />
+              </Box>
+              <input type="search"></input>
+            </Box>
+            <DropDownBox>
+              <MenuOpenIcon />
+              {/* <BasicMenu /> */}
+            </DropDownBox>
+          </Box>
+          {data?.data ? (
+          <MUIDataTable data={userData} columns={columns} options={options} />
+          ) :
+          (
+            <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={5}>
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+            <LinearProgress color="inherit" />
+          </Stack>
+          )
+        }
+          <CustomModal
+            modal={modal}
+            closeModal={closeModal}
+            userid={view}
+            userDeleteApi={userDeleteApi}
+            userDeleteData={userDeleteData}
+            userDeleteLoading={userDeleteLoading}
+            permanentDelete={permanentDelete}
+          />
+        </Box>
+      </ManageUsersWrapper>
+    </ManageUsersContainer>
+    
+      
+
+    
+    
+    
+      {/* <ManageUsersContainer>
         <ManageUsersWrapper
           sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
         >
@@ -252,7 +324,7 @@ const ManageUsers = () => {
               <DropDownBox>
                 <MenuOpenIcon />
                 {/* <BasicMenu /> */}
-              </DropDownBox>
+              {/* </DropDownBox>
             </Box>
             <MUIDataTable data={userData} columns={columns} options={options} />
             <CustomModal
@@ -266,7 +338,8 @@ const ManageUsers = () => {
             />
           </Box>
         </ManageUsersWrapper>
-      </ManageUsersContainer>
+      </ManageUsersContainer> */} */
+      {/* } */}
     </>
   );
 };

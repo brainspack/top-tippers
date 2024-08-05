@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
+import { Avatar } from "@mui/material";
 
 export default function BasicMenu() {
   const navigate = useNavigate();
@@ -27,7 +28,12 @@ export default function BasicMenu() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        Dashboard
+        <Avatar
+          alt="Remy Sharp"
+          src="/static/images/avatar/1.jpg"
+          sx={{ width: 34, height: 34, marginRight:"7px" }}
+        />{" "}
+        John Doe
       </Button>
       <Menu
         id="basic-menu"
