@@ -23,31 +23,32 @@ export const LOGIN_DATA = [
 ];
 
 export const adminList = [
-  { label: "Dashboard", route: "dashboard" },
-  { label: "Manage Users", route: "users" },
+  { label: "Dashboard", route: "/admin/dashboard" },
+  { label: "Manage Users", route: "/admin/users" },
   { label: "Messaging", route: "messaging" },
   { label: "Master", route: "master" },
 ];
 
 export const DASHBOARD_CARD_DATA = [
   {
-    icons:<GroupsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Users",
-    countNumber:"",
-    subHeading :"20% From last year"
+    icons: <GroupsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Users",
+    countNumber: "",
+    subHeading: "20% From last year",
   },
   {
-    icons:<SportsSoccerIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Sports",
-    countNumber:"",
-    subHeading :"20% From last year"
-  },{
-    icons:<EmojiEventsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Competitions",
-    countNumber:"",
-    subHeading :"20% From last year"
-  }
-]
+    icons: <SportsSoccerIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Sports",
+    countNumber: "",
+    subHeading: "20% From last year",
+  },
+  {
+    icons: <EmojiEventsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Competitions",
+    countNumber: "",
+    subHeading: "20% From last year",
+  },
+];
 export const ANALYSIS_CARD_DATA = [
   {
     icons: <SportsSoccerIcon sx={{ fontSize: "40px" }} />,

@@ -8,18 +8,20 @@ import DashboardPage from "./components/Dashboard/DashBoardpage.jsx";
 import { DashboardCard } from "./components/DashboardContent/dashboardContentStyled.js";
 import DashboardContent from "./components/DashboardContent/DashboardContent.jsx";
 import ManageUsers from "./components/ManageUsers/ManageUsers.jsx";
-import UserProfile from "./components/UserProfile.jsx";
+// import UserProfile from "./components/UserProfile.jsx";
+import ManageUsersComponent from "./components/ManageUsers/ManageUsersComponent.jsx";
+import UserProfile from "./components/UserProfile/UserProfile.jsx";
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<DashboardPage />}>
-          <Route index element={<DashboardContent />} />
-          <Route path="users" element={<ManageUsers />} />
+        <Route path="/admin">
+          <Route index element={<Login />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="users" element={<ManageUsersComponent />} />
+          <Route path="userprofile/:userId" element={<UserProfile />} />
         </Route>
-        <Route path="/userprofile/:userId" element={<UserProfile />} />
       </Routes>
       <OpenNotification />
     </div>

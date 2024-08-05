@@ -16,7 +16,7 @@ export default function BasicMenu() {
   };
   const logOut = () => {
     localStorage.clear();
-    navigate("/");
+    navigate("/admin");
   };
   return (
     <div>
