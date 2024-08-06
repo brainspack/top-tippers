@@ -34,8 +34,8 @@ export const LOGIN_DATA = [
 ];
 
 export const adminList = [
-  { label: "Dashboard", route: "dashboard", icon: <DashboardIcon />  },
-  { label: "Manage Users", route: "users", icon: <PersonIcon /> },
+  { label: "Dashboard",  route: "/admin/dashboard", icon: <DashboardIcon />  },
+  { label: "Manage Users",route: "/admin/users", icon: <PersonIcon /> },
   { label: "Messaging", route: "messaging", icon: <EmailIcon /> },
   { label: "Master", route: "master", icon: <SpaceDashboardIcon /> },
 ];

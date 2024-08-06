@@ -33,6 +33,9 @@ import CustomModal from "../reuse/CustomModal";
 import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
 import BasicMenu from "../Dashboard/ProfileMenu";
 import { useNavigate } from "react-router-dom";
+import CustomPagination from "../reuse/CustomPagination";
+import BasicPagination from "../reuse/CustomPagination";
+import UserMenu from "./UserMenu";
 const ManageUsers = () => {
   const navigate = useNavigate();
   const [view, setView] = useState("");
@@ -45,10 +48,13 @@ const ManageUsers = () => {
     setModal(false);
   };
   const dispatch = useDispatch();
-  const [userList, { data, isLoading, error, isSuccess: userListSuccess }] =
-    useGetUserListByNameMutation();
+  const [userList, sampleData] = useGetUserListByNameMutation();
+  const { data, isLoading, error, isSuccess: userListSuccess } = sampleData;
+  console.log(sampleData, "data");
   const { data: userData } = useSelector(userDataSelector);
-  console.log(userData, "thisIsState");
+  const userAllData = useSelector(userDataSelector);
+
+  console.log(userAllData, "thisIsState");
   const [
     deactivateUser,
     {
@@ -67,9 +73,13 @@ const ManageUsers = () => {
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteUserByNameMutation();
+  const onHandleSearch = () => {
+    return <></>;
+  };
 
   useEffect(() => {
     if (data && data.data) dispatch(updateUserData(data?.data));
+    console.log(data?.totalCount, "jk");
   }, [data, userListSuccess]);
   useEffect(() => {
     const reqParams = {
@@ -77,7 +87,6 @@ const ManageUsers = () => {
       page: 0,
       sortValue: "",
       sortOrder: "",
-      pageSize: 40,
     };
     userList(reqParams);
   }, [deactivateUserSuccess, userDeleteSuccess]);
@@ -117,7 +126,8 @@ const ManageUsers = () => {
       },
     },
     {
-      name: "isTopSportUser",
+      // name: "isTopSportUser",
+      name: "isTopSportUser" ? "Yes" : "No",
       label: "TopSport",
       options: {
         filter: true,
@@ -178,7 +188,7 @@ const ManageUsers = () => {
             )}
             <Box display="flex" gap="10px">
               <VisibilityIcon
-                onClick={() => navigate(`/userprofile/${value}`)}
+                onClick={() => navigate(`/admin/userprofile/${value}`)}
               ></VisibilityIcon>
               <DeleteIcon onClick={() => openModal(value)} />
             </Box>
@@ -194,6 +204,27 @@ const ManageUsers = () => {
     print: false,
     viewColumns: false,
     selectableRows: false,
+    pagination: true,
+    rowsPerPage: 10,
+    count: userData?.totalcount,
+    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      return (
+        <>
+          <CustomPagination
+            total={data?.totalCount}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            changeRowsPerPage={changeRowsPerPage}
+            changePage={changePage}
+            userList={userList}
+            userData={userData}
+
+            // isEdit={isEdit}
+          />
+          {/* <BasicPagination /> */}
+        </>
+      );
+    },
   };
   const permanentDelete = async () => {
     try {
@@ -319,12 +350,9 @@ const ManageUsers = () => {
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <SearchIcon />
                 </Box>
-                <input type="search"></input>
+                <input type="search" onChange={onHandleSearch}></input>
               </Box>
-              <DropDownBox>
-                <MenuOpenIcon />
-                {/* <BasicMenu /> */}
-              {/* </DropDownBox>
+              <UserMenu />
             </Box>
             <MUIDataTable data={userData} columns={columns} options={options} />
             <CustomModal

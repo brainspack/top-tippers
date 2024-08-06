@@ -72,7 +72,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function DashboardComponent() {
+export default function DashboardComponent({ content }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.up('sm')); // Checks if the screen width is >= 'sm'
@@ -93,8 +93,7 @@ export default function DashboardComponent() {
       <AppBar position="fixed" open={open}>
         <Box sx={{ display: "flex", padding: "0px 20px !important" }}>
           <IconButton
-
-          className="icon-bar"
+            className="icon-bar"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -104,7 +103,7 @@ export default function DashboardComponent() {
             <MenuIcon />
           </IconButton>
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <Typography variant="h6" noWrap component="div"/>
+            <Typography variant="h6" noWrap component="div" />
             <BasicMenu />
           </Toolbar>
         </Box>
@@ -123,18 +122,17 @@ export default function DashboardComponent() {
         open={open}
       >
         <DrawerHeader>
-          <Box sx={{
-            width:"100%",
-            height:"19px",
-            backgroundImage: `url(${LogoImage})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "100%",
-            display: "flex",
-            alignItems: "center",
-            
-          }}>
-
-          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              height: "19px",
+              backgroundImage: `url(${LogoImage})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "100%",
+              display: "flex",
+              alignItems: "center",
+            }}
+          ></Box>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -167,7 +165,9 @@ export default function DashboardComponent() {
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>
         <DrawerHeader />
-        <Outlet />
+
+        {/* <DashboardContent /> */}
+        {content}
       </Main>
     </Box>
   );
