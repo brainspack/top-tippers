@@ -34,10 +34,10 @@ export const LOGIN_DATA = [
 ];
 
 export const adminList = [
-  { label: "Dashboard",  route: "/admin/dashboard", icon: <DashboardIcon />  },
-  { label: "Manage Users",route: "/admin/users", icon: <PersonIcon /> },
-  { label: "Messaging", route: "messaging", icon: <EmailIcon /> },
-  { label: "Master", route: "master", icon: <SpaceDashboardIcon /> },
+  { label: "Dashboard",  route: "/admin/dashboard", icon: <DashboardIcon sx={{color:"white"}} />  },
+  { label: "Manage Users",route: "/admin/users", icon: <PersonIcon sx={{color:"white"}} /> },
+  { label: "Messaging", route: "messaging", icon: <EmailIcon sx={{color:"white"}} /> },
+  { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
 ];
 
 export const DASHBOARD_CARD_DATA = [

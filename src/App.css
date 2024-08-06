@@ -128,6 +128,51 @@
  }
 }
 
-.active{
+.active .drawer-nav{
   background-color: #e5a842;
+}
+
+.user-menu{
+  font-size: 14px !important;
+}
+.drawer-routes{
+  text-decoration: none;
+  color: white;
+}
+
+#basic-menu .MuiPaper-elevation8{
+  left:1108px !important;
+}
+
+.css-6hp17o-MuiList-root-MuiMenu-list{
+  padding: 0px !important;
+}
+
+.drawer-nav{
+  width: 100% ;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.drawer-nav:hover{
+  background-color: #e5a842 !important;
+  transition: all 300ms ease;
+
+}
+
+.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper{
+  background-color: #383434;
+
+}
+
+/*= ======================== drawer top icons styling ========================== */
+
+.MuiSvgIcon-fontSizeMedium:hover{
+  background-color: #e5a842;
+  border-radius: 50%;
+  transition: all 300ms ease;
+}
+
+.MuiSvgIcon-fontSizeMedium{
+  border-radius: 50%;
 }

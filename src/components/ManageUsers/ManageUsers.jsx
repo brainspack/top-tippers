@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Box,
   Button,
@@ -11,10 +12,9 @@ import {
   ManageUsersContainer,
   ManageUsersHeading,
   ManageUsersWrapper,
+  ManageUserTableWrapper,
 } from "./ManangeUsersStyled";
-import * as React from 'react';
-import Stack from '@mui/material/Stack';
-import LinearProgress from '@mui/material/LinearProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import SearchIcon from "@mui/icons-material/Search";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MUIDataTable from "mui-datatables";
@@ -99,7 +99,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -110,7 +110,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -121,7 +121,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -133,7 +133,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -145,7 +145,7 @@ const ManageUsers = () => {
         sort: true,
         setCellHeaderProps: () => ({
           style: {
-            backgroundColor: "#E08300",
+            backgroundColor: "#e5a842",
             color: "black",
             display: "flex",
             justifyContent: "center",
@@ -174,7 +174,7 @@ const ManageUsers = () => {
         sort: true,
         setCellHeaderProps: () => ({
           style: {
-            backgroundColor: "#E08300",
+            backgroundColor: "#e5a842",
             color: "black",
           },
         }),
@@ -285,30 +285,21 @@ const ManageUsers = () => {
               <input type="search"></input>
             </Box>
             <DropDownBox>
-              <MenuOpenIcon />
+              <UserMenu />
               {/* <BasicMenu /> */}
             </DropDownBox>
           </Box>
-          {data?.data ? (
+          {/* {data?.data ? ( */}
+          <ManageUserTableWrapper>
           <MUIDataTable data={userData} columns={columns} options={options} />
-          ) :
+          </ManageUserTableWrapper>
+          {/* ) :
           (
-            <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={5}>
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-            <LinearProgress color="inherit" />
-          </Stack>
-          )
-        }
+            <Box sx={{ display: 'flex', justifyContent:"center" }}>
+            <CircularProgress  />
+            </Box>
+          ) */}
+        {/* } */}
           <CustomModal
             modal={modal}
             closeModal={closeModal}
@@ -366,7 +357,7 @@ const ManageUsers = () => {
             />
           </Box>
         </ManageUsersWrapper>
-      </ManageUsersContainer> */} */
+      </ManageUsersContainer> */} 
       {/* } */}
     </>
   );
