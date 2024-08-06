@@ -22,7 +22,7 @@ import LogoImage from "../../images/logo.svg";
 import BasicMenu from "./ProfileMenu";
 import DashboardContent from "../DashboardContent/DashboardContent";
 import { adminList } from "../../utils/constant";
-import { Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 
 const drawerWidth = 240;
@@ -147,15 +147,18 @@ export default function DashboardComponent() {
 
         <List>
           {adminList.map((text, index) => (
+
             <ListItem key={text} disablePadding>
+
               <ListItemButton
                 onClick={() => {
                   navigate(text.route);
                 }}
-              >
+                >
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {text.icon}
                 </ListItemIcon>
+                  
                 <ListItemText primary={text.label} />
               </ListItemButton>
             </ListItem>
