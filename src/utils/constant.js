@@ -1,7 +1,18 @@
 import GroupsIcon from "@mui/icons-material/Groups";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+
+// =============  dashboad Icons ====================================
+
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+
+// ================= URL ==================
+
 export const BASE_URL = "http://54.201.160.69:3019/";
+
 export const LOGIN_DATA = [
   {
     ID: 0,
@@ -23,10 +34,10 @@ export const LOGIN_DATA = [
 ];
 
 export const adminList = [
-  { label: "Dashboard", route: "dashboard" },
-  { label: "Manage Users", route: "users" },
-  { label: "Messaging", route: "messaging" },
-  { label: "Master", route: "master" },
+  { label: "Dashboard", route: "dashboard", icon: <DashboardIcon />  },
+  { label: "Manage Users", route: "users", icon: <PersonIcon /> },
+  { label: "Messaging", route: "messaging", icon: <EmailIcon /> },
+  { label: "Master", route: "master", icon: <SpaceDashboardIcon /> },
 ];
 
 export const DASHBOARD_CARD_DATA = [
