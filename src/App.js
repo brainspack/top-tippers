@@ -11,6 +11,7 @@ import ManageUsers from "./components/ManageUsers/ManageUsers.jsx";
 // import UserProfile from "./components/UserProfile.jsx";
 import ManageUsersComponent from "./components/ManageUsers/ManageUsersComponent.jsx";
 import UserProfile from "./components/UserProfile/UserProfile.jsx";
+import PrivateRoute from "./containers/Routing/PrivateRoute.js";
 
 function App() {
   return (
@@ -18,9 +19,11 @@ function App() {
       <Routes>
         <Route path="/admin">
           <Route index element={<Login />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="users" element={<ManageUsersComponent />} />
-          <Route path="userprofile/:userId" element={<UserProfile />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="users" element={<ManageUsersComponent />} />
+            <Route path="userprofile/:userId" element={<UserProfile />} />
+          </Route>
         </Route>
       </Routes>
       <OpenNotification />

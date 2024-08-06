@@ -44,7 +44,16 @@ function Login(props) {
   const [logIn, { data: responseData, isLoading, error, isSuccess }] =
     useGetAdminLoginByNameMutation();
   const navigate = useNavigate();
+  console.log(location, "location");
 
+  useEffect(() => {
+    const token = localStorage?.getItem("token");
+    if (token) {
+      if (path === "/admin") {
+        navigate("/admin/dashboard");
+      }
+    }
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
