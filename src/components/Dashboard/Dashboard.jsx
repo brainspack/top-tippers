@@ -22,7 +22,8 @@ import LogoImage from "../../images/logo.svg";
 import BasicMenu from "./ProfileMenu";
 import DashboardContent from "../DashboardContent/DashboardContent";
 import { adminList } from "../../utils/constant";
-import { Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -74,6 +75,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function DashboardComponent({ content }) {
   const navigate = useNavigate();
   const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.up('sm')); // Checks if the screen width is >= 'sm'
+
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -85,7 +88,7 @@ export default function DashboardComponent({ content }) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", position:"relative", zIndex:"1" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Box sx={{ display: "flex", padding: "0px 20px !important" }}>
@@ -142,15 +145,18 @@ export default function DashboardComponent({ content }) {
 
         <List>
           {adminList.map((text, index) => (
+
             <ListItem key={text} disablePadding>
+
               <ListItemButton
                 onClick={() => {
                   navigate(text.route);
                 }}
-              >
+                >
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {text.icon}
                 </ListItemIcon>
+                  
                 <ListItemText primary={text.label} />
               </ListItemButton>
             </ListItem>

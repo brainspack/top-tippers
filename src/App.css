@@ -46,6 +46,8 @@
   border-radius: 6px;
 }
 
+
+
 .email-input {
   outline: none;
 }
@@ -75,7 +77,15 @@
   height: 40px;
 }
 #basic-button{
+  /* background-color: #ddd; */
+  text-transform: none;
+  color: white;
+
+}
+#basic-button:hover{
   background-color: #ddd;
+  
+
 }
 
 .icon-bar{
@@ -90,4 +100,34 @@
 
 .dashboard-card:hover .favIcon{
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+
+/*================================ selector form control styling =========================== */
+
+
+
+.css-6hp17o-MuiList-root-MuiMenu-list{
+  width: 180px;
+}
+.calender{
+  font-size: 14px !important;
+}
+
+.calender-border .MuiOutlinedInput-notchedOutline{
+  border: none !important;
+}
+
+
+@media screen and (max-width: 599px) {
+ .MuiDrawer-docked .css-1f2xuhi-MuiDrawer-docked{
+  position: absolute !important;
+  bottom: 0px !important;
+  top: 0px !important;
+  z-index: 2 !important;
+ }
+}
+
+.active{
+  background-color: #e5a842;
 }

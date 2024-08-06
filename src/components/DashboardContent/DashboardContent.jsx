@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   AnalysisCard,
+  AnalysisCardAndChartWrapper,
   AnalysisCardWrapper,
   AnalysisHeading,
   AnalysisHeadingWrapper,
@@ -21,12 +22,14 @@ import {
   DashboardCardWrapper,
   DashboardHeading,
   DashboardMainContainer,
+  DateSelectWrapper,
 } from "./dashboardContentStyled";
 import { ANALYSIS_CARD_DATA, DASHBOARD_CARD_DATA } from "../../utils/constant";
-import { Box, Fab } from "@mui/material";
+import { Box, Fab, FormControl, FormHelperText, MenuItem, Select, Typography } from "@mui/material";
 import { useGetUserListByNameMutation } from "../../api/UserList";
 import { useGetUserListCompetitionApiByNameMutation } from "../../api/listCompetition";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 
 function DashboardContent(props) {
@@ -39,6 +42,14 @@ function DashboardContent(props) {
     useGetUserListCompetitionApiByNameMutation();
   const [userListSport, { data: listSportData }] =
   useGetUserListSportApiByNameMutation();
+
+  // state of selectors
+
+  const [Date, setDate] = React.useState('');
+
+  const handleChange = (event) => {
+    setDate(event.target.value);
+  };
 
 //   total user
 
@@ -168,8 +179,33 @@ function DashboardContent(props) {
           <AnalysisHeadingWrapper>
             <AnalysisHeading>Analysis Chart</AnalysisHeading>
           </AnalysisHeadingWrapper>
-          <Box sx={{ display: "flex" }}>
+          <AnalysisCardAndChartWrapper>
+         
             <AnalysisTeamCardWrapper>
+              <DateSelectWrapper>
+                <CalendarTodayIcon sx={{fontSize:"16px"}} />
+                
+
+            <FormControl sx={{ m: 1, minWidth: 130 }}>
+        <Select
+          value={Date}
+          className="calender-border"
+          onChange={handleChange}
+          displayEmpty
+          sx={{fontSize:"14px"}}
+        >
+          <MenuItem  value="">
+          <Typography sx={{color:"grey !important", fontSize:"14px !important"}}>
+
+            This week
+          </Typography>
+          </MenuItem>
+          <MenuItem className="calender" value={10}>This Day</MenuItem>
+          <MenuItem className="calender" value={20}>This Month</MenuItem>
+          <MenuItem className="calender" value={30}>This Year</MenuItem>
+        </Select>
+      </FormControl>
+              </DateSelectWrapper>
               <AnalysisCardWrapper>
                 {ANALYSIS_CARD_DATA.map((ele) => (
                   <AnalysisCard className="dashboard-card">
@@ -210,7 +246,7 @@ function DashboardContent(props) {
             <AnalysisTeamImageWrapper>
               <AnalysisTeamImage></AnalysisTeamImage>
             </AnalysisTeamImageWrapper>
-          </Box>
+          </AnalysisCardAndChartWrapper>
         </AnalysisTeamWrapper>
       </DashboardMainContainer>
     </>
