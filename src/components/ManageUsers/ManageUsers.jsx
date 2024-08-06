@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Box,
   Button,
@@ -12,10 +13,9 @@ import {
   ManageUsersContainer,
   ManageUsersHeading,
   ManageUsersWrapper,
+  ManageUserTableWrapper,
 } from "./ManangeUsersStyled";
-import * as React from "react";
-import Stack from "@mui/material/Stack";
-import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import MUIDataTable from "mui-datatables";
@@ -101,7 +101,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -112,7 +112,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -123,7 +123,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -134,7 +134,7 @@ const ManageUsers = () => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#E08300", color: "black" },
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -146,7 +146,7 @@ const ManageUsers = () => {
         sort: true,
         setCellHeaderProps: () => ({
           style: {
-            backgroundColor: "#E08300",
+            backgroundColor: "#e5a842",
             color: "black",
             display: "flex",
             justifyContent: "center",
@@ -175,7 +175,7 @@ const ManageUsers = () => {
         sort: true,
         setCellHeaderProps: () => ({
           style: {
-            backgroundColor: "#E08300",
+            backgroundColor: "#e5a842",
             color: "black",
           },
         }),
@@ -279,6 +279,64 @@ const ManageUsers = () => {
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <SearchIcon />
                 </Box>
+                <input type="search"></input>
+              </Box>
+              <DropDownBox>
+                <UserMenu />
+                {/* <BasicMenu /> */}
+              </DropDownBox>
+            </Box>
+            {/* {data?.data ? ( */}
+            <ManageUserTableWrapper>
+              <MUIDataTable
+                data={userData}
+                columns={columns}
+                options={options}
+              />
+            </ManageUserTableWrapper>
+            {/* ) :
+          (
+            <Box sx={{ display: 'flex', justifyContent:"center" }}>
+            <CircularProgress  />
+            </Box>
+          ) */}
+            {/* } */}
+            <CustomModal
+              modal={modal}
+              closeModal={closeModal}
+              userid={view}
+              userDeleteApi={userDeleteApi}
+              userDeleteData={userDeleteData}
+              userDeleteLoading={userDeleteLoading}
+              permanentDelete={permanentDelete}
+            />
+          </Box>
+        </ManageUsersWrapper>
+      </ManageUsersContainer>
+
+      {/* <ManageUsersContainer>
+        <ManageUsersWrapper
+          sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
+        >
+          <Box>
+            <ManageUsersHeading>Manage User</ManageUsersHeading>
+          </Box>
+          <Box border={"1px solid rgba(0, 0, 0, 0.1)"}>
+            <Box
+              padding={"15px"}
+              sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Box
+                className="inputbox"
+                sx={{
+                  display: "flex",
+                  border: "1px solid rgba(0,0,0,0.1)",
+                  width: "40%",
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <SearchIcon />
+                </Box>
                 <input type="search" onChange={onHandleSearch}></input>
               </Box>
               <UserMenu />
@@ -316,7 +374,8 @@ const ManageUsers = () => {
             />
           </Box>
         </ManageUsersWrapper>
-      </ManageUsersContainer>
+      </ManageUsersContainer> */}
+      {/* } */}
     </>
   );
 };

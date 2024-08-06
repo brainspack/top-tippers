@@ -18,7 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import LogoImage from "../../images/logo.svg";
+import LogoImage from "../../images/toptippers.svg";
 import BasicMenu from "./ProfileMenu";
 import DashboardContent from "../DashboardContent/DashboardContent";
 import { adminList } from "../../utils/constant";
@@ -121,11 +121,12 @@ export default function DashboardComponent({ content }) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader >
           <Box
             sx={{
               width: "100%",
-              height: "19px",
+
+              height: "30px",
               backgroundImage: `url(${LogoImage})`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "100%",
@@ -135,7 +136,7 @@ export default function DashboardComponent({ content }) {
           ></Box>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
+              <ChevronLeftIcon sx={{color:"white"}} />
             ) : (
               <ChevronRightIcon />
             )}
@@ -146,12 +147,13 @@ export default function DashboardComponent({ content }) {
         <List>
           {adminList.map((text, index) => (
 
-            <ListItem key={text} disablePadding>
+            <NavLink className={"drawer-routes"} to={text.route} key={text} disablePadding>
 
               <ListItemButton
-                onClick={() => {
-                  navigate(text.route);
-                }}
+              disableRipple 
+                 className={"drawer-nav"}
+                
+              
                 >
                 <ListItemIcon>
                   {text.icon}
@@ -159,7 +161,7 @@ export default function DashboardComponent({ content }) {
                   
                 <ListItemText primary={text.label} />
               </ListItemButton>
-            </ListItem>
+            </NavLink>
           ))}
         </List>
       </Drawer>

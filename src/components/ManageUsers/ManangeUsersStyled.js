@@ -27,3 +27,7 @@ export const DropDownBox = styled(Box)(() => ({
   justifyContent: "center",
   alignItems: "center",
 }));
+
+export const ManageUserTableWrapper = styled(Box)(() => ({
+ width:"100%"
+}));
