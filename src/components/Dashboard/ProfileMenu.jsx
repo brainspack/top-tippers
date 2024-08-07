@@ -24,7 +24,7 @@ export default function BasicMenu() {
   };
   const logOut = () => {
     localStorage.clear();
-    navigate("/admin");
+    navigate("/admin/");
   };
 
   const adminName = async (responseData) => {
@@ -56,7 +56,7 @@ export default function BasicMenu() {
         <Avatar
           alt="Remy Sharp"
           src="/static/images/avatar/1.jpg"
-          sx={{ width: 34, height: 34, marginRight:"7px" }}
+          sx={{ width: 34, height: 34, marginRight: "7px" }}
         />{" "}
         {/* {responseData.name} */}
       </Button>
