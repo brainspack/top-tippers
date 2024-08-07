@@ -167,7 +167,7 @@
 
 /*= ======================== drawer top icons styling ========================== */
 
-.MuiSvgIcon-fontSizeMedium:hover{
+.drawer-icon-left .MuiSvgIcon-fontSizeMedium:hover{
   background-color: #e5a842;
   border-radius: 50%;
   transition: all 300ms ease;
@@ -176,3 +176,24 @@
 .MuiSvgIcon-fontSizeMedium{
   border-radius: 50%;
 }
+
+/* ============= ACCORDIAN STYLIGN ====================== */
+
+
+.accordion-master{
+  background-color: #383434 !important ;
+  color: white !important;
+}
+
+.accordion-master .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root{
+  min-height: 64px;
+}
+
+.master-subheadings{
+  display: flex;
+}
+
+.MuiAccordion-region .css-15v22id-MuiAccordionDetails-root{
+  padding: 8px 45px 16px 47px !important;
+} 
+

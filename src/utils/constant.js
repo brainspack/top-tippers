@@ -7,7 +7,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 // ================= URL ==================
 
@@ -49,11 +49,17 @@ export const adminList = [
     route: "messaging",
     icon: <EmailIcon sx={{ color: "white" }} />,
   },
+  // { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
+];
+export const MASTER_SUBHEADINGS = [
   {
-    label: "Master",
-    route: "master",
-    icon: <SpaceDashboardIcon sx={{ color: "white" }} />,
+    label: "Master Sports",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
   },
+  { label: "Master Team", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
+  { label: "Master Round", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
+  { label: "Master Game", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
+  // { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
 ];
 
 export const DASHBOARD_CARD_DATA = [

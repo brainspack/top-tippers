@@ -57,7 +57,6 @@ function DashboardContent(props) {
     try {
       const result = await userList({ body: data }).unwrap();
       console.log(result, "RESULT");
-      // console.log(responseData,"jdkjkj");
       let temData=[...dataCount]
       if (result) {
         const tempData = [...DASHBOARD_CARD_DATA]
@@ -80,7 +79,6 @@ function DashboardContent(props) {
     try {
       const result = await userListSport({ body: data }).unwrap();
       console.log(result, "RESULT");
-      // console.log(responseData,"jdkjkj");
       let temData=[...dataCount]
 
       if (result) {
@@ -102,7 +100,6 @@ function DashboardContent(props) {
     try {
       const result = await userListCompetition({ body: data }).unwrap();
       console.log(result, "RESULT");
-      // console.log(responseData,"jdkjkj");
       let temData=[...dataCount]
 
       if (result) {
