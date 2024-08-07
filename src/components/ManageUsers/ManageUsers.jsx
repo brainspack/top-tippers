@@ -14,6 +14,9 @@ import {
   ManageUsersHeading,
   ManageUsersWrapper,
   ManageUserTableWrapper,
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
 } from "./ManangeUsersStyled";
 import CircularProgress from "@mui/material/CircularProgress";
 import SearchIcon from "@mui/icons-material/Search";
@@ -51,7 +54,7 @@ const ManageUsers = () => {
   const dispatch = useDispatch();
   const [userList, sampleData] = useGetUserListByNameMutation();
   const { data, isLoading, error, isSuccess: userListSuccess } = sampleData;
-  console.log(sampleData, "data");
+  console.log(sampleData, "sampleData");
   const { data: userData } = useSelector(userDataSelector);
   const userAllData = useSelector(userDataSelector);
 
@@ -75,23 +78,21 @@ const ManageUsers = () => {
     },
   ] = useDeleteUserByNameMutation();
   const onHandleSearch = (e) => {
-    console.log(e.target.value, "SEARCH");
-    return <></>;
-  };
-
-  useEffect(() => {
-    if (data && data.data) dispatch(updateUserData(data?.data));
-    console.log(data?.totalCount, "jk");
-  }, [data, userListSuccess]);
-  useEffect(() => {
     const reqParams = {
-      search_string: "",
+      search_string: e.target.value,
       page: 0,
       sortValue: "",
       sortOrder: "",
     };
     userList(reqParams);
-  }, [deactivateUserSuccess, userDeleteSuccess]);
+  };
+  const permanentDelete = async () => {
+    try {
+      userDeleteApi({ userId: view });
+    } catch (error) {
+      console.log(" Error", error);
+    }
+  };
 
   const columns = [
     {
@@ -181,24 +182,19 @@ const ManageUsers = () => {
         }),
         customBodyRender: (value, rowData) => (
           <>
-            {console.log(
-              data?.data?.isVerified,
-              userData,
-              value,
-              "data?.data?.isVerified"
-            )}
+            {console.log(data?.data, "insideEmail")}
             <Box display="flex" gap="10px">
               <VisibilityIcon
                 onClick={() => navigate(`/admin/userprofile/${value}`)}
               ></VisibilityIcon>
               <DeleteIcon onClick={() => openModal(value)} />
-              {data?.data?.isVerified === false ? <EmailIcon /> : ""}
             </Box>
           </>
         ),
       },
     },
   ];
+
   const options = {
     filter: false,
     download: false,
@@ -224,13 +220,7 @@ const ManageUsers = () => {
       );
     },
   };
-  const permanentDelete = async () => {
-    try {
-      userDeleteApi({ userId: view });
-    } catch (error) {
-      console.log(" Error", error);
-    }
-  };
+
   useEffect(() => {
     if (userDeleteLoading) return;
     if (userDeleteData?.code === 200) {
@@ -254,6 +244,18 @@ const ManageUsers = () => {
       }
     }
   }, [userDeleteData, userDeleteLoading]);
+  useEffect(() => {
+    if (data && data?.data) dispatch(updateUserData(data?.data));
+  }, [data, userListSuccess]);
+  useEffect(() => {
+    const reqParams = {
+      search_string: "",
+      page: 0,
+      sortValue: "",
+      sortOrder: "",
+    };
+    userList(reqParams);
+  }, [deactivateUserSuccess, userDeleteSuccess]);
   return (
     <>
       <ManageUsersContainer>
@@ -266,27 +268,28 @@ const ManageUsers = () => {
           <Box border={"1px solid rgba(0, 0, 0, 0.1)"}>
             <Box
               padding={"15px"}
-              sx={{ display: "flex", justifyContent: "space-between" }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
             >
-              <Box
-                className="inputbox"
-                sx={{
-                  display: "flex",
-                  border: "1px solid rgba(0,0,0,0.1)",
-                  width: "40%",
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <SearchIcon />
-                </Box>
-                <input type="search"></input>
+              <Box>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon sx={{ color: "primary.secondary" }} />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                    color="rgb(13, 25, 51)"
+                    onChange={onHandleSearch}
+                  />
+                </Search>
               </Box>
               <DropDownBox>
                 <UserMenu />
-                {/* <BasicMenu /> */}
               </DropDownBox>
             </Box>
-            {/* {data?.data ? ( */}
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={userData}
@@ -294,13 +297,6 @@ const ManageUsers = () => {
                 options={options}
               />
             </ManageUserTableWrapper>
-            {/* ) :
-          (
-            <Box sx={{ display: 'flex', justifyContent:"center" }}>
-            <CircularProgress  />
-            </Box>
-          ) */}
-            {/* } */}
             <CustomModal
               modal={modal}
               closeModal={closeModal}
@@ -313,69 +309,6 @@ const ManageUsers = () => {
           </Box>
         </ManageUsersWrapper>
       </ManageUsersContainer>
-
-      {/* <ManageUsersContainer>
-        <ManageUsersWrapper
-          sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
-        >
-          <Box>
-            <ManageUsersHeading>Manage User</ManageUsersHeading>
-          </Box>
-          <Box border={"1px solid rgba(0, 0, 0, 0.1)"}>
-            <Box
-              padding={"15px"}
-              sx={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <Box
-                className="inputbox"
-                sx={{
-                  display: "flex",
-                  border: "1px solid rgba(0,0,0,0.1)",
-                  width: "40%",
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <SearchIcon />
-                </Box>
-                <input type="search" onChange={onHandleSearch}></input>
-              </Box>
-              <UserMenu />
-            </Box>
-            {data?.data ? (
-              <MUIDataTable
-                data={userData}
-                columns={columns}
-                options={options}
-              />
-            ) : (
-              <Stack sx={{ width: "100%", color: "grey.500" }} spacing={5}>
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-                <LinearProgress color="inherit" />
-              </Stack>
-            )}
-            <CustomModal
-              modal={modal}
-              closeModal={closeModal}
-              userid={view}
-              userDeleteApi={userDeleteApi}
-              userDeleteData={userDeleteData}
-              userDeleteLoading={userDeleteLoading}
-              permanentDelete={permanentDelete}
-            />
-          </Box>
-        </ManageUsersWrapper>
-      </ManageUsersContainer> */}
-      {/* } */}
     </>
   );
 };

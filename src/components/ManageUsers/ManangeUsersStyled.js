@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, InputBase, Paper, styled, Typography } from "@mui/material";
 
 export const ManageUsersContainer = styled(Box)(() => ({
   width: "100%",
@@ -29,5 +29,53 @@ export const DropDownBox = styled(Box)(() => ({
 }));
 
 export const ManageUserTableWrapper = styled(Box)(() => ({
- width:"100%"
+  width: "100%",
+}));
+
+export const Search = styled(Paper)(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  // backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    // backgroundColor: alpha(theme.palette.common.white, 0.25),
+    color: theme.palette.primary.main,
+  },
+  color: "rgb(13, 25, 51)",
+  marginLeft: 0,
+  width: "50%",
+  // backgroundColor: "rgb(13, 25, 51)",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
+export const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+export const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "rgb(13, 25, 51)",
+  width: "100%",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    color: "rgb(13, 25, 51) !important",
+    "&::placeholder": {
+      textOverflow: "ellipsis !important",
+      color: "rgb(13, 25, 51)",
+    },
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    [theme.breakpoints.up("sm")]: {
+      width: "30ch",
+      "&:focus": {
+        width: "38ch",
+      },
+    },
+  },
 }));

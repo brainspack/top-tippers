@@ -4,10 +4,10 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 // =============  dashboad Icons ====================================
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 
 // ================= URL ==================
 
@@ -34,31 +34,48 @@ export const LOGIN_DATA = [
 ];
 
 export const adminList = [
-  { label: "Dashboard",  route: "/admin/dashboard", icon: <DashboardIcon sx={{color:"white"}} />  },
-  { label: "Manage Users",route: "/admin/users", icon: <PersonIcon sx={{color:"white"}} /> },
-  { label: "Messaging", route: "messaging", icon: <EmailIcon sx={{color:"white"}} /> },
-  { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
+  {
+    label: "Dashboard",
+    route: "/admin/dashboard",
+    icon: <DashboardIcon sx={{ color: "white" }} />,
+  },
+  {
+    label: "Manage Users",
+    route: "/admin/users",
+    icon: <PersonIcon sx={{ color: "white" }} />,
+  },
+  {
+    label: "Messaging",
+    route: "messaging",
+    icon: <EmailIcon sx={{ color: "white" }} />,
+  },
+  {
+    label: "Master",
+    route: "master",
+    icon: <SpaceDashboardIcon sx={{ color: "white" }} />,
+  },
 ];
 
 export const DASHBOARD_CARD_DATA = [
   {
-    icons:<GroupsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Users",
-    countNumber:"0",
-    subHeading :"20% From last year"
+    icons: <GroupsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Users",
+    countNumber: "0",
+    subHeading: "20% From last year",
   },
   {
-    icons:<SportsSoccerIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Sports",
-    countNumber:"0",
-    subHeading :"20% From last year"
-  },{
-    icons:<EmojiEventsIcon sx={{fontSize:"40px"}} />,
-    heading:"Total Competitions",
-    countNumber:"0",
-    subHeading :"20% From last year"
-  }
-]
+    icons: <SportsSoccerIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Sports",
+    countNumber: "0",
+    subHeading: "20% From last year",
+  },
+  {
+    icons: <EmojiEventsIcon sx={{ fontSize: "40px" }} />,
+    heading: "Total Competitions",
+    countNumber: "0",
+    subHeading: "20% From last year",
+  },
+];
 export const ANALYSIS_CARD_DATA = [
   {
     icons: <SportsSoccerIcon sx={{ fontSize: "40px" }} />,
@@ -73,5 +90,3 @@ export const ANALYSIS_CARD_DATA = [
     subHeading: "20% From last year",
   },
 ];
-
-

@@ -32,7 +32,6 @@ import {
 import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
-// import { LOGIN_DATA } from "../../utils/contant";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_DATA } from "../../utils/constant";
 import { handleNotification } from "../../slices/Snackbar";
@@ -44,12 +43,11 @@ function Login(props) {
   const [logIn, { data: responseData, isLoading, error, isSuccess }] =
     useGetAdminLoginByNameMutation();
   const navigate = useNavigate();
-  console.log(location, "location");
 
   useEffect(() => {
     const token = localStorage?.getItem("token");
     if (token) {
-      if (path === "/admin") {
+      if (path === "/admin/") {
         navigate("/admin/dashboard");
       }
     }
@@ -97,7 +95,6 @@ function Login(props) {
           );
         }
       }
-      console.log(logIn(), "log");
     } catch (err) {}
     await responseData;
   };
