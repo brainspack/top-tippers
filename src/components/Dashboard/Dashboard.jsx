@@ -21,9 +21,18 @@ import MailIcon from "@mui/icons-material/Mail";
 import LogoImage from "../../images/toptippers.svg";
 import BasicMenu from "./ProfileMenu";
 import DashboardContent from "../DashboardContent/DashboardContent";
-import { adminList } from "../../utils/constant";
+import { adminList, MASTER_SUBHEADINGS } from "../../utils/constant";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from '@mui/material/Button';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+
 
 const drawerWidth = 240;
 
@@ -125,7 +134,6 @@ export default function DashboardComponent({ content }) {
           <Box
             sx={{
               width: "100%",
-
               height: "30px",
               backgroundImage: `url(${LogoImage})`,
               backgroundRepeat: "no-repeat",
@@ -134,7 +142,7 @@ export default function DashboardComponent({ content }) {
               alignItems: "center",
             }}
           ></Box>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton className="drawer-icon-left" onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon sx={{color:"white"}} />
             ) : (
@@ -158,11 +166,33 @@ export default function DashboardComponent({ content }) {
                 <ListItemIcon>
                   {text.icon}
                 </ListItemIcon>
+
                   
                 <ListItemText primary={text.label} />
+                {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
               </ListItemButton>
+              
             </NavLink>
           ))}
+          <Accordion className="accordion-master" elevation={0}>
+        <AccordionSummary
+        className="accordion-master"
+          expandIcon={<ExpandMoreIcon sx={{color:"white"}} />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+          
+        >
+          <SpaceDashboardIcon sx={{color:"white", marginRight:"32px"}} />
+          Master
+        </AccordionSummary>
+            {MASTER_SUBHEADINGS.map((ele)=>(
+        <AccordionDetails className="master-subheadings">
+          {ele.icon}
+
+              {ele.label}
+        </AccordionDetails>
+            ))}
+      </Accordion>
         </List>
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>
