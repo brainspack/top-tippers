@@ -10,7 +10,6 @@ import { useDownlaodCsvByNameMutation } from "../../api/DownloadCsv";
 export default function UserMenu() {
   const [disabledUserApi, { data, isLoading, error }] =
     useDisabledUserByNameMutation();
-  //   const [getCsvFile, { data: csvFile }] = useDownlaodCsvByNameMutation();
 
   const disabledUser = async () => {
     const result = await disabledUserApi();
@@ -25,18 +24,9 @@ export default function UserMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  //   const handleGetCSV = async () => {
-  //     await getCsvFile({}).then((response) => {
-  //       const url = window.URL.createObjectURL(new Blob([response.data]));
-  //       const link = document.createElement("a");
-  //       link.href = url;
-  //       link.setAttribute("download", `csv`);
-  //       link.click();
-  //     });
-  //   };
 
   return (
-    <div >
+    <div>
       <DropDownBox onClick={handleClick}>
         <MenuOpenIcon />
       </DropDownBox>
@@ -48,13 +38,17 @@ export default function UserMenu() {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
-        
-        
       >
-        <MenuItem className="user-menu" onClick={disabledUser}>Disable User</MenuItem>
-        <MenuItem className="user-menu" onClick={handleClose}>Sample File to Export </MenuItem>
-        <MenuItem className="user-menu" onClick={handleClose}>Map Users to Top Sport </MenuItem>
-        <MenuItem className="user-menu" >Export Csv </MenuItem>
+        <MenuItem className="user-menu" onClick={disabledUser}>
+          Disable User
+        </MenuItem>
+        <MenuItem className="user-menu" onClick={handleClose}>
+          Sample File to Export{" "}
+        </MenuItem>
+        <MenuItem className="user-menu" onClick={handleClose}>
+          Map Users to Top Sport{" "}
+        </MenuItem>
+        <MenuItem className="user-menu">Export Csv </MenuItem>
       </Menu>
     </div>
   );

@@ -62,14 +62,12 @@ export const LoginHeading = styled(Typography)(() => ({
 export const InputWrapper = styled(Box)(() => ({
   width: "100%",
   height: "220px",
-  // backgroundColor:"red",
   display: "flex",
   alignItems: "center",
 }));
 export const InputBox = styled(Box)(() => ({
   width: "100%",
   height: "190px",
-  // backgroundColor:"yellow",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
