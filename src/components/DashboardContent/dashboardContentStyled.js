@@ -5,7 +5,6 @@ import analysisChart from "../../images/dummy-chart.png"
 export const DashboardMainContainer = styled(Box)(({theme}) => ({
   width: "100%",
   height: "565px",
-  // backgroundColor:"red",
   display:"flex",
   flexDirection:"column",
   justifyContent:"space-between",
@@ -92,34 +91,28 @@ export const DashboardCard = styled(Box)(({theme}) => ({
     width:"48%",
     height:"124px"
   },
-  // [theme.breakpoints.between("md", "lg")]: {
-  //   height: "800px",
-  // },
+  
 
 }));
 export const DashboardCardContentWrapper = styled(Box)(() => ({
   width:"85%",
   height:"90px",
   display:"flex",
-  // flexDirection:"column",
-  // justifyContent:"space-between",
-  // backgroundColor:"blue",
+ 
   justifyContent:"space-between"
 
 }));
-export const DashboardCardiconWrapper = styled(Box)(() => ({
+export const DashboardCardiconWrapper = styled(Box)(({theme}) => ({
   width:"25%",
   height:"90px",
-  
-  // backgroundColor:"yellow",
-  
+
+
 
 }));
 export const DashboardCardContentBox = styled(Box)(() => ({
   width:"70%",
   height:"90px",
   
-  // backgroundColor:"orange",
   display:"flex",
   flexDirection:"column",
   justifyContent:"space-between",
@@ -159,7 +152,6 @@ export const AnalysisTeamWrapper = styled(Box)(({theme}) => ({
  
   width:"100%",
   height:"370px",
-  // backgroundColor:"yellow",
   display:"flex",
   flexDirection:"column",
   justifyContent:"space-between",
@@ -175,7 +167,6 @@ export const AnalysisHeadingWrapper = styled(Box)(() => ({
  
   width:"100%",
   height:"37px",
-  // backgroundColor:"burlywood",
   display:"flex",
   alignItems:"end",
   
@@ -192,7 +183,6 @@ export const AnalysisTeamCardWrapper = styled(Box)(({theme}) => ({
  
   width:"47%",
   height:"340px",
-  // backgroundColor:"blue"
   
   [theme.breakpoints.down("sm")]: {
     width:"100%",
@@ -221,7 +211,6 @@ export const DateSelectWrapper = styled(Box)(({theme}) => ({
   width:"100%",
   display:"flex",
   alignItems:"center",
-  // backgroundColor:"yellow",
   [theme.breakpoints.between("sm", "md")]: {
     height:"58px",
     width:"32%"
@@ -235,7 +224,6 @@ export const AnalysisTeamImageWrapper = styled(Box)(({theme}) => ({
   height:"320px",
   display:"flex",
   alignItems:"center",
-  // backgroundImage:`url(${analysisChart})`
   [theme.breakpoints.between("sm", "md")]: {
     height:"305px",
   },
@@ -257,7 +245,6 @@ export const AnalysisCardWrapper = styled(Box)(({theme}) => ({
  
   width:"94%",
   height:"260px",
-  // backgroundColor:"yellow",
   display:"flex",
   flexDirection:"column",
   justifyContent:"space-between",
@@ -287,7 +274,6 @@ export const AnalysisCard = styled(Box)(({theme}) => ({
     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" 
    },
    [theme.breakpoints.down("sm")]: {
-    // width:"100%"
   },
    [theme.breakpoints.between("sm", "md")]: {
     width:"48%"

@@ -25,12 +25,19 @@ import {
   DateSelectWrapper,
 } from "./dashboardContentStyled";
 import { ANALYSIS_CARD_DATA, DASHBOARD_CARD_DATA } from "../../utils/constant";
-import { Box, Fab, FormControl, FormHelperText, MenuItem, Select, Typography } from "@mui/material";
+import {
+  Box,
+  Fab,
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import { useGetUserListByNameMutation } from "../../api/UserList";
 import { useGetUserListCompetitionApiByNameMutation } from "../../api/listCompetition";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 function DashboardContent(props) {
   const [dataCount, setDataCount] = useState(DASHBOARD_CARD_DATA);
@@ -41,26 +48,26 @@ function DashboardContent(props) {
   const [userListCompetition, { data: listCompetitionData }] =
     useGetUserListCompetitionApiByNameMutation();
   const [userListSport, { data: listSportData }] =
-  useGetUserListSportApiByNameMutation();
+    useGetUserListSportApiByNameMutation();
 
   // state of selectors
 
-  const [Date, setDate] = React.useState('');
+  const [Date, setDate] = React.useState("");
 
   const handleChange = (event) => {
     setDate(event.target.value);
   };
 
-//   total user
+  //   total user
 
   const TotalUserCount = async (data) => {
     try {
       const result = await userList({ body: data }).unwrap();
       console.log(result, "RESULT");
-      let temData=[...dataCount]
+      let temData = [...dataCount];
       if (result) {
-        const tempData = [...DASHBOARD_CARD_DATA]
-        temData[0].countNumber=result.totalCount;
+        const tempData = [...DASHBOARD_CARD_DATA];
+        temData[0].countNumber = result.totalCount;
         setDataCount([...temData]);
       }
       console.log(userList(), "log");
@@ -71,19 +78,17 @@ function DashboardContent(props) {
   };
   console.log(dataCount, "jsakjk");
 
-
-
-//   sport
+  //   sport
 
   const TotalUserSport = async (data) => {
     try {
       const result = await userListSport({ body: data }).unwrap();
       console.log(result, "RESULT");
-      let temData=[...dataCount]
+      let temData = [...dataCount];
 
       if (result) {
-        const tempData = [...DASHBOARD_CARD_DATA]
-        temData[1].countNumber=result.totalCount;
+        const tempData = [...DASHBOARD_CARD_DATA];
+        temData[1].countNumber = result.totalCount;
         setDataCount([...temData]);
       }
       console.log(userListSport(), "log");
@@ -94,17 +99,17 @@ function DashboardContent(props) {
   };
   console.log(dataCount, "sports");
 
-  //   competition 
+  //   competition
 
   const TotalUserCompetition = async (data) => {
     try {
       const result = await userListCompetition({ body: data }).unwrap();
       console.log(result, "RESULT");
-      let temData=[...dataCount]
+      let temData = [...dataCount];
 
       if (result) {
-        const tempData = [...DASHBOARD_CARD_DATA]
-        temData[2].countNumber=result.totalCount;
+        const tempData = [...DASHBOARD_CARD_DATA];
+        temData[2].countNumber = result.totalCount;
         setDataCount([...temData]);
       }
       console.log(userListCompetition(), "log");
@@ -122,7 +127,6 @@ function DashboardContent(props) {
       sortValue: "",
       sortOrder: "",
     };
-    //   userList();
     TotalUserCount(reqParams);
     TotalUserSport(reqParams);
     TotalUserCompetition(reqParams);
@@ -135,40 +139,41 @@ function DashboardContent(props) {
           <DashboardHeading>Dashboard</DashboardHeading>
           <DashboardCardBox>
             <DashboardCardInnerBox>
-              {dataCount.length>0 && dataCount?.map((ele) =>  (
-                <DashboardCard className="dashboard-card">
-                  <DashboardCardContentWrapper>
-                    <DashboardCardiconWrapper>
-                      <Box
-                        sx={{
-                          width: "65px",
-                          height: "65px",
-                          borderRadius: "50%",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                        className="favIcon"
-                      >
-                        {ele.icons}
-                      </Box>
-                    </DashboardCardiconWrapper>
-                    <DashboardCardContentBox>
-                      <DashboardCardContentCount>
-                        <DashboardCardContentHeading>
-                          {ele.heading}
-                        </DashboardCardContentHeading>
-                        <DashboardCardCountNumber>
-                        {ele.countNumber}
-                        </DashboardCardCountNumber>
-                      </DashboardCardContentCount>
-                      <DashboardCardCountentSubHeading>
-                        {ele.subHeading}
-                      </DashboardCardCountentSubHeading>
-                    </DashboardCardContentBox>
-                  </DashboardCardContentWrapper>
-                </DashboardCard>
-              ))}
+              {dataCount.length > 0 &&
+                dataCount?.map((ele) => (
+                  <DashboardCard className="dashboard-card">
+                    <DashboardCardContentWrapper>
+                      <DashboardCardiconWrapper>
+                        <Box
+                          sx={{
+                            width: "65px",
+                            height: "65px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          className="favIcon"
+                        >
+                          {ele.icons}
+                        </Box>
+                      </DashboardCardiconWrapper>
+                      <DashboardCardContentBox>
+                        <DashboardCardContentCount>
+                          <DashboardCardContentHeading>
+                            {ele.heading}
+                          </DashboardCardContentHeading>
+                          <DashboardCardCountNumber>
+                            {ele.countNumber}
+                          </DashboardCardCountNumber>
+                        </DashboardCardContentCount>
+                        <DashboardCardCountentSubHeading>
+                          {ele.subHeading}
+                        </DashboardCardCountentSubHeading>
+                      </DashboardCardContentBox>
+                    </DashboardCardContentWrapper>
+                  </DashboardCard>
+                ))}
             </DashboardCardInnerBox>
           </DashboardCardBox>
         </DashboardCardWrapper>
@@ -177,31 +182,39 @@ function DashboardContent(props) {
             <AnalysisHeading>Analysis Chart</AnalysisHeading>
           </AnalysisHeadingWrapper>
           <AnalysisCardAndChartWrapper>
-         
             <AnalysisTeamCardWrapper>
               <DateSelectWrapper>
-                <CalendarTodayIcon sx={{fontSize:"16px"}} />
-                
+                <CalendarTodayIcon sx={{ fontSize: "16px" }} />
 
-            <FormControl sx={{ m: 1, minWidth: 130 }}>
-        <Select
-          value={Date}
-          className="calender-border"
-          onChange={handleChange}
-          displayEmpty
-          sx={{fontSize:"14px"}}
-        >
-          <MenuItem  value="">
-          <Typography sx={{color:"grey !important", fontSize:"14px !important"}}>
-
-            This week
-          </Typography>
-          </MenuItem>
-          <MenuItem className="calender" value={10}>This Day</MenuItem>
-          <MenuItem className="calender" value={20}>This Month</MenuItem>
-          <MenuItem className="calender" value={30}>This Year</MenuItem>
-        </Select>
-      </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 130 }}>
+                  <Select
+                    value={Date}
+                    className="calender-border"
+                    onChange={handleChange}
+                    displayEmpty
+                    sx={{ fontSize: "14px" }}
+                  >
+                    <MenuItem value="">
+                      <Typography
+                        sx={{
+                          color: "grey !important",
+                          fontSize: "14px !important",
+                        }}
+                      >
+                        This week
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem className="calender" value={10}>
+                      This Day
+                    </MenuItem>
+                    <MenuItem className="calender" value={20}>
+                      This Month
+                    </MenuItem>
+                    <MenuItem className="calender" value={30}>
+                      This Year
+                    </MenuItem>
+                  </Select>
+                </FormControl>
               </DateSelectWrapper>
               <AnalysisCardWrapper>
                 {ANALYSIS_CARD_DATA.map((ele) => (
