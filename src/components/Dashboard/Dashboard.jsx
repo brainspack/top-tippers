@@ -12,27 +12,22 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import LogoImage from "../../images/toptippers.svg";
 import BasicMenu from "./ProfileMenu";
-import DashboardContent from "../DashboardContent/DashboardContent";
-import { adminList, MASTER_SUBHEADINGS } from "../../utils/constant";
+import { ADMIN_LIST, MASTER_SUBHEADINGS } from "../../utils/constant";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Accordion from '@mui/material/Accordion';
-import AccordionActions from '@mui/material/AccordionActions';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Button from '@mui/material/Button';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import Accordion from "@mui/material/Accordion";
+import AccordionActions from "@mui/material/AccordionActions";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Button from "@mui/material/Button";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 
 const drawerWidth = 240;
 
@@ -84,7 +79,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function DashboardComponent({ content }) {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.up('sm')); // Checks if the screen width is >= 'sm'
+  const isSm = useMediaQuery(theme.breakpoints.up("sm")); // Checks if the screen width is >= 'sm'
 
   const [open, setOpen] = React.useState(true);
 
@@ -97,7 +92,7 @@ export default function DashboardComponent({ content }) {
   };
 
   return (
-    <Box sx={{ display: "flex", position:"relative", zIndex:"1" }}>
+    <Box sx={{ display: "flex", position: "relative", zIndex: "1" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Box sx={{ display: "flex", padding: "0px 20px !important" }}>
@@ -130,7 +125,7 @@ export default function DashboardComponent({ content }) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader >
+        <DrawerHeader>
           <Box
             sx={{
               width: "100%",
@@ -144,7 +139,7 @@ export default function DashboardComponent({ content }) {
           ></Box>
           <IconButton className="drawer-icon-left" onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
-              <ChevronLeftIcon sx={{color:"white"}} />
+              <ChevronLeftIcon sx={{ color: "white" }} />
             ) : (
               <ChevronRightIcon />
             )}
@@ -153,46 +148,45 @@ export default function DashboardComponent({ content }) {
         <Divider />
 
         <List>
-          {adminList.map((text, index) => (
+          {ADMIN_LIST.map((text, index) => (
+            <NavLink
+              className={"drawer-routes"}
+              to={text.route}
+              key={text}
+              disablePadding
+            >
+              <ListItemButton disableRipple className={"drawer-nav"}>
+                <ListItemIcon>{text.icon}</ListItemIcon>
 
-            <NavLink className={"drawer-routes"} to={text.route} key={text} disablePadding>
-
-              <ListItemButton
-              disableRipple 
-                 className={"drawer-nav"}
-                
-              
-                >
-                <ListItemIcon>
-                  {text.icon}
-                </ListItemIcon>
-
-                  
                 <ListItemText primary={text.label} />
                 {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
               </ListItemButton>
-              
             </NavLink>
           ))}
           <Accordion className="accordion-master" elevation={0}>
-        <AccordionSummary
-        className="accordion-master"
-          expandIcon={<ExpandMoreIcon sx={{color:"white"}} />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-          
-        >
-          <SpaceDashboardIcon sx={{color:"white", marginRight:"32px"}} />
-          Master
-        </AccordionSummary>
-            {MASTER_SUBHEADINGS.map((ele)=>(
-        <AccordionDetails className="master-subheadings">
-          {ele.icon}
+            <AccordionSummary
+              className="accordion-master"
+              expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <SpaceDashboardIcon
+                sx={{ color: "white", marginRight: "32px" }}
+              />
+              Master
+            </AccordionSummary>
+            {MASTER_SUBHEADINGS.map((ele) => (
+              <>
+                <NavLink to={ele.route} className={"drawer-routes drawer-nav"}>
+                  <AccordionDetails className="master-subheadings">
+                    {ele.icon}
 
-              {ele.label}
-        </AccordionDetails>
+                    {ele.label}
+                  </AccordionDetails>
+                </NavLink>
+              </>
             ))}
-      </Accordion>
+          </Accordion>
         </List>
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>

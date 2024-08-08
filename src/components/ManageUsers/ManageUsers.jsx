@@ -1,13 +1,17 @@
-import * as React from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  Switch,
-  FormControlLabel,
-  Skeleton,
-  TextField,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
+import MUIDataTable from "mui-datatables";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
+import { useGetUserListByNameMutation } from "../../api/UserList";
+import { useDeactivateUserByNameMutation } from "../../api/DeactivateUser";
+import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
+import { userDataSelector } from "../../slices/userSlice/userSelector";
+import { updateUserData } from "../../slices/userSlice/user";
+import { handleNotification } from "../../slices/Snackbar";
 import {
   DropDownBox,
   ManageUsersContainer,
@@ -18,30 +22,13 @@ import {
   SearchIconWrapper,
   StyledInputBase,
 } from "./ManangeUsersStyled";
-import CircularProgress from "@mui/material/CircularProgress";
-import SearchIcon from "@mui/icons-material/Search";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import MUIDataTable from "mui-datatables";
-import { useGetUserListByNameMutation } from "../../api/UserList";
-import { useDeactivateUserByNameMutation } from "../../api/DeactivateUser";
-import { useEffect, useState } from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EmailIcon from "@mui/icons-material/Email";
-import { handleNotification } from "../../slices/Snackbar";
-import { useDispatch, useSelector } from "react-redux";
 import ControlledSwitches from "../SwitchComponent";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import { updateUserData } from "../../slices/userSlice/user";
 import CustomModal from "../reuse/CustomModal";
-import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
-import BasicMenu from "../Dashboard/ProfileMenu";
-import { useNavigate } from "react-router-dom";
 import CustomPagination from "../reuse/CustomPagination";
-import BasicPagination from "../reuse/CustomPagination";
 import UserMenu from "./UserMenu";
 const ManageUsers = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [view, setView] = useState("");
   const [modal, setModal] = useState(false);
   const openModal = (id) => {
@@ -51,14 +38,28 @@ const ManageUsers = () => {
   const closeModal = () => {
     setModal(false);
   };
-  const dispatch = useDispatch();
-  const [userList, sampleData] = useGetUserListByNameMutation();
-  const { data, isLoading, error, isSuccess: userListSuccess } = sampleData;
-  console.log(sampleData, "sampleData");
+
   const { data: userData } = useSelector(userDataSelector);
   const userAllData = useSelector(userDataSelector);
 
-  console.log(userAllData, "thisIsState");
+  const onHandleSearch = (e) => {
+    const reqParams = {
+      search_string: e.target.value,
+      page: 0,
+      sortValue: "",
+      sortOrder: "",
+    };
+    userList(reqParams);
+  };
+  const permanentDelete = async () => {
+    try {
+      userDeleteApi({ userId: view });
+    } catch (error) {
+      console.log(" Error", error);
+    }
+  };
+  const [userList, sampleData] = useGetUserListByNameMutation();
+  const { data, isLoading, error, isSuccess: userListSuccess } = sampleData;
   const [
     deactivateUser,
     {
@@ -77,22 +78,41 @@ const ManageUsers = () => {
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteUserByNameMutation();
-  const onHandleSearch = (e) => {
+  useEffect(() => {
+    if (userDeleteLoading) return;
+    if (userDeleteData?.code === 200) {
+      if (userDeleteData) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: userDeleteData?.message,
+            severity: userDeleteData?.code,
+          })
+        );
+        closeModal();
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: userDeleteData?.message,
+            severity: userDeleteData?.status,
+          })
+        );
+      }
+    }
+  }, [userDeleteData, userDeleteLoading]);
+  useEffect(() => {
+    if (data && data?.data) dispatch(updateUserData(data?.data));
+  }, [data, userListSuccess]);
+  useEffect(() => {
     const reqParams = {
-      search_string: e.target.value,
+      search_string: "",
       page: 0,
       sortValue: "",
       sortOrder: "",
     };
     userList(reqParams);
-  };
-  const permanentDelete = async () => {
-    try {
-      userDeleteApi({ userId: view });
-    } catch (error) {
-      console.log(" Error", error);
-    }
-  };
+  }, [deactivateUserSuccess, userDeleteSuccess]);
 
   const columns = [
     {
@@ -221,41 +241,6 @@ const ManageUsers = () => {
     },
   };
 
-  useEffect(() => {
-    if (userDeleteLoading) return;
-    if (userDeleteData?.code === 200) {
-      if (userDeleteData) {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: userDeleteData?.message,
-            severity: userDeleteData?.code,
-          })
-        );
-        closeModal();
-      } else {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: userDeleteData?.message,
-            severity: userDeleteData?.status,
-          })
-        );
-      }
-    }
-  }, [userDeleteData, userDeleteLoading]);
-  useEffect(() => {
-    if (data && data?.data) dispatch(updateUserData(data?.data));
-  }, [data, userListSuccess]);
-  useEffect(() => {
-    const reqParams = {
-      search_string: "",
-      page: 0,
-      sortValue: "",
-      sortOrder: "",
-    };
-    userList(reqParams);
-  }, [deactivateUserSuccess, userDeleteSuccess]);
   return (
     <>
       <ManageUsersContainer>

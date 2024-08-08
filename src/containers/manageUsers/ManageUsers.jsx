@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import ManageUsers from "./ManageUsers";
-import DashboardComponent from "../Dashboard/Dashboard";
+import DashboardComponent from "../../components/Dashboard/Dashboard";
+import ManageUsers from "../../components/ManageUsers/ManageUsers";
 
 const ManageUsersComponent = () => {
   return (

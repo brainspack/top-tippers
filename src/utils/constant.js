@@ -33,7 +33,7 @@ export const LOGIN_DATA = [
   },
 ];
 
-export const adminList = [
+export const ADMIN_LIST = [
   {
     label: "Dashboard",
     route: "/admin/dashboard",
@@ -46,20 +46,36 @@ export const adminList = [
   },
   {
     label: "Messaging",
-    route: "messaging",
+    route: "/admin/messaging",
     icon: <EmailIcon sx={{ color: "white" }} />,
   },
-  // { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
 ];
 export const MASTER_SUBHEADINGS = [
   {
-    label: "Master Sports",
+    label: "Manage Sports",
     icon: <NavigateNextIcon sx={{ color: "white" }} />,
+    route: "/admin/sport",
   },
-  { label: "Master Team", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
-  { label: "Master Round", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
-  { label: "Master Game", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
-  // { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
+  {
+    label: "Manage Team",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
+    route: "/admin/team",
+  },
+  {
+    label: "Manage Round",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
+    route: "/admin/round",
+  },
+  {
+    label: "Manage Game",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
+    route: "/admin/game",
+  },
+  {
+    label: "Manage Comp...",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
+    route: "/admin/competition",
+  },
 ];
 
 export const DASHBOARD_CARD_DATA = [

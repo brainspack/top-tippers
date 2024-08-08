@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   value: {
     state: false,
-    message: null,
-    severity: null,
+    message: "",
+    severity: "info",
   },
 };
 
@@ -13,13 +13,15 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     handleNotification: (state, { payload }) => {
-      state.value.state = payload.state;
-      state.value.message = payload.message;
-      state.value.severity = payload.severity;
+      const { state: open, message, severity } = payload;
+      state.value = {
+        state: open,
+        message: message || null,
+        severity: severity || "info",
+      };
     },
   },
 });
 
 export const { handleNotification } = counterSlice.actions;
-
 export default counterSlice.reducer;
