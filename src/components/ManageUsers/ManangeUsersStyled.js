@@ -35,15 +35,12 @@ export const ManageUserTableWrapper = styled(Box)(() => ({
 export const Search = styled(Paper)(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  // backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
-    // backgroundColor: alpha(theme.palette.common.white, 0.25),
     color: theme.palette.primary.main,
   },
   color: "rgb(13, 25, 51)",
   marginLeft: 0,
   width: "50%",
-  // backgroundColor: "rgb(13, 25, 51)",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",

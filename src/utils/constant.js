@@ -8,6 +8,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import MenuIcon from "@mui/icons-material/Menu";
+
 
 // ================= URL ==================
 
@@ -28,8 +30,6 @@ export const LOGIN_DATA = [
     LABEL: "Password",
     RMESSAGE: "Please  Enter the Password",
     REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-    // RXMESSAGE:
-    //   "Password should be of at least  8 characters, one capital letter, and one number. and one special character.",
   },
 ];
 
@@ -49,7 +49,6 @@ export const adminList = [
     route: "messaging",
     icon: <EmailIcon sx={{ color: "white" }} />,
   },
-  // { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
 ];
 export const MASTER_SUBHEADINGS = [
   {
@@ -59,7 +58,6 @@ export const MASTER_SUBHEADINGS = [
   { label: "Master Team", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
   { label: "Master Round", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
   { label: "Master Game", icon: <NavigateNextIcon sx={{ color: "white" }} /> },
-  // { label: "Master", route: "master", icon: <SpaceDashboardIcon sx={{color:"white"}} /> },
 ];
 
 export const DASHBOARD_CARD_DATA = [
@@ -96,3 +94,8 @@ export const ANALYSIS_CARD_DATA = [
     subHeading: "20% From last year",
   },
 ];
+
+
+export const menu_icon = [{
+  iconss : <MenuIcon />
+}]
