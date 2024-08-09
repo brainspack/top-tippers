@@ -64,11 +64,10 @@ function DashboardContent(props) {
     try {
       const result = await userList({ body: data }).unwrap();
       console.log(result, "RESULT");
-      let temData = [...dataCount];
+      let tempData = [...dataCount];
       if (result) {
-        const tempData = [...DASHBOARD_CARD_DATA];
-        temData[0].countNumber = result.totalCount;
-        setDataCount([...temData]);
+        tempData[0].countNumber = result.totalCount;
+        setDataCount([...tempData]);
       }
       console.log(userList(), "log");
     } catch (err) {
@@ -84,12 +83,11 @@ function DashboardContent(props) {
     try {
       const result = await userListSport({ body: data }).unwrap();
       console.log(result, "RESULT");
-      let temData = [...dataCount];
+      let tempData = [...dataCount];
 
       if (result) {
-        const tempData = [...DASHBOARD_CARD_DATA];
-        temData[1].countNumber = result.totalCount;
-        setDataCount([...temData]);
+        tempData[1].countNumber = result.totalCount;
+        setDataCount([...tempData]);
       }
       console.log(userListSport(), "log");
     } catch (err) {
@@ -105,12 +103,11 @@ function DashboardContent(props) {
     try {
       const result = await userListCompetition({ body: data }).unwrap();
       console.log(result, "RESULT");
-      let temData = [...dataCount];
+      let tempData = [...dataCount];
 
       if (result) {
-        const tempData = [...DASHBOARD_CARD_DATA];
-        temData[2].countNumber = result.totalCount;
-        setDataCount([...temData]);
+        tempData[2].countNumber = result.totalCount;
+        setDataCount([...tempData]);
       }
       console.log(userListCompetition(), "log");
     } catch (err) {

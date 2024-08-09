@@ -109,13 +109,16 @@ export const DashboardCardiconWrapper = styled(Box)(({theme}) => ({
 
 
 }));
-export const DashboardCardContentBox = styled(Box)(() => ({
+export const DashboardCardContentBox = styled(Box)(({theme}) => ({
   width:"70%",
   height:"90px",
   
   display:"flex",
   flexDirection:"column",
   justifyContent:"space-between",
+  [theme.breakpoints.between("sm", "md")]: {
+    width:"64%",
+  },
 
 }));
 export const DashboardCardContentCount = styled(Box)(() => ({

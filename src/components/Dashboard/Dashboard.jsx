@@ -23,15 +23,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LogoImage from "../../images/toptippers.svg";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import useWindowWidth from "./useWindowWidth";
 import BasicMenu from "./ProfileMenu";
 import { ADMIN_LIST, MASTER_SUBHEADINGS } from "../../utils/constant";
-import { ListItem, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -124,24 +122,67 @@ export default function DashboardComponent({ content }) {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
+      sx={{
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        backgroundColor: "#383434",
+      }}
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
+      elevation={0}
     >
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+        <Box
+          sx={{
+            width: "95%",
+            height: "44px",
+            backgroundImage: `url(${LogoImage})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "90%",
+            display: "flex",
+            marginLeft: "10px",
+            alignItems: "center",
+          }}
+        ></Box>
+        {ADMIN_LIST.map((text, index) => (
+          <NavLink
+            className={"drawer-routes"}
+            to={text.route}
+            key={text}
+            disablePadding
+          >
+            <ListItemButton disableRipple className={"drawer-nav"}>
+              <ListItemIcon>{text.icon}</ListItemIcon>
+
+              <ListItemText primary={text.label} />
+              {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
             </ListItemButton>
-          </ListItem>
+          </NavLink>
         ))}
+        <Accordion className="accordion-master" elevation={0}>
+          <AccordionSummary
+            className="accordion-master"
+            expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <SpaceDashboardIcon sx={{ color: "white", marginRight: "32px" }} />
+            Master
+          </AccordionSummary>
+          {MASTER_SUBHEADINGS.map((ele) => (
+            <>
+              <NavLink to={ele.route} className={"drawer-routes drawer-nav"}>
+                <AccordionDetails className="master-subheadings">
+                  {ele.icon}
+
+                  {ele.label}
+                </AccordionDetails>
+              </NavLink>
+            </>
+          ))}
+        </Accordion>
       </List>
       <Divider />
-      <List>
+      {/* <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -152,7 +193,7 @@ export default function DashboardComponent({ content }) {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </Box>
   );
 
