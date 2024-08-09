@@ -46,6 +46,8 @@
   border-radius: 6px;
 }
 
+
+
 .email-input {
   outline: none;
 }
@@ -69,166 +71,126 @@
   width: 100%;
   justify-content: space-between;
 }
-.inputbox input {
-  border: none !important;
+.inputbox input{
+  border:none !important;
   width: 100%;
   height: 40px;
 }
-#basic-button {
+#basic-button{
+  /* background-color: #ddd; */
   text-transform: none;
   color: white;
+
 }
-#basic-button:hover {
+#basic-button:hover{
   background-color: #ddd;
+  
+
 }
 
-.icon-bar {
+.icon-bar{
   padding: 20px !important;
 }
 
-.favIcon {
+
+.favIcon{
   background-color: #e5a842 !important;
+  /* box-shadow: 0px !important; */
 }
 
-.dashboard-card:hover .favIcon {
+.dashboard-card:hover .favIcon{
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
+
 /*================================ selector form control styling =========================== */
 
-.css-6hp17o-MuiList-root-MuiMenu-list {
+
+
+.css-6hp17o-MuiList-root-MuiMenu-list{
   width: 180px;
 }
-.calender {
+.calender{
   font-size: 14px !important;
 }
 
-.calender-border .MuiOutlinedInput-notchedOutline {
+.calender-border .MuiOutlinedInput-notchedOutline{
   border: none !important;
 }
 
-@media screen and (max-width: 599px) {
-  .MuiDrawer-docked .css-1f2xuhi-MuiDrawer-docked {
-    position: absolute !important;
-    bottom: 0px !important;
-    top: 0px !important;
-    z-index: 2 !important;
-  }
-}
 
-.active .drawer-nav {
+.active .drawer-nav{
   background-color: #e5a842;
 }
 
-.user-menu {
+.user-menu{
   font-size: 14px !important;
 }
-.drawer-routes {
+.drawer-routes{
   text-decoration: none;
   color: white;
 }
-/* .masterRoutes{
-  text-decoration: none;
-  color: white  ;
-} */
 
-#basic-menu .MuiPaper-elevation8 {
-  left: 1108px !important;
+#basic-menu .MuiPaper-elevation8{
+  left:1108px !important;
 }
 
-.css-6hp17o-MuiList-root-MuiMenu-list {
+.css-6hp17o-MuiList-root-MuiMenu-list{
   padding: 0px !important;
 }
 
-.drawer-nav {
-  width: 100%;
+.drawer-nav{
+  width: 100% ;
   height: 50px;
   display: flex;
   align-items: center;
 }
-.drawer-nav:hover {
+.drawer-nav:hover{
   background-color: #e5a842 !important;
   transition: all 300ms ease;
+
 }
 
-.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper {
+.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper{
   background-color: #383434;
+
 }
 
-/* ======================== drawer top icons styling ========================== */
+/*= ======================== drawer top icons styling ========================== */
 
-.drawer-icon-left .MuiSvgIcon-fontSizeMedium:hover {
+.drawer-icon-left .MuiSvgIcon-fontSizeMedium:hover{
   background-color: #e5a842;
   border-radius: 50%;
   transition: all 300ms ease;
 }
 
-.MuiSvgIcon-fontSizeMedium {
+.MuiSvgIcon-fontSizeMedium{
   border-radius: 50%;
 }
 
 /* ============= ACCORDIAN STYLIGN ====================== */
 
-.accordion-master {
+
+.accordion-master{
   background-color: #383434 !important ;
   color: white !important;
 }
 
-.accordion-master .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root {
+.accordion-master .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root{
   min-height: 64px;
 }
 
-.master-subheadings {
+.master-subheadings{
   display: flex;
 }
 
-.MuiAccordion-region .css-15v22id-MuiAccordionDetails-root {
+.MuiAccordion-region .css-15v22id-MuiAccordionDetails-root{
   padding: 8px 45px 16px 47px !important;
-}
+} 
+  
+/* =================================== responsive sidebar styling ========================== */
 
-/* ==============  outer styling ============================== */
-
-
-h1, p {
-  font-family: Lato;
-}
-
-.drawer-side-drawer {
-  top: 47px !important;
-  text-align: left !important;
-  width: 57% !important;
-  transform: translate(350px, 0px) !important;
-}
-
-/* .drawer-side-drawer:active {
-  top: 47px !important;
-  text-align: left !important;
-  width: 350px !important;
-  transform: translate(0px, 0px) !important;
-} */
-
-/* .drawer-side-drawer:focus {
-  top: 47px !important;
-  text-align: left !important;
-  width: 350px !important;
-  transform: translate(0px, 0px) !important;
-} */
-
-.drawer-title-div {
-  display: inline-block;
-  width: 100%;
-  background: #F2F8FB;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.24);
-}
-
-.drawer-title-text {
-  display: inline-block;
-  margin-left: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  color: #484848;
-  font-family: Muli;
-  font-size: 16px;
-  font-weight: 600;
-}
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
+  background-color:#383434 !important;
+} 
 
