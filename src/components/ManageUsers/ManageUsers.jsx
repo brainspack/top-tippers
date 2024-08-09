@@ -19,7 +19,9 @@ import {
   ManageUsersWrapper,
   ManageUserTableWrapper,
   Search,
+  SearchContainer,
   SearchIconWrapper,
+  SearchWrapper,
   StyledInputBase,
 } from "./ManangeUsersStyled";
 import ControlledSwitches from "../SwitchComponent";
@@ -29,8 +31,10 @@ import UserMenu from "./UserMenu";
 const ManageUsers = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { data: userData } = useSelector(userDataSelector);
   const [view, setView] = useState("");
   const [modal, setModal] = useState(false);
+
   const openModal = (id) => {
     setModal(true);
     setView(id);
@@ -38,9 +42,6 @@ const ManageUsers = () => {
   const closeModal = () => {
     setModal(false);
   };
-
-  const { data: userData } = useSelector(userDataSelector);
-  const userAllData = useSelector(userDataSelector);
 
   const onHandleSearch = (e) => {
     const reqParams = {
@@ -51,6 +52,7 @@ const ManageUsers = () => {
     };
     userList(reqParams);
   };
+
   const permanentDelete = async () => {
     try {
       userDeleteApi({ userId: view });
@@ -58,8 +60,10 @@ const ManageUsers = () => {
       console.log(" Error", error);
     }
   };
-  const [userList, sampleData] = useGetUserListByNameMutation();
-  const { data, isLoading, error, isSuccess: userListSuccess } = sampleData;
+
+  const [userList, { data, isLoading, error, isSuccess: userListSuccess }] =
+    useGetUserListByNameMutation();
+
   const [
     deactivateUser,
     {
@@ -69,6 +73,7 @@ const ManageUsers = () => {
       isSuccess: deactivateUserSuccess,
     },
   ] = useDeactivateUserByNameMutation();
+
   const [
     userDeleteApi,
     {
@@ -78,6 +83,7 @@ const ManageUsers = () => {
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteUserByNameMutation();
+
   useEffect(() => {
     if (userDeleteLoading) return;
     if (userDeleteData?.code === 200) {
@@ -101,9 +107,11 @@ const ManageUsers = () => {
       }
     }
   }, [userDeleteData, userDeleteLoading]);
+
   useEffect(() => {
     if (data && data?.data) dispatch(updateUserData(data?.data));
   }, [data, userListSuccess]);
+
   useEffect(() => {
     const reqParams = {
       search_string: "",
@@ -202,7 +210,6 @@ const ManageUsers = () => {
         }),
         customBodyRender: (value, rowData) => (
           <>
-            {console.log(data?.data, "insideEmail")}
             <Box display="flex" gap="10px">
               <VisibilityIcon
                 onClick={() => navigate(`/admin/userprofile/${value}`)}
@@ -235,6 +242,7 @@ const ManageUsers = () => {
             changePage={changePage}
             userList={userList}
             userData={userData}
+            isLoading={isLoading}
           />
         </>
       );
@@ -244,21 +252,13 @@ const ManageUsers = () => {
   return (
     <>
       <ManageUsersContainer>
-        <ManageUsersWrapper
-          sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
-        >
+        <ManageUsersWrapper>
           <Box>
             <ManageUsersHeading>Manage User</ManageUsersHeading>
           </Box>
-          <Box border={"1px solid rgba(0, 0, 0, 0.1)"}>
-            <Box
-              padding={"15px"}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Box>
+          <SearchContainer>
+            <SearchWrapper>
+              <Box sx={{ width: "45%" }}>
                 <Search>
                   <SearchIconWrapper>
                     <SearchIcon sx={{ color: "primary.secondary" }} />
@@ -274,7 +274,7 @@ const ManageUsers = () => {
               <DropDownBox>
                 <UserMenu />
               </DropDownBox>
-            </Box>
+            </SearchWrapper>
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={userData}
@@ -291,7 +291,7 @@ const ManageUsers = () => {
               userDeleteLoading={userDeleteLoading}
               permanentDelete={permanentDelete}
             />
-          </Box>
+          </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>
     </>

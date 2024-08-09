@@ -2,17 +2,16 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Login from "./components/LoginPage/LoginPage.jsx";
 import { OpenNotification } from "./components/Snackbar.jsx";
-import PrivateRoute from "./containers/Routing/PrivateRoute.js";
 import DashboardPage from "./containers/dashboard/Dashboard.jsx";
 import ManageUsersComponent from "./containers/manageUsers/ManageUsers.jsx";
 import UserProfile from "./containers/userProfile/UserProfile.jsx";
 import MessagingComponent from "./containers/messaging/MessagingComponent.jsx";
-import MasterSportComponent from "./containers/master/ManageSportComponent.jsx";
 import ManageSportComponent from "./containers/master/ManageSportComponent.jsx";
 import ManageTeamComponent from "./containers/master/ManageTeamComponent.jsx";
 import ManageCompetitionComponent from "./containers/master/ManageCompetitionComponent.jsx";
 import ManageGameComponent from "./containers/master/ManageGameComponent.jsx";
 import ManageRoundComponent from "./containers/master/ManageRoundComponent.jsx";
+import PrivateRoute from "./routers/PrivateRoute.js";
 
 const App = () => {
   return (
