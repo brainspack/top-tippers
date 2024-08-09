@@ -1,32 +1,68 @@
 import { Box, Button, Paper, styled, Typography } from "@mui/material";
 import bannerImage from "../../images/login-banner.6b372104.png";
 import LogoImage from "../../images/logo.svg";
-import { LoadingButton } from "@mui/lab";
+import logInArt from "../../images/login-art.f41b477f.png";
+import zIndex from "@mui/material/styles/zIndex";
 
-export const MainContainer = styled(Box)(() => ({
+export const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   height: "100vh",
   backgroundImage: `url(${bannerImage})`,
   position: "relative",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  [theme.breakpoints.down("sm")]: {
+    display: "flex",
+    alignItems: "center",
+  },
+  [theme.breakpoints.between("sm", "md")]: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+  },
 }));
-export const LoginContainerWrapper = styled(Box)(() => ({
-  width: "84%",
-  height: "540px",
-  zIndex: 2,
+export const LoginContainerBox = styled(Box)(({ theme }) => ({
+  width: "57%",
+  height: "inherit",
+  position: "absolute",
+  zIndex: "1",
+  backgroundImage: `url(${logInArt})`,
+  backgroundSize: "cover",
+  [theme.breakpoints.down("sm")]: {
+    width: "10%",
+    height: "57%",
+  },
+  [theme.breakpoints.between("sm", "md")]: {
+    width: "100%",
+    height: "80%",
+  },
+}));
+export const LoginContainerWrapper = styled(Box)(({ theme }) => ({
+  width: "95%",
+  height: "100%",
   display: "flex",
   justifyContent: "flex-end",
+  alignItems: "center",
+  [theme.breakpoints.between("sm", "md")]: {
+    position: "absolute",
+    zIndex: 5,
+    width: "100%",
+    justifyContent: "center",
+  },
 }));
-export const LoginContainer = styled(Paper)(() => ({
-  width: "40%",
+export const LoginContainer = styled(Paper)(({ theme }) => ({
+  width: "37%",
   height: "540px",
   backgroundColor: "white",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   borderRadius: "8px",
+  [theme.breakpoints.down("sm")]: {
+    width: "97%",
+    zIndex: 8,
+  },
+  [theme.breakpoints.between("sm", "md")]: {
+    width: "60%",
+  },
 }));
 export const LoginContainerInnerWrapper = styled(Box)(() => ({
   width: "85%",
@@ -39,11 +75,14 @@ export const LogoImageWrapper = styled(Box)(() => ({
   justifyContent: "center",
   alignItems: "center",
 }));
-export const LogoImageBox = styled(Box)(() => ({
+export const LogoImageBox = styled(Box)(({ theme }) => ({
   width: "90%",
   height: "40px",
   backgroundImage: `url(${LogoImage})`,
   backgroundRepeat: "no-repeat",
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
 }));
 export const LoginHeadingWrapper = styled(Box)(() => ({
   width: "100%",

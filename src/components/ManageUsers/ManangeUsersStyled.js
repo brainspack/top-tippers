@@ -10,6 +10,17 @@ export const ManageUsersWrapper = styled(Box)(() => ({
   width: "100%",
   height: "auto",
   padding: "20px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+}));
+export const SearchContainer = styled(Box)(() => ({
+  border: "1px solid rgba(0, 0, 0, 0.1)",
+}));
+export const SearchWrapper = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "space-between",
+  padding: "15px",
 }));
 
 export const ManageUsersHeading = styled(Typography)(({ theme }) => ({

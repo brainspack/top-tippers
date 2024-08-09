@@ -1,22 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  ForgotPassword,
-  ForgotPasswordWrapper,
-  InputBox,
-  InputWrapper,
-  LoginButton,
-  LoginContainer,
-  LoginContainerInnerWrapper,
-  LoginContainerWrapper,
-  LoginHeading,
-  LoginHeadingWrapper,
-  LogoImageBox,
-  LogoImageWrapper,
-  MainContainer,
-} from "./loginStyled";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-
 import {
   Box,
   FormControl,
@@ -25,33 +10,37 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  Paper,
   TextField,
-  Typography,
 } from "@mui/material";
-import loginArt from "../../images/login-art.f41b477f.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  ForgotPassword,
+  ForgotPasswordWrapper,
+  InputBox,
+  InputWrapper,
+  LoginButton,
+  LoginContainer,
+  LoginContainerBox,
+  LoginContainerInnerWrapper,
+  LoginContainerWrapper,
+  LoginHeading,
+  LoginHeadingWrapper,
+  LogoImageBox,
+  LogoImageWrapper,
+  MainContainer,
+} from "./loginStyled";
+import loginArt from "../../images/login-art.f41b477f.png";
 import { LOGIN_DATA } from "../../utils/constant";
 import { handleNotification } from "../../slices/Snackbar";
 
-function Login(props) {
+const Login = (props) => {
   const location = useLocation();
   const path = location.pathname;
   const dispatch = useDispatch();
-  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
-    useGetAdminLoginByNameMutation();
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage?.getItem("token");
-    if (token) {
-      if (path === "/admin/") {
-        navigate("/admin/dashboard");
-      }
-    }
-  });
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -101,22 +90,25 @@ function Login(props) {
   const onSubmit = (data) => {
     HandleSubmit(data);
   };
+  const onHandleNavigate = () => {
+    const token = localStorage?.getItem("token");
+    if ((token && path === "/admin") || path === "/admin/") {
+      navigate("/admin/dashboard");
+    }
+  };
+  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
+    useGetAdminLoginByNameMutation();
+  useEffect(() => {
+    onHandleNavigate();
+  }, [navigate, path]);
 
   return (
     <>
       <MainContainer>
-        <Box
-          sx={{
-            position: "absolute",
-            zIndex: "1",
-            top: "-70px",
-            left: "0px",
-            width: "60%",
-            height: "700px",
-          }}
-          component={"img"}
-          src={loginArt}
-        />
+        {/* <LoginContainerBox className="ImageBox">
+          <img src={loginArt} />
+        </LoginContainerBox> */}
+        <LoginContainerBox></LoginContainerBox>
         <LoginContainerWrapper>
           <LoginContainer>
             <LoginContainerInnerWrapper>
@@ -229,6 +221,6 @@ function Login(props) {
       <Outlet />
     </>
   );
-}
+};
 
 export default Login;

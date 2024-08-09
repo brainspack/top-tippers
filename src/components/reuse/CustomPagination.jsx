@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { Box } from "@mui/material";
-import Pagination from "@mui/material/Pagination";
+import { Box, Skeleton, Pagination } from "@mui/material";
 
-const CustomPagination = ({ total, userList, rowsPerPage }) => {
+const CustomPagination = ({ total, userList, rowsPerPage, isLoading }) => {
   const totalPages = Math.ceil(total / rowsPerPage);
-  const [change, setChange] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handlePageButtonClick = (e, pageNumber) => {
-    setChange(pageNumber);
+    setCurrentPage(pageNumber);
     const reqParams = {
       search_string: "",
-      page: change,
+      page: pageNumber,
       sortValue: "",
       sortOrder: "",
     };
@@ -17,26 +17,30 @@ const CustomPagination = ({ total, userList, rowsPerPage }) => {
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          height: "50px",
-        }}
-      >
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end",
+        height: "50px",
+      }}
+    >
+      {isLoading ? (
+        <Skeleton variant="rectangular" width={400} height={40} />
+      ) : (
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Pagination
             count={totalPages}
+            page={currentPage}
             variant="outlined"
-            color={"primary"}
-            shape="circle"
+            color="primary"
+            shape="circular"
             boundaryCount={2}
             onChange={handlePageButtonClick}
           />
         </Box>
-      </Box>
-    </>
+      )}
+    </Box>
   );
 };
+
 export default CustomPagination;
