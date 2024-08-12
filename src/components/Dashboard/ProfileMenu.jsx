@@ -27,9 +27,9 @@ export default function BasicMenu() {
     navigate("/admin/");
   };
 
-  const adminName = async (responseData) => {
+  const adminName = async (data) => {
     try {
-      const result = await logIn({ body: responseData }).unwrap();
+      const result = await logIn({ body: data }).unwrap();
       console.log(result, "RESULT");
     
    }catch (err) {
@@ -59,6 +59,7 @@ export default function BasicMenu() {
           sx={{ width: 34, height: 34, marginRight: "7px" }}
         />{" "}
         {/* {responseData.name} */}
+        John Doe
       </Button>
       <Menu
         id="basic-menu"
