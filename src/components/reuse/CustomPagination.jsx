@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Skeleton, Pagination } from "@mui/material";
 
 const CustomPagination = ({ total, userList, rowsPerPage, isLoading }) => {
-  const totalPages = Math.ceil(total / rowsPerPage);
+  const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageButtonClick = (e, pageNumber) => {
@@ -16,6 +16,13 @@ const CustomPagination = ({ total, userList, rowsPerPage, isLoading }) => {
     userList(reqParams);
   };
 
+  useEffect(() => {
+    if (rowsPerPage && total) {
+      const pages = Math.ceil(total / rowsPerPage);
+      setTotalPages(pages);
+    }
+  }, [rowsPerPage, total]);
+
   return (
     <Box
       sx={{
@@ -24,21 +31,17 @@ const CustomPagination = ({ total, userList, rowsPerPage, isLoading }) => {
         height: "50px",
       }}
     >
-      {isLoading ? (
-        <Skeleton variant="rectangular" width={400} height={40} />
-      ) : (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            variant="outlined"
-            color="primary"
-            shape="circular"
-            boundaryCount={2}
-            onChange={handlePageButtonClick}
-          />
-        </Box>
-      )}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          variant="outlined"
+          color="primary"
+          shape="circular"
+          boundaryCount={2}
+          onChange={handlePageButtonClick}
+        />
+      </Box>
     </Box>
   );
 };

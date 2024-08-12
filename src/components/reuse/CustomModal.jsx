@@ -1,8 +1,6 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
-import { handleNotification } from "../../slices/Snackbar";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,7 +14,7 @@ const style = {
 };
 
 const CustomModal = (props) => {
-  const { modal, closeModal, permanentDelete } = props;
+  const { modal, closeModal, content, action } = props;
 
   const dispatch = useDispatch();
 
@@ -30,9 +28,7 @@ const CustomModal = (props) => {
       >
         <Box sx={style}>
           <Box>
-            <Typography variant="h6">
-              Are you sure you want to delete?
-            </Typography>
+            <Typography variant="h6">{content}</Typography>
             <Box
               display={"flex"}
               justifyContent={"space-around"}
@@ -48,7 +44,10 @@ const CustomModal = (props) => {
               <Button
                 variant="contained"
                 color="error"
-                onClick={permanentDelete}
+                onClick={() => {
+                  action();
+                  closeModal();
+                }}
               >
                 Ok
               </Button>

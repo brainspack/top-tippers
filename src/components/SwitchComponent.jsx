@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Switch from "@mui/material/Switch";
-import deactivateUserApi from "../api/DeactivateUser";
 import { useDispatch } from "react-redux";
 import { handleNotification } from "../slices/Snackbar";
 
