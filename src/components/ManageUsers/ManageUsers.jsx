@@ -122,6 +122,8 @@ const ManageUsers = () => {
     userList(reqParams);
   }, [deactivateUserSuccess, userDeleteSuccess]);
 
+  
+
   const columns = [
     {
       name: "name",
