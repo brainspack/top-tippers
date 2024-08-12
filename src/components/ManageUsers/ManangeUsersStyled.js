@@ -16,11 +16,14 @@ export const ManageUsersWrapper = styled(Box)(() => ({
 }));
 export const SearchContainer = styled(Box)(() => ({
   border: "1px solid rgba(0, 0, 0, 0.1)",
+  borderRadius: "8px",
 }));
 export const SearchWrapper = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-between",
   padding: "15px",
+
+  // border: "1px solid red",
 }));
 
 export const ManageUsersHeading = styled(Typography)(({ theme }) => ({
@@ -41,6 +44,7 @@ export const DropDownBox = styled(Box)(() => ({
 
 export const ManageUserTableWrapper = styled(Box)(() => ({
   width: "100%",
+  padding: "15px",
 }));
 
 export const Search = styled(Paper)(({ theme }) => ({

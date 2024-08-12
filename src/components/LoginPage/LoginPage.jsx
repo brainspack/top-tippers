@@ -12,6 +12,7 @@ import {
   OutlinedInput,
   TextField,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 import {
@@ -30,7 +31,6 @@ import {
   LogoImageWrapper,
   MainContainer,
 } from "./loginStyled";
-import loginArt from "../../images/login-art.f41b477f.png";
 import { LOGIN_DATA } from "../../utils/constant";
 import { handleNotification } from "../../slices/Snackbar";
 
@@ -212,7 +212,9 @@ const Login = (props) => {
                 <ForgotPasswordWrapper>
                   <ForgotPassword>Forgot Password?</ForgotPassword>
                 </ForgotPasswordWrapper>
-                <LoginButton type="submit">Login</LoginButton>
+                <LoginButton type="submit" disabled={isLoading}>
+                  {isLoading ? <LoadingButton loading /> : "LogIn"}
+                </LoginButton>
               </form>
             </LoginContainerInnerWrapper>
           </LoginContainer>

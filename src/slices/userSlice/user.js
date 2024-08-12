@@ -13,6 +13,7 @@ export const userSlice = createSlice({
         return {
           ...user,
           isTopSportUser: user.isTopSportUser ? "Yes" : "No",
+          isVerified: user.isVerified ? "Yes" : "No",
         };
       });
       state.data = changedData;

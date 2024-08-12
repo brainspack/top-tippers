@@ -6,9 +6,11 @@ import MUIDataTable from "mui-datatables";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
+import MailIcon from "@mui/icons-material/Mail";
 import { useGetUserListByNameMutation } from "../../api/UserList";
 import { useDeactivateUserByNameMutation } from "../../api/DeactivateUser";
 import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
+import { useVerifyUserByNameMutation } from "../../api/VerifyUser";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
 import { updateUserData } from "../../slices/userSlice/user";
 import { handleNotification } from "../../slices/Snackbar";
@@ -28,16 +30,61 @@ import ControlledSwitches from "../SwitchComponent";
 import CustomModal from "../reuse/CustomModal";
 import CustomPagination from "../reuse/CustomPagination";
 import UserMenu from "./UserMenu";
+
 const ManageUsers = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data: userData } = useSelector(userDataSelector);
-  const [view, setView] = useState("");
   const [modal, setModal] = useState(false);
-
-  const openModal = (id) => {
+  const [modalTitle, setModalContent] = useState("");
+  const [action, setAction] = useState(() => () => {});
+  const openModal = (id, type) => {
+    if (type === "delete") {
+      setModalContent("Do you want to delete this record?");
+      setAction(() => async () => {
+        try {
+          await userDeleteApi({ userId: id }).unwrap();
+          dispatch(
+            handleNotification({
+              state: true,
+              message: userDeleteData?.message,
+              severity: userDeleteData?.code,
+            })
+          );
+        } catch (error) {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: userDeleteData?.message,
+              severity: userDeleteData?.code,
+            })
+          );
+        }
+      });
+    } else if (type === "verify") {
+      setModalContent("Do you want to verify this account?");
+      setAction(() => async () => {
+        try {
+          await verifyUserApi({ userId: id }).unwrap();
+          dispatch(
+            handleNotification({
+              state: true,
+              message: verifyUserData?.message,
+              severity: verifyUserData?.code,
+            })
+          );
+        } catch (error) {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: verifyUserData?.message,
+              severity: verifyUserData?.code,
+            })
+          );
+        }
+      });
+    }
     setModal(true);
-    setView(id);
   };
   const closeModal = () => {
     setModal(false);
@@ -51,14 +98,6 @@ const ManageUsers = () => {
       sortOrder: "",
     };
     userList(reqParams);
-  };
-
-  const permanentDelete = async () => {
-    try {
-      userDeleteApi({ userId: view });
-    } catch (error) {
-      console.log(" Error", error);
-    }
   };
 
   const [userList, { data, isLoading, error, isSuccess: userListSuccess }] =
@@ -83,6 +122,14 @@ const ManageUsers = () => {
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteUserByNameMutation();
+  const [
+    verifyUserApi,
+    {
+      data: verifyUserData,
+      isLoading: verifyUserLoading,
+      isSuccess: verifyUserSuccess,
+    },
+  ] = useVerifyUserByNameMutation();
 
   useEffect(() => {
     if (userDeleteLoading) return;
@@ -107,6 +154,29 @@ const ManageUsers = () => {
       }
     }
   }, [userDeleteData, userDeleteLoading]);
+  useEffect(() => {
+    if (verifyUserLoading) return;
+    if (verifyUserData?.code === 200) {
+      if (verifyUserData) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: verifyUserData?.message,
+            severity: verifyUserData?.code,
+          })
+        );
+        closeModal();
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: verifyUserData?.message,
+            severity: verifyUserData?.status,
+          })
+        );
+      }
+    }
+  }, [verifyUserData, verifyUserLoading]);
 
   useEffect(() => {
     if (data && data?.data) dispatch(updateUserData(data?.data));
@@ -120,7 +190,7 @@ const ManageUsers = () => {
       sortOrder: "",
     };
     userList(reqParams);
-  }, [deactivateUserSuccess, userDeleteSuccess]);
+  }, [deactivateUserSuccess, userDeleteSuccess, verifyUserSuccess]);
 
   
 
@@ -210,16 +280,29 @@ const ManageUsers = () => {
             color: "black",
           },
         }),
-        customBodyRender: (value, rowData) => (
-          <>
-            <Box display="flex" gap="10px">
-              <VisibilityIcon
-                onClick={() => navigate(`/admin/userprofile/${value}`)}
-              ></VisibilityIcon>
-              <DeleteIcon onClick={() => openModal(value)} />
-            </Box>
-          </>
-        ),
+        customBodyRender: (value, rowData) => {
+          console.log(rowData, value, "thisIsRowData");
+          return (
+            <>
+              <Box display="flex" gap="10px">
+                <VisibilityIcon
+                  onClick={() => navigate(`/admin/userprofile/${value}`)}
+                ></VisibilityIcon>
+                <DeleteIcon onClick={() => openModal(value, "delete")} />
+
+                {userData?.map((e) => {
+                  if (e._id === value) {
+                    return e.isVerified === "No" ? (
+                      <MailIcon onClick={() => openModal(value, "verify")} />
+                    ) : (
+                      ""
+                    );
+                  }
+                })}
+              </Box>
+            </>
+          );
+        },
       },
     },
   ];
@@ -287,11 +370,8 @@ const ManageUsers = () => {
             <CustomModal
               modal={modal}
               closeModal={closeModal}
-              userid={view}
-              userDeleteApi={userDeleteApi}
-              userDeleteData={userDeleteData}
-              userDeleteLoading={userDeleteLoading}
-              permanentDelete={permanentDelete}
+              content={modalTitle}
+              action={action}
             />
           </SearchContainer>
         </ManageUsersWrapper>

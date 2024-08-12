@@ -6,6 +6,7 @@ import deleteUserApi from "./api/DeleteUser";
 import userDetailsApi from "./api/getUserDetails";
 import disabledUserApi from "./api/UserDisabled";
 import downloadCsvApi from "./api/DownloadCsv";
+import verifyUserApi from "./api/VerifyUser";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import snackbarReducer from "../src/slices/Snackbar";
 import userReducer from "../src/slices/userSlice/user";
@@ -25,6 +26,7 @@ export const store = configureStore({
     [downloadCsvApi.reducerPath]: downloadCsvApi.reducer,
     [deleteUserApi.reducerPath]: deleteUserApi.reducer,
     [userDetailsApi.reducerPath]: userDetailsApi.reducer,
+    [verifyUserApi.reducerPath]: verifyUserApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -38,6 +40,7 @@ export const store = configureStore({
       userListSportApi.middleware,
       disabledUserApi.middleware,
       downloadCsvApi.middleware,
+      verifyUserApi.middleware
     ),
 });
 setupListeners(store.dispatch);
