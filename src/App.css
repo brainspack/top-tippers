@@ -202,3 +202,25 @@
   width: 100%;
   object-fit: cover;
 }
+
+/* =============== ADD SPORT MODAL ==================== */
+
+.close-icon{
+  color:grey;
+  cursor: pointer;
+  
+}
+.close-icon:hover{
+  color:black;
+
+}
+
+#modal-modal-description .css-lh3xye-MuiFormControl-root{
+  margin: 0px;
+}
+#modal-modal-description .MuiFormControl-root{
+  margin: 0px !important;
+}
+.css-6hp17o-MuiList-root-MuiMenu-list{
+  width: auto !important;
+}

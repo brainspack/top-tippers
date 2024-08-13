@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import {
   DropDownBox,
@@ -20,6 +20,10 @@ import MUIDataTable from "mui-datatables";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from '@mui/icons-material/Send';
+import EditIcon from '@mui/icons-material/Edit';
+import { AddSportBtn } from "./masterStyled";
+import AddIcon from '@mui/icons-material/Add';
+import AddSportModal from "./AddSportModal";
 const ManageSport = (props) => {
 
   const [userListSport, { data: listSportData }] =
@@ -140,9 +144,9 @@ const ManageSport = (props) => {
         customBodyRender: (value, rowData) => (
           <>
             <Box display="flex" gap="10px">
-              <VisibilityIcon
+              <EditIcon
                 // onClick={() => navigate(`/admin/userprofile/${value}`)}
-              ></VisibilityIcon>
+              ></EditIcon>
               <DeleteIcon 
               // onClick={() => openModal(value)}
                />
@@ -153,7 +157,7 @@ const ManageSport = (props) => {
       },
     },
     {
-      name: "invite&Comp Button",
+      name: "isInviteCompButton",
       label: "Invite&Comp Button",
       options: {
         filter: true,
@@ -214,8 +218,10 @@ const ManageSport = (props) => {
     <>
       <ManageUsersContainer>
         <ManageUsersWrapper>
-          <Box>
+          <Box sx={{display:"flex", justifyContent:"space-between"}}>
             <ManageUsersHeading>Sport</ManageUsersHeading>
+            <AddSportModal />
+      
           </Box>
            <SearchContainer>
             {/* <SearchWrapper> */}
