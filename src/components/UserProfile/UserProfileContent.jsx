@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useUserDetailsByNameMutation } from "../../api/getUserDetails";
 import { useEffect } from "react";
@@ -43,7 +43,9 @@ const UserProfileContent = () => {
           </CardActionArea>
         </Card>
       ) : (
-        ""
+        <Box>
+          <CircularProgress />
+        </Box>
       )}
     </>
   );

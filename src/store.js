@@ -7,6 +7,9 @@ import userDetailsApi from "./api/getUserDetails";
 import disabledUserApi from "./api/UserDisabled";
 import downloadCsvApi from "./api/DownloadCsv";
 import verifyUserApi from "./api/VerifyUser";
+import teamListApi from "./api/GetTeamList";
+import blockTeamApi from "./api/BlockTeam";
+import deleteTeamApi from "./api/DeleteTeam";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import snackbarReducer from "../src/slices/Snackbar";
 import userReducer from "../src/slices/userSlice/user";
@@ -27,6 +30,9 @@ export const store = configureStore({
     [deleteUserApi.reducerPath]: deleteUserApi.reducer,
     [userDetailsApi.reducerPath]: userDetailsApi.reducer,
     [verifyUserApi.reducerPath]: verifyUserApi.reducer,
+    [teamListApi.reducerPath]: teamListApi.reducer,
+    [blockTeamApi.reducerPath]: blockTeamApi.reducer,
+    [deleteTeamApi.reducerPath]: deleteTeamApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -40,7 +46,10 @@ export const store = configureStore({
       userListSportApi.middleware,
       disabledUserApi.middleware,
       downloadCsvApi.middleware,
-      verifyUserApi.middleware
+      verifyUserApi.middleware,
+      teamListApi.middleware,
+      blockTeamApi.middleware,
+      deleteTeamApi.middleware
     ),
 });
 setupListeners(store.dispatch);

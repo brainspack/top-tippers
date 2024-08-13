@@ -3,18 +3,20 @@ import Switch from "@mui/material/Switch";
 import { useDispatch } from "react-redux";
 import { handleNotification } from "../slices/Snackbar";
 
-export default function ControlledSwitches({
+const ControlledSwitches = ({
   statusChangeApi,
   value,
   rowData,
   deactivateUserData,
-  userList,
-}) {
+  content,
+}) => {
   const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
   const handleChange = (event) => {
+    const userId = rowData.rowData[5];
+    // const teamId = rowData.rowData[4]
     setChecked(event.target.checked);
-    statusChangeApi({ userId: rowData.rowData[5] });
+    statusChangeApi({ userId: userId });
     if (deactivateUserData?.code === 200) {
       dispatch(
         handleNotification({
@@ -35,4 +37,5 @@ export default function ControlledSwitches({
       inputProps={{ "aria-label": "controlled" }}
     />
   );
-}
+};
+export default ControlledSwitches;
