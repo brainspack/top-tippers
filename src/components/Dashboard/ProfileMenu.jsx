@@ -9,8 +9,8 @@ import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 export default function BasicMenu() {
   const [logIn, { data: responseData, isLoading, error, isSuccess }] =
     useGetAdminLoginByNameMutation();
-  console.log(responseData, "RESPONSEDATA");
-  console.log(responseData, "RESPONSEDATA");
+  // console.log(responseData, "RESPONSEDATA");
+  // console.log(responseData, "RESPONSEDATA");
 
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,20 +26,20 @@ export default function BasicMenu() {
     navigate("/admin/");
   };
 
-  const adminName = async (data) => {
-    try {
-      const result = await logIn({ body: data }).unwrap();
-      console.log(result, "RESULT");
-    } catch (err) {
-      console.log(err, "the err");
-    }
-    await responseData;
-  };
-  console.log(responseData, "sjakj");
+  // const adminName = async (data) => {
+  //   try {
+  //     const result = await logIn({ body: data }).unwrap();
+  //     console.log(result, "RESULT");
+  //   } catch (err) {
+  //     console.log(err, "the err");
+  //   }
+  //   await responseData;
+  // };
+  // console.log(responseData, "sjakj");
 
-  useEffect(() => {
-    adminName();
-  }, []);
+  // useEffect(() => {
+  //   adminName();
+  // }, []);
   return (
     <div>
       <Button
@@ -54,8 +54,8 @@ export default function BasicMenu() {
           src="/static/images/avatar/1.jpg"
           sx={{ width: 34, height: 34, marginRight: "7px" }}
         />{" "}
-        {/* {responseData.name} */}
-        John Doe
+        {/* {responseData?.name} */}
+        {/* John Doe */}
       </Button>
       <Menu
         id="basic-menu"

@@ -192,8 +192,6 @@ const ManageUsers = () => {
     userList(reqParams);
   }, [deactivateUserSuccess, userDeleteSuccess, verifyUserSuccess]);
 
-  
-
   const columns = [
     {
       name: "name",
@@ -254,6 +252,7 @@ const ManageUsers = () => {
           },
         }),
         customBodyRender: (value, rowData) => {
+          console.log(value, rowData, "INSIDE MANAGE USER");
           return (
             <>
               <ControlledSwitches
