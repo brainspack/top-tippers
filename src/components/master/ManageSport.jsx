@@ -19,34 +19,28 @@ import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import MUIDataTable from "mui-datatables";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from '@mui/icons-material/Send';
-import EditIcon from '@mui/icons-material/Edit';
+import SendIcon from "@mui/icons-material/Send";
+import EditIcon from "@mui/icons-material/Edit";
 import { AddSportBtn } from "./masterStyled";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import AddSportModal from "./AddSportModal";
 const ManageSport = (props) => {
-
   const [userListSport, { data: listSportData }] =
-  useGetUserListSportApiByNameMutation();
+    useGetUserListSportApiByNameMutation();
 
-  console.log(listSportData,"LISTSPORT");
-  
+  console.log(listSportData, "LISTSPORT");
 
-  
   const TableSportData = async (data) => {
-
     try {
       const result = await userListSport({ body: data }).unwrap();
       console.log(result, "RESULT");
-      
-      
     } catch (err) {
       console.log(err, "the errr");
     }
     await listSportData;
   };
-  
-  console.log(listSportData,"LISTTTT");
+
+  console.log(listSportData, "LISTTTT");
 
   useEffect(() => {
     const reqParams = {
@@ -62,14 +56,12 @@ const ManageSport = (props) => {
     {
       name: "sportname",
       label: "Sport Name",
-      
+
       options: {
-        
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          
-          style: { backgroundColor: "#e5a842", color: "black"},
+          style: { backgroundColor: "#e5a842", color: "black" },
         }),
       },
     },
@@ -128,7 +120,7 @@ const ManageSport = (props) => {
         }),
       },
     },
-    
+
     {
       name: "_id",
       label: "Actions",
@@ -145,12 +137,12 @@ const ManageSport = (props) => {
           <>
             <Box display="flex" gap="10px">
               <EditIcon
-                // onClick={() => navigate(`/admin/userprofile/${value}`)}
+              // onClick={() => navigate(`/admin/userprofile/${value}`)}
               ></EditIcon>
-              <DeleteIcon 
+              <DeleteIcon
               // onClick={() => openModal(value)}
-               />
-               <SendIcon />
+              />
+              <SendIcon />
             </Box>
           </>
         ),
@@ -218,14 +210,13 @@ const ManageSport = (props) => {
     <>
       <ManageUsersContainer>
         <ManageUsersWrapper>
-          <Box sx={{display:"flex", justifyContent:"space-between"}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>Sport</ManageUsersHeading>
-            <AddSportModal />
-      
+            <AddSportModal content={"Add Sport"} />
           </Box>
-           <SearchContainer>
+          <SearchContainer>
             {/* <SearchWrapper> */}
-          {/*
+            {/*
               <Box sx={{ width: "45%" }}>
                 <Search>
                   <SearchIconWrapper>
@@ -259,8 +250,8 @@ const ManageSport = (props) => {
                 options={options}
               />
             </ManageUserTableWrapper>
-              {/* </SearchWrapper> */}
-            </SearchContainer> 
+            {/* </SearchWrapper> */}
+          </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>
     </>
@@ -268,4 +259,3 @@ const ManageSport = (props) => {
 };
 
 export default ManageSport;
-
