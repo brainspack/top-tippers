@@ -17,3 +17,20 @@ export const SportModalHeading = styled(Typography)(() => ({
      justifyContent:"space-between"
 
   }));
+export const BackModalBtn = styled(Button)(() => ({
+    outline:"none",
+    border:"1px solid black",
+    color:"black",
+    textTransform:"none",
+    marginRight:"10px"
+
+  }));
+export const AddSportSubmitBtn = styled(Button)(() => ({
+    backgroundColor:"#e08300",
+    color:"white",
+    textTransform:"none",
+    "&:hover":{
+        backgroundColor:"#e08300"
+    }
+
+  }));

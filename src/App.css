@@ -224,3 +224,17 @@
 .css-6hp17o-MuiList-root-MuiMenu-list{
   width: auto !important;
 }
+
+.css-1yuxz6i{
+  margin-top: 8px !important;
+}
+
+#modal-modal-description .css-cxvmgy-MuiInputBase-root-MuiOutlinedInput-root{
+  font-size: 14px;
+  height: 34px;
+}
+
+#modal-modal-description .css-1c63tv3-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+  height: 34px;
+
+}
