@@ -8,15 +8,19 @@ const ControlledSwitches = ({
   value,
   rowData,
   deactivateUserData,
-  content,
 }) => {
   const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
   const handleChange = (event) => {
     const userId = rowData.rowData[5];
-    // const teamId = rowData.rowData[4]
+    const teamId = rowData.rowData[4];
     setChecked(event.target.checked);
-    statusChangeApi({ userId: userId });
+    if (userId) {
+      statusChangeApi({ userId: userId });
+    } else if (teamId) {
+      statusChangeApi({ teamId: teamId });
+    }
+
     if (deactivateUserData?.code === 200) {
       dispatch(
         handleNotification({

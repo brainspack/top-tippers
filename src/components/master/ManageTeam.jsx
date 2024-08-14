@@ -21,6 +21,9 @@ import CustomPagination from "../reuse/CustomPagination";
 import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import { useBlockTeamByNameMutation } from "../../api/BlockTeam";
 import { useDeleteTeamByNameMutation } from "../../api/DeleteTeam";
+import CustomSwitch from "./CustomSelect";
+import AddSportModal from "./AddSportModal";
+import CustomSelect from "./CustomSelect";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
@@ -34,7 +37,7 @@ const ManageUsers = () => {
       setModalContent("Do you want to delete this record?");
       setAction(() => async () => {
         try {
-          await userDeleteApi({ userId: id }).unwrap();
+          await userDeleteApi({ teamId: id }).unwrap();
           dispatch(
             handleNotification({
               state: true,
@@ -161,7 +164,6 @@ const ManageUsers = () => {
           },
         }),
         customBodyRender: (value, rowData) => {
-          console.log(value, rowData, "INSIDE TEAMID");
           return (
             <>
               <ControlledSwitches
@@ -189,7 +191,6 @@ const ManageUsers = () => {
           },
         }),
         customBodyRender: (value, rowData) => {
-          // console.log(rowData, value, "thisIsRowData");
           return (
             <>
               <Box display="flex" gap="10px">
@@ -236,8 +237,11 @@ const ManageUsers = () => {
     <>
       <ManageUsersContainer>
         <ManageUsersWrapper>
-          <Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>Team</ManageUsersHeading>
+            <Box sx={{ display: "flex" }}>
+              <CustomSelect />
+            </Box>
           </Box>
           <SearchContainer>
             <ManageUserTableWrapper>

@@ -3,6 +3,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+
+import { AddSportBtn, SportModalHeading } from "./masterStyled";
+import AddIcon from "@mui/icons-material/Add";
 import { AddSportBtn, AddSportSubmitBtn, BackModalBtn, SportModalHeading } from "./masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from '@mui/icons-material/Send';
@@ -21,7 +24,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -35,7 +37,7 @@ const style = {
   p: 1,
 };
 
-export default function AddSportModal() {
+export default function AddSportModal({ content }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,7 +46,7 @@ export default function AddSportModal() {
     <div>
       <AddSportBtn disableRipple onClick={handleOpen}>
         <AddIcon sx={{ mr: 1 }} />
-        Add Sport
+        {content}
       </AddSportBtn>{" "}
       <Modal
         open={open}
@@ -63,6 +65,14 @@ export default function AddSportModal() {
               <CloseIcon className="close-icon" onClick={handleClose} />
             </SportModalHeading>
           </Box>
+          <Box id="modal-modal-description" sx={{ mt: 2, padding: "0 15px" }}>
+            <FormHelperText
+              sx={{ color: "black", display: "flex" }}
+              id="outlined-weight-helper-text"
+            >
+              <Typography sx={{ color: "red", mr: 1 }}>*</Typography>
+              Sport Name:
+            </FormHelperText>
           <Box
             id="modal-modal-description"
             sx={{
@@ -84,6 +94,13 @@ export default function AddSportModal() {
                 "aria-label": "weight",
               }}
             />
+            <FormHelperText
+              sx={{ color: "black", display: "flex" }}
+              id="outlined-weight-helper-text"
+            >
+              <Typography sx={{ color: "red", mr: 1 }}>*</Typography>
+              Description:
+            </FormHelperText>
 
             <CustomAddSportLabel requiredInput="*" inputLabel="Description:" />
 
@@ -95,6 +112,13 @@ export default function AddSportModal() {
                 "aria-label": "weight",
               }}
             />
+            <FormHelperText
+              sx={{ color: "black", display: "flex" }}
+              id="outlined-weight-helper-text"
+            >
+              <Typography sx={{ color: "red", mr: 1 }}>*</Typography>
+              Sport Type:
+            </FormHelperText>
 
             <CustomAddSportLabel
               requiredInput="*"
@@ -123,6 +147,9 @@ export default function AddSportModal() {
                 displayEmpty
                 sx={{ fontSize: "14px", height: "40px" }}
               >
+                <MenuItem value={"selectRole"} disabled>
+                  Sport Type{" "}
+                </MenuItem>
                 <MenuItem disabled>Sport Type </MenuItem>
                 <MenuItem className="calender" value="">
                   Regular
@@ -136,6 +163,13 @@ export default function AddSportModal() {
                 </MenuItem>
               </Select>
             </FormControl>
+            <FormHelperText
+              sx={{ color: "black", display: "flex" }}
+              id="outlined-weight-helper-text"
+            >
+              <Typography sx={{ color: "red", mr: 1 }}>*</Typography>
+              Round Bonus:
+            </FormHelperText>
 
             <CustomAddSportLabel requiredInput="*" inputLabel="Round Bonus:" />
 
@@ -144,6 +178,11 @@ export default function AddSportModal() {
                 // value={roundBonus}
                 // onChange={handleChangeRound}
                 defaultValue={"Bonus"}
+                sx={{ fontSize: "14px", height: "40px" }}
+              >
+                <MenuItem value={"selectRole"} disabled>
+                  Bonus{" "}
+                </MenuItem>
                 displayEmpty
                 sx={{ fontSize: "14px", height: "40px" }}
               >
@@ -160,6 +199,13 @@ export default function AddSportModal() {
                 </MenuItem>
               </Select>
             </FormControl>
+            <FormHelperText
+              sx={{ color: "black", display: "flex" }}
+              id="outlined-weight-helper-text"
+            >
+              <Typography sx={{ color: "red", mr: 1 }}>*</Typography>
+              MULTI CALCULATOR STAKE VALUE:
+            </FormHelperText>
 
             <CustomAddSportLabel
               requiredInput="*"
@@ -183,8 +229,7 @@ export default function AddSportModal() {
           <AddSportSubmitBtn>
             <SendIcon sx={{mr:1}} />
             Submit</AddSportSubmitBtn>
-          </Box>
-        
+          </Box>        
         </Box>
       </Modal>
     </div>
