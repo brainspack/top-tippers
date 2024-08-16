@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: "",
+  teamData: {},
 };
 
 export const manageSlice = createSlice({
@@ -9,12 +9,7 @@ export const manageSlice = createSlice({
   initialState,
   reducers: {
     updateListSport: (state, { payload }) => {
-      //   const { state: open, message, severity } = payload;
-      //   state.value = {
-      //     state: open,
-      //     message: message || null,
-      //     severity: severity || "info",
-      //   };
+      state.teamData = payload;
     },
   },
 });

@@ -9,14 +9,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserData: (state, { payload }) => {
-      // const changedData = payload.map((user) => {
-      //   return {
-      //     ...user,
-      //     isTopSportUser: user.isTopSportUser ? "Yes" : "No",
-      //     isVerified: user.isVerified ? "Yes" : "No",
-      //   };
-      // });
-      // state.data = changedData;
+      const changedData = payload.map((user) => {
+        return {
+          ...user,
+          isTopSportUser: user.isTopSportUser ? "Yes" : "No",
+          isVerified: user.isVerified ? "Yes" : "No",
+        };
+      });
+      state.data = changedData;
     },
   },
 });
