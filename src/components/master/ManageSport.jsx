@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropDownBox,
   ManageUsersContainer,
@@ -24,11 +24,68 @@ import EditIcon from "@mui/icons-material/Edit";
 import { AddSportBtn } from "./masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import AddSportModal from "./AddSportModal";
+import { useDispatch } from "react-redux";
+import CustomModal from "../reuse/CustomModal";
+import { handleNotification } from "../../slices/Snackbar";
+import { useDeleteSportByNameMutation } from "../../api/DeleteSport";
+import { updateModalVisibility } from "../../slices/userSlice/user";
 const ManageSport = (props) => {
+  const dispatch = useDispatch();
+
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalContent] = useState("");
+  const [action, setAction] = useState(() => () => {});
+
+  const openModal = (id, type) => {
+    if (type === "delete") {
+      setModalContent("Do you want to delete this record?");
+      setAction(() => async () => {
+        try {
+          await SportDeleteApi({ sportId: id }).unwrap();
+          dispatch(
+            handleNotification({
+              state: true,
+              message: sportDeleteData?.message,
+              severity: sportDeleteData?.code,
+            })
+          );
+        } catch (error) {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: sportDeleteData?.message,
+              severity: sportDeleteData?.code,
+            })
+          );
+        }
+      });
+    }
+
+    setModal(true);
+  };
+  const closeModal = () => {
+    setModal(false);
+  };
+
+  const handleOpen = () => {
+    console.log("sjfbsjdsjdbfdf");
+    dispatch(updateModalVisibility(true));
+  };
+
   const [userListSport, { data: listSportData }] =
     useGetUserListSportApiByNameMutation();
 
   console.log(listSportData, "LISTSPORT");
+
+  const [
+    SportDeleteApi,
+    {
+      data: sportDeleteData,
+      isLoading: sportDeleteLoading,
+      error: sportDeleteError,
+      isSuccess: sportDeleteSuccess,
+    },
+  ] = useDeleteSportByNameMutation();
 
   const TableSportData = async (data) => {
     try {
@@ -50,7 +107,7 @@ const ManageSport = (props) => {
       sortOrder: "",
     };
     TableSportData(reqParams);
-  }, []);
+  }, [sportDeleteSuccess]);
 
   const columns = [
     {
@@ -137,12 +194,14 @@ const ManageSport = (props) => {
           <>
             <Box display="flex" gap="10px">
               <EditIcon
-              // onClick={() => navigate(`/admin/userprofile/${value}`)}
+                sx={{ cursor: "pointer" }}
+                onClick={handleOpen}
               ></EditIcon>
               <DeleteIcon
-              // onClick={() => openModal(value)}
+                sx={{ cursor: "pointer" }}
+                onClick={() => openModal(value, "delete")}
               />
-              <SendIcon />
+              <SendIcon sx={{ cursor: "pointer" }} />
             </Box>
           </>
         ),
@@ -212,7 +271,7 @@ const ManageSport = (props) => {
         <ManageUsersWrapper>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>Sport</ManageUsersHeading>
-            <AddSportModal content={"Add Sport"} />
+            <AddSportModal />
           </Box>
           <SearchContainer>
             {/* <SearchWrapper> */}
@@ -250,6 +309,12 @@ const ManageSport = (props) => {
                 options={options}
               />
             </ManageUserTableWrapper>
+            <CustomModal
+              modal={modal}
+              closeModal={closeModal}
+              content={modalTitle}
+              action={action}
+            />
             {/* </SearchWrapper> */}
           </SearchContainer>
         </ManageUsersWrapper>

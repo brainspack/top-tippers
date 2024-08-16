@@ -199,8 +199,12 @@ const ManageUsers = () => {
               <Box display="flex" gap="10px">
                 <VisibilityIcon
                   onClick={() => navigate(`/admin/teamdetail/${value}`)}
+                  sx={{ cursor: "pointer" }}
                 ></VisibilityIcon>
-                <DeleteIcon onClick={() => openModal(value, "delete")} />
+                <DeleteIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => openModal(value, "delete")}
+                />
               </Box>
             </>
           );

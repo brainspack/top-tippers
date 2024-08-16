@@ -26,6 +26,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
+import { updateModalVisibility } from "../../slices/userSlice/user";
+import { useDispatch, useSelector } from "react-redux";
+import { userDataSelector } from "../../slices/userSlice/userSelector";
 
 const style = {
   position: "absolute",
@@ -41,18 +44,28 @@ const style = {
 };
 
 export default function AddSportModal() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
+  //   const [open, setOpen] = React.useState(false);
+  const { isModalVisible } = useSelector(userDataSelector);
+
+  console.log(isModalVisible);
+  const handleOpen = () => {
+    console.log("sjfbsjdsjdbfdf");
+    dispatch(updateModalVisibility(true));
+  };
+  const handleClose = () => {
+    dispatch(updateModalVisibility(false));
+  };
+  //   const handleClose = () => setOpen(false);
 
   return (
-    <div>
+    <>
       <AddSportBtn disableRipple onClick={handleOpen}>
         <AddIcon sx={{ mr: 1 }} />
         Add Sport
       </AddSportBtn>{" "}
       <Modal
-        open={open}
+        open={isModalVisible}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -188,7 +201,7 @@ export default function AddSportModal() {
               height: "35px",
             }}
           >
-            <BackModalBtn>Back</BackModalBtn>
+            <BackModalBtn onClick={handleClose}>Back</BackModalBtn>
             <AddSportSubmitBtn>
               <SendIcon sx={{ mr: 1 }} />
               Submit
@@ -196,6 +209,6 @@ export default function AddSportModal() {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }

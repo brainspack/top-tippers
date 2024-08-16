@@ -17,6 +17,7 @@ import userReducer from "../src/slices/userSlice/user";
 import manageReducer from "./slices/manageTeam/manageTeam";
 import userListCompetitionApi from "./api/listCompetition";
 import userListSportApi from "./api/listSport";
+import deleteSportApi from "./api/DeleteSport";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -37,6 +38,7 @@ export const store = configureStore({
     [blockTeamApi.reducerPath]: blockTeamApi.reducer,
     [deleteTeamApi.reducerPath]: deleteTeamApi.reducer,
     [teamDetailApi.reducerPath]: teamDetailApi.reducer,
+    [deleteSportApi.reducerPath]: deleteSportApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -55,6 +57,7 @@ export const store = configureStore({
       blockTeamApi.middleware,
       deleteTeamApi.middleware,
       teamDetailApi.middleware
+      deleteSportApi.middleware
     ),
 });
 setupListeners(store.dispatch);

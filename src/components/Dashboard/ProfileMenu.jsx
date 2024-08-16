@@ -7,8 +7,8 @@ import { Avatar } from "@mui/material";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 
 export default function BasicMenu() {
-  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
-    useGetAdminLoginByNameMutation();
+  // const [logIn, { data: responseData, isLoading, error, isSuccess }] =
+  useGetAdminLoginByNameMutation();
   // console.log(responseData, "RESPONSEDATA");
   // console.log(responseData, "RESPONSEDATA");
 
