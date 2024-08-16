@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Box, Skeleton, Pagination } from "@mui/material";
 
-const CustomPagination = ({ total, userList, rowsPerPage, isLoading }) => {
+const CustomPagination = ({ total, userList, rowsPerPage }) => {
   const [totalPages, setTotalPages] = useState(0);
+  console.log(totalPages, "TOTAL PAGES", total);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageButtonClick = (e, pageNumber) => {
@@ -17,9 +18,12 @@ const CustomPagination = ({ total, userList, rowsPerPage, isLoading }) => {
   };
 
   useEffect(() => {
-    if (rowsPerPage && total) {
+    if (rowsPerPage && total !== undefined) {
       const pages = Math.ceil(total / rowsPerPage);
+      console.log(pages, "pages");
       setTotalPages(pages);
+    } else {
+      setTotalPages(0);
     }
   }, [rowsPerPage, total]);
 

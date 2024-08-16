@@ -12,6 +12,7 @@ import ManageCompetitionComponent from "./containers/master/ManageCompetitionCom
 import ManageGameComponent from "./containers/master/ManageGameComponent.jsx";
 import ManageRoundComponent from "./containers/master/ManageRoundComponent.jsx";
 import PrivateRoute from "./routers/PrivateRoute.js";
+import TeamDetailProfile from "./containers/teamDetail/TeamDetailProfile.jsx";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="userprofile/:userId" element={<UserProfile />} />
             <Route path="sport" element={<ManageSportComponent />} />
             <Route path="team" element={<ManageTeamComponent />} />
+            <Route path="teamdetail/:teamId" element={<TeamDetailProfile />} />
             <Route path="round" element={<ManageRoundComponent />} />
             <Route path="game" element={<ManageGameComponent />} />
             <Route

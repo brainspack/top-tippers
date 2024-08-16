@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -21,14 +21,16 @@ import CustomPagination from "../reuse/CustomPagination";
 import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import { useBlockTeamByNameMutation } from "../../api/BlockTeam";
 import { useDeleteTeamByNameMutation } from "../../api/DeleteTeam";
-import CustomSwitch from "./CustomSelect";
-import AddSportModal from "./AddSportModal";
+
 import CustomSelect from "./CustomSelect";
+import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
+import { updateListSport } from "../../slices/manageTeam/manageTeam";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: userData } = useSelector(userDataSelector);
+  const { teamData } = useSelector(manageSportSelector);
+  console.log(teamData, "teamdata");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -63,8 +65,10 @@ const ManageUsers = () => {
     setModal(false);
   };
 
-  const [userList, { data, isLoading, error, isSuccess: userListSuccess }] =
-    useTeamListByNameMutation();
+  const [
+    userList,
+    { data, isLoading: teamDataFetching, error, isSuccess: userListSuccess },
+  ] = useTeamListByNameMutation();
 
   const [
     deactivateUser,
@@ -87,7 +91,7 @@ const ManageUsers = () => {
   ] = useDeleteTeamByNameMutation();
 
   useEffect(() => {
-    if (data && data?.data) dispatch(updateUserData(data?.data));
+    if (data && data?.data) dispatch(updateListSport(data));
   }, [data, userListSuccess]);
 
   useEffect(() => {
@@ -171,7 +175,6 @@ const ManageUsers = () => {
                 rowData={rowData}
                 statusChangeApi={deactivateUser}
                 deactivateUserData={deactivateUserData}
-                userList={userList}
               />
             </>
           );
@@ -195,8 +198,8 @@ const ManageUsers = () => {
             <>
               <Box display="flex" gap="10px">
                 <VisibilityIcon
+                  onClick={() => navigate(`/admin/teamdetail/${value}`)}
                   sx={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/admin/userprofile/${value}`)}
                 ></VisibilityIcon>
                 <DeleteIcon
                   sx={{ cursor: "pointer" }}
@@ -223,14 +226,14 @@ const ManageUsers = () => {
       return (
         <>
           <CustomPagination
-            total={data?.totalCount}
+            total={teamData?.totalCount}
             page={page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
             userList={userList}
-            userData={userData}
-            isLoading={isLoading}
+            userData={teamData?.data}
+            isLoading={teamDataFetching}
           />
         </>
       );
@@ -249,11 +252,15 @@ const ManageUsers = () => {
           </Box>
           <SearchContainer>
             <ManageUserTableWrapper>
+              {/* {teamDataFetching ? (
+                <CircularProgress />
+              ) : ( */}
               <MUIDataTable
-                data={userData}
+                data={teamData?.data}
                 columns={columns}
                 options={options}
               />
+              {/* )} */}
             </ManageUserTableWrapper>
             <CustomModal
               modal={modal}
