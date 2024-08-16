@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: [],
+  isModalVisible: false,
+  mode: "",
 };
 
 export const userSlice = createSlice({
@@ -9,18 +11,21 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserData: (state, { payload }) => {
-      // const changedData = payload.map((user) => {
-      //   return {
-      //     ...user,
-      //     isTopSportUser: user.isTopSportUser ? "Yes" : "No",
-      //     isVerified: user.isVerified ? "Yes" : "No",
-      //   };
-      // });
-      // state.data = changedData;
+      const changedData = payload.map((user) => {
+        return {
+          ...user,
+          isTopSportUser: user.isTopSportUser ? "Yes" : "No",
+          isVerified: user.isVerified ? "Yes" : "No",
+        };
+      });
+      state.data = changedData;
+    },
+    updateModalVisibility: (state, { payload }) => {
+      state.isModalVisible = payload;
     },
   },
 });
 
-export const { updateUserData } = userSlice.actions;
+export const { updateUserData, updateModalVisibility } = userSlice.actions;
 
 export default userSlice.reducer;

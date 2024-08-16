@@ -9,12 +9,12 @@ export const manageSlice = createSlice({
   initialState,
   reducers: {
     updateListSport: (state, { payload }) => {
-      //   const { state: open, message, severity } = payload;
-      //   state.value = {
-      //     state: open,
-      //     message: message || null,
-      //     severity: severity || "info",
-      //   };
+        const { state: open, message, severity } = payload;
+        state.value = {
+          state: open,
+          message: message || null,
+          severity: severity || "info",
+        };
     },
   },
 });
