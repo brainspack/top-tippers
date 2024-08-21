@@ -21,6 +21,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import EditIcon from "@mui/icons-material/Edit";
+import Switch from "@mui/material/Switch";
 import { AddSportBtn } from "./masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import AddSportModal from "./AddSportModal";
@@ -29,12 +30,20 @@ import CustomModal from "../reuse/CustomModal";
 import { handleNotification } from "../../slices/Snackbar";
 import { useDeleteSportByNameMutation } from "../../api/DeleteSport";
 import { updateModalVisibility } from "../../slices/userSlice/user";
+import { useGetSetInviteAndCompButtonApiByNameMutation } from "../../api/setInviteAndCompButton";
 const ManageSport = (props) => {
   const dispatch = useDispatch();
+  const [listSport, setListSportData] = useState([]);
+  const [checked, setChecked] = useState(false);
 
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
+
+  // const handleChange = (event) => {
+  //   const setInvite = tableMeta.rowData[6];
+  //   setInviteAndComp({setInvite :})
+  // };
 
   const openModal = (id, type) => {
     if (type === "delete") {
@@ -71,9 +80,15 @@ const ManageSport = (props) => {
     console.log("sjfbsjdsjdbfdf");
     dispatch(updateModalVisibility(true));
   };
+  const handleEditClick = (rowData) => {
+    dispatch(updateModalVisibility(true));
+  };
 
   const [userListSport, { data: listSportData }] =
     useGetUserListSportApiByNameMutation();
+
+  const [userSetInvite, { data: setInviteButton }] =
+    useGetSetInviteAndCompButtonApiByNameMutation();
 
   console.log(listSportData, "LISTSPORT");
 
@@ -91,13 +106,42 @@ const ManageSport = (props) => {
     try {
       const result = await userListSport({ body: data }).unwrap();
       console.log(result, "RESULT");
+
+      setListSportData(result.data);
     } catch (err) {
       console.log(err, "the errr");
     }
     await listSportData;
   };
+  const setInviteAndComp = async (id) => {
+    try {
+      await userSetInvite({ sportId: id }).unwrap();
+      dispatch(
+        handleNotification({
+          state: true,
+          message: userSetInvite?.message,
+          severity: userSetInvite?.code,
+        })
+      );
+      // const reqParams = {
+      //   search_string: "",
+      //   page: 0,
+      //   sortValue: "",
+      //   sortOrder: "",
+      // };
+      // TableSportData(reqParams);
+    } catch (error) {
+      dispatch(
+        handleNotification({
+          state: true,
+          message: userSetInvite?.message,
+          severity: userSetInvite?.code,
+        })
+      );
+    }
+  };
 
-  console.log(listSportData, "LISTTTT");
+  console.log(setInviteButton, "LISTTTT");
 
   useEffect(() => {
     const reqParams = {
@@ -107,6 +151,7 @@ const ManageSport = (props) => {
       sortOrder: "",
     };
     TableSportData(reqParams);
+    // setInviteAndComp();
   }, [sportDeleteSuccess]);
 
   const columns = [
@@ -167,7 +212,7 @@ const ManageSport = (props) => {
       },
     },
     {
-      name: "status",
+      name: "bonus",
       label: "Status",
       options: {
         filter: true,
@@ -175,6 +220,9 @@ const ManageSport = (props) => {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
         }),
+        customBodyRender: (value) => (
+          <Typography>{value ? "Open" : "Close"}</Typography>
+        ),
       },
     },
 
@@ -195,7 +243,7 @@ const ManageSport = (props) => {
             <Box display="flex" gap="10px">
               <EditIcon
                 sx={{ cursor: "pointer" }}
-                onClick={handleOpen}
+                onClick={() => handleEditClick(rowData)}
               ></EditIcon>
               <DeleteIcon
                 sx={{ cursor: "pointer" }}
@@ -221,17 +269,13 @@ const ManageSport = (props) => {
             justifyContent: "center",
           },
         }),
-        customBodyRender: (value, rowData) => {
+        customBodyRender: (value, tableMeta) => {
+          const id = tableMeta.rowData[6];
           return (
-            <>
-              {/* <ControlledSwitches
-                value={value}
-                rowData={rowData}
-                statusChangeApi={deactivateUser}
-                deactivateUserData={deactivateUserData}
-                userList={userList}
-              /> */}
-            </>
+            <Switch
+              checked={value}
+              // onChange={() => handleChange(tableMeta.rowData)}
+            />
           );
         },
       },

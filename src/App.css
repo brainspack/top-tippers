@@ -46,8 +46,6 @@
   border-radius: 6px;
 }
 
-
-
 .email-input {
   outline: none;
 }
@@ -71,133 +69,122 @@
   width: 100%;
   justify-content: space-between;
 }
-.inputbox input{
-  border:none !important;
+.inputbox input {
+  border: none !important;
   width: 100%;
   height: 40px;
 }
-#basic-button{
+#basic-button {
   /* background-color: #ddd; */
   text-transform: none;
   color: white;
-
 }
-#basic-button:hover{
+#basic-button:hover {
   background-color: #ddd;
-  
-
 }
 
-.icon-bar{
+.icon-bar {
   padding: 20px !important;
 }
 
-
-.favIcon{
+.favIcon {
   background-color: #e5a842 !important;
   /* box-shadow: 0px !important; */
 }
 
-.dashboard-card:hover .favIcon{
+.dashboard-card:hover .favIcon {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-
 /*================================ selector form control styling =========================== */
 
-
-
-.css-6hp17o-MuiList-root-MuiMenu-list{
+.css-6hp17o-MuiList-root-MuiMenu-list {
   width: 180px;
 }
-.calender{
+.calender {
   font-size: 14px !important;
 }
 
-.calender-border .MuiOutlinedInput-notchedOutline{
+.calender-border .MuiOutlinedInput-notchedOutline {
   border: none !important;
 }
 
-
-.active .drawer-nav{
+.active .drawer-nav {
   background-color: #e5a842;
 }
 
-.user-menu{
+.user-menu {
   font-size: 14px !important;
 }
-.drawer-routes{
+.drawer-routes {
   text-decoration: none;
   color: white;
 }
 
-#basic-menu .MuiPaper-elevation8{
-  left:1108px !important;
+#basic-menu .MuiPaper-elevation8 {
+  left: 1108px !important;
 }
 
-.css-6hp17o-MuiList-root-MuiMenu-list{
+.css-6hp17o-MuiList-root-MuiMenu-list {
   padding: 0px !important;
 }
 
-.drawer-nav{
-  width: 100% ;
+.drawer-nav {
+  width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
 }
-.drawer-nav:hover{
+.drawer-nav:hover {
   background-color: #e5a842 !important;
   transition: all 300ms ease;
-
 }
 
-.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper{
+.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper {
   background-color: #383434;
-
 }
 
 /*= ======================== drawer top icons styling ========================== */
 
-.drawer-icon-left .MuiSvgIcon-fontSizeMedium:hover{
+.drawer-icon-left .MuiSvgIcon-fontSizeMedium:hover {
   background-color: #e5a842;
   border-radius: 50%;
   transition: all 300ms ease;
 }
 
-.MuiSvgIcon-fontSizeMedium{
+.MuiSvgIcon-fontSizeMedium {
   border-radius: 50%;
 }
 
 /* ============= ACCORDIAN STYLIGN ====================== */
 
-
-.accordion-master{
+.accordion-master {
   background-color: #383434 !important ;
   color: white !important;
 }
 
-.accordion-master .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root{
+.accordion-master .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root {
   min-height: 64px;
 }
 
-.master-subheadings{
+.master-subheadings {
   display: flex;
 }
 
-.MuiAccordion-region .css-15v22id-MuiAccordionDetails-root{
-  padding: 8px 45px 16px 47px !important;
-} 
-  
+.MuiAccordion-region .css-15v22id-MuiAccordionDetails-root {
+  padding: 16px 45px 16px 47px !important;
+}
+
 /* =================================== responsive sidebar styling ========================== */
 
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
-  background-color:#383434 !important;
-} 
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  background-color: #383434 !important;
+}
 
-.css-rqglhn-MuiTable-root{
+.css-rqglhn-MuiTable-root {
   border-collapse: initial !important;
 }
-.ImageBox img{
+.ImageBox img {
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -205,36 +192,65 @@
 
 /* =============== ADD SPORT MODAL ==================== */
 
-.close-icon{
-  color:grey;
+.close-icon {
+  color: grey;
   cursor: pointer;
-  
 }
-.close-icon:hover{
-  color:black;
-
+.close-icon:hover {
+  color: black;
 }
 
-#modal-modal-description .css-lh3xye-MuiFormControl-root{
+#modal-modal-description .css-lh3xye-MuiFormControl-root {
   margin: 0px;
 }
-#modal-modal-description .MuiFormControl-root{
+#modal-modal-description .MuiFormControl-root {
   margin: 0px !important;
 }
-.css-6hp17o-MuiList-root-MuiMenu-list{
+.css-6hp17o-MuiList-root-MuiMenu-list {
   width: auto !important;
 }
 
-.css-1yuxz6i{
+.css-1yuxz6i {
   margin-top: 8px !important;
 }
 
-#modal-modal-description .css-cxvmgy-MuiInputBase-root-MuiOutlinedInput-root{
+#modal-modal-description .css-cxvmgy-MuiInputBase-root-MuiOutlinedInput-root {
   font-size: 14px;
   height: 34px;
 }
 
-#modal-modal-description .css-1c63tv3-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+#modal-modal-description
+  .css-1c63tv3-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
   height: 34px;
+}
+#modal-modal-description
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 6.5px 14px;
+}
+#modal-modal-description
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 6.5px 14px;
+}
 
+/* date picker styling */
+
+.customize-date-picker {
+  outline: none;
+  height: 34px;
+  width: 100%;
+}
+
+.react-datepicker__input-container .custom-date-picker {
+  padding-left: 20px !important; /* Adjust padding as needed */
+  box-sizing: border-box;
+}
+
+.css-10vqu3n-MuiFormHelperText-root {
+  margin-top: 0;
+}
+
+.errorMsgParent p {
+  margin-top: 2px;
+  margin-bottom: 5px;
+  height: 15px;
 }
