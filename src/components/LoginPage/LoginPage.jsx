@@ -59,7 +59,7 @@ const Login = (props) => {
   const HandleSubmit = async (data) => {
     try {
       const result = await logIn({ body: data }).unwrap();
-      console.log(result, "RESULT");
+      console.log(result, "RESULT_LOGIN");
       if (result) {
         if (result.data) {
           let token = result.data.token;
@@ -92,7 +92,7 @@ const Login = (props) => {
   };
   const onHandleNavigate = () => {
     const token = localStorage?.getItem("token");
-    if ((token && path === "/admin") || path === "/admin/") {
+    if ((token && path === "/admin") || (token && path === "/admin/")) {
       navigate("/admin/dashboard");
     }
   };
