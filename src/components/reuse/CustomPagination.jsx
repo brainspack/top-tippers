@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Box, Skeleton, Pagination } from "@mui/material";
 
-const CustomPagination = ({ total, userList, rowsPerPage }) => {
+const CustomPagination = (props) => {
+  const { total, userList, rowsPerPage } = props;
   const [totalPages, setTotalPages] = useState(0);
-  console.log(totalPages, "TOTAL PAGES", total);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageButtonClick = (e, pageNumber) => {
@@ -14,6 +14,9 @@ const CustomPagination = ({ total, userList, rowsPerPage }) => {
       sortValue: "",
       sortOrder: "",
     };
+    // if(id){
+    //   reqParams.sport=id
+    // }
     userList(reqParams);
   };
 

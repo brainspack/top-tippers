@@ -42,7 +42,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 470,
   bgcolor: "background.paper",
-  //   border: "2px solid #000",
   boxShadow: 24,
   height: "600px",
   p: 1,
@@ -50,10 +49,8 @@ const style = {
 
 export default function AddSportModal({ onAddSport }) {
   const dispatch = useDispatch();
-  //   const [open, setOpen] = React.useState(false);
   const { isModalVisible } = useSelector(userDataSelector);
 
-  console.log(isModalVisible);
   const handleOpen = () => {
     console.log("sjfbsjdsjdbfdf");
     dispatch(updateModalVisibility(true));
@@ -62,7 +59,6 @@ export default function AddSportModal({ onAddSport }) {
     dispatch(updateModalVisibility(false));
     reset();
   };
-  //   const handleClose = () => setOpen(false);
 
   const [addUpdateSport, { data: addUpdateSportData }] =
     useGetAddUpdateSportApiByNameMutation();
