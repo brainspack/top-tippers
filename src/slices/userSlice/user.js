@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   data: [],
   isModalVisible: false,
-  mode: "",
+  modalSportName: "",
 };
 
 export const userSlice = createSlice({
@@ -23,9 +23,13 @@ export const userSlice = createSlice({
     updateModalVisibility: (state, { payload }) => {
       state.isModalVisible = payload;
     },
+    setModalSportName: (state, action) => {
+      state.modalSportName = action.payload;
+    },
   },
 });
 
-export const { updateUserData, updateModalVisibility } = userSlice.actions;
+export const { updateUserData, updateModalVisibility, setModalSportName } =
+  userSlice.actions;
 
 export default userSlice.reducer;

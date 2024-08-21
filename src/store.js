@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 import adminLoginApi from "./api/AdminLogin";
 import userListApi from "./api/UserList";
 import deactivateUserApi from "./api/DeactivateUser";
@@ -11,7 +12,8 @@ import teamListApi from "./api/GetTeamList";
 import blockTeamApi from "./api/BlockTeam";
 import deleteTeamApi from "./api/DeleteTeam";
 import teamDetailApi from "./api/TeamDetail";
-import { setupListeners } from "@reduxjs/toolkit/query";
+import addTeamApi from "./api/AddNewTeam";
+import updateTeamApi from "./api/UpdateTeam";
 import snackbarReducer from "../src/slices/Snackbar";
 import userReducer from "../src/slices/userSlice/user";
 import manageReducer from "./slices/manageTeam/manageTeam";
@@ -39,6 +41,8 @@ export const store = configureStore({
     [deleteTeamApi.reducerPath]: deleteTeamApi.reducer,
     [teamDetailApi.reducerPath]: teamDetailApi.reducer,
     [deleteSportApi.reducerPath]: deleteSportApi.reducer,
+    [addTeamApi.reducerPath]: addTeamApi.reducer,
+    [updateTeamApi.reducerPath]: updateTeamApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -56,8 +60,10 @@ export const store = configureStore({
       teamListApi.middleware,
       blockTeamApi.middleware,
       deleteTeamApi.middleware,
-      teamDetailApi.middleware
-      deleteSportApi.middleware
+      teamDetailApi.middleware,
+      deleteSportApi.middleware,
+      addTeamApi.middleware,
+      updateTeamApi.middleware
     ),
 });
 setupListeners(store.dispatch);

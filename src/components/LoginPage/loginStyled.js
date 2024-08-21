@@ -27,8 +27,8 @@ export const LoginContainerBox = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${logInArt})`,
   backgroundSize: "cover",
   [theme.breakpoints.down("sm")]: {
-    width: "10%",
-    height: "57%",
+    width: "100%",
+    height: "80%",
   },
   [theme.breakpoints.between("sm", "md")]: {
     width: "100%",

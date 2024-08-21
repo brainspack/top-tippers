@@ -1,24 +1,19 @@
 import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import { useDispatch } from "react-redux";
 import { updateListSport } from "../../slices/manageTeam/manageTeam";
 
-const CustomSelect = () => {
-  const [listSportApi, { data, isLoading, error }] =
-    useGetUserListSportApiByNameMutation();
+const CustomSelect = ({ data, listSportApi }) => {
   const [teamListApi, { data: teamListData, userListSuccess }] =
     useTeamListByNameMutation();
   const [selectedSport, setSelectedSport] = useState("");
-  console.log(selectedSport, "INSIDE SELECTEDSPORT");
   const dispatch = useDispatch();
   const handlesportChange = (event) => {
-    console.log(event.target.value, "EVENT");
     setSelectedSport(event.target.value);
     const reqParams = {
       page: 0,
@@ -47,7 +42,7 @@ const CustomSelect = () => {
   }, []);
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ width: "180px" }}>
       <FormControl fullWidth>
         <InputLabel id="sport-select-label">Sport</InputLabel>
         <Select

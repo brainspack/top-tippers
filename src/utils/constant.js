@@ -12,7 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 // ================= URL ==================
 
-export const BASE_URL = "http://54.201.160.69:3019/";
+export const BASE_URL = "http://localhost:3019/";
 
 export const LOGIN_DATA = [
   {

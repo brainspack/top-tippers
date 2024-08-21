@@ -6,7 +6,11 @@ import MUIDataTable from "mui-datatables";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
-import { updateUserData } from "../../slices/userSlice/user";
+import {
+  setModalSportName,
+  updateModalVisibility,
+  updateUserData,
+} from "../../slices/userSlice/user";
 import { handleNotification } from "../../slices/Snackbar";
 import {
   ManageUsersContainer,
@@ -21,16 +25,22 @@ import CustomPagination from "../reuse/CustomPagination";
 import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import { useBlockTeamByNameMutation } from "../../api/BlockTeam";
 import { useDeleteTeamByNameMutation } from "../../api/DeleteTeam";
+import AddIcon from "@mui/icons-material/Add";
 
 import CustomSelect from "./CustomSelect";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
 import { updateListSport } from "../../slices/manageTeam/manageTeam";
+import AddTeamModal from "./AddTeamModal";
+import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
+import { AddSportBtn } from "./masterStyled";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { teamData } = useSelector(manageSportSelector);
-  console.log(teamData, "teamdata");
+  {
+    teamData?.data?.map((ele) => console.log(ele.teamLogo, "ELE"));
+  }
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -64,9 +74,12 @@ const ManageUsers = () => {
   const closeModal = () => {
     setModal(false);
   };
+  // const handleOpen = () => {
+  //   dispatch(updateModalVisibility(true));
+  // };
 
   const [
-    userList,
+    teamList,
     { data, isLoading: teamDataFetching, error, isSuccess: userListSuccess },
   ] = useTeamListByNameMutation();
 
@@ -89,6 +102,10 @@ const ManageUsers = () => {
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteTeamByNameMutation();
+  const [
+    listSportApi,
+    { data: listSportData, isLoading, error: listSportError },
+  ] = useGetUserListSportApiByNameMutation();
 
   useEffect(() => {
     if (data && data?.data) dispatch(updateListSport(data));
@@ -100,7 +117,7 @@ const ManageUsers = () => {
       sortValue: "",
       sortOrder: "",
     };
-    userList(reqParams);
+    teamList(reqParams);
   }, [deactivateUserSuccess, userDeleteSuccess]);
 
   const columns = [
@@ -141,12 +158,24 @@ const ManageUsers = () => {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
         }),
-        customBodyRender: (data) => {
+        customBodyRender: (data, value) => {
+          {
+            console.log(value, "VALUE");
+          }
           return (
             <>
-              <Box>
-                <img alt="profile" />
-              </Box>
+              {teamData?.data.map((e) => {
+                if (e._id === value.rowData[4]) {
+                  return (
+                    <Box
+                      className="logoBox"
+                      sx={{ height: "50px", width: "50px" }}
+                    >
+                      <img src={e.teamLogo} />
+                    </Box>
+                  );
+                }
+              })}
             </>
           );
         },
@@ -231,7 +260,7 @@ const ManageUsers = () => {
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
-            userList={userList}
+            userList={teamList}
             userData={teamData?.data}
             isLoading={teamDataFetching}
           />
@@ -239,28 +268,48 @@ const ManageUsers = () => {
       );
     },
   };
+  const { isModalVisible, modalSportName } = useSelector(userDataSelector);
 
+  const handleOpen = () => {
+    // if (data?.data?.sport?.sportname) {
+    //   dispatch(setModalSportName(data.data.sport.sportname));
+    // }
+    dispatch(updateModalVisibility(true));
+  };
   return (
     <>
       <ManageUsersContainer>
         <ManageUsersWrapper>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>Team</ManageUsersHeading>
-            <Box sx={{ display: "flex" }}>
-              <CustomSelect />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "30%",
+              }}
+            >
+              <CustomSelect data={listSportData} listSportApi={listSportApi} />
+              <AddSportBtn disableRipple onClick={handleOpen}>
+                <AddIcon sx={{ mr: 1 }} />
+                Add Team
+              </AddSportBtn>{" "}
+              <AddTeamModal
+                data={listSportData}
+                listSportApi={listSportApi}
+                open={isModalVisible}
+                onClose={() => dispatch(updateModalVisibility(false))}
+                initialSportName={modalSportName}
+              />
             </Box>
           </Box>
           <SearchContainer>
             <ManageUserTableWrapper>
-              {/* {teamDataFetching ? (
-                <CircularProgress />
-              ) : ( */}
               <MUIDataTable
                 data={teamData?.data}
                 columns={columns}
                 options={options}
               />
-              {/* )} */}
             </ManageUserTableWrapper>
             <CustomModal
               modal={modal}

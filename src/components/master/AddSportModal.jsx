@@ -37,7 +37,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  //   border: "2px solid #000",
   boxShadow: 24,
   height: "550px",
   p: 1,
@@ -45,10 +44,8 @@ const style = {
 
 export default function AddSportModal() {
   const dispatch = useDispatch();
-  //   const [open, setOpen] = React.useState(false);
   const { isModalVisible } = useSelector(userDataSelector);
 
-  console.log(isModalVisible);
   const handleOpen = () => {
     console.log("sjfbsjdsjdbfdf");
     dispatch(updateModalVisibility(true));
@@ -56,7 +53,6 @@ export default function AddSportModal() {
   const handleClose = () => {
     dispatch(updateModalVisibility(false));
   };
-  //   const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -134,8 +130,6 @@ export default function AddSportModal() {
 
             <FormControl sx={{ m: 1 }} fullWidth>
               <Select
-                // value={sportType}
-                // onChange={handleChangeSport}
                 defaultValue={"Sport Type"}
                 displayEmpty
                 sx={{ fontSize: "14px", height: "40px" }}
@@ -145,9 +139,6 @@ export default function AddSportModal() {
                   Regular
                 </MenuItem>
 
-                {/* <MenuItem className="calender" value={30}>
-                        Regular
-                        </MenuItem> */}
                 <MenuItem className="calender" value={30}>
                   Draw
                 </MenuItem>

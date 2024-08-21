@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
+import AddTeamModal from "../master/AddTeamModal";
 
 const UserProfileContent = () => {
   const [userDetails, { data, isLoading, error, isSuccess }] =

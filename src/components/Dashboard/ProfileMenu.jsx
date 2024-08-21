@@ -55,7 +55,7 @@ export default function BasicMenu() {
           sx={{ width: 34, height: 34, marginRight: "7px" }}
         />{" "}
         {/* {responseData?.name} */}
-        {/* John Doe */}
+        John Doe
       </Button>
       <Menu
         id="basic-menu"
