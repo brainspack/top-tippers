@@ -26,7 +26,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-import { updateModalVisibility } from "../../slices/userSlice/user";
+import {
+  getUserDataForEdit,
+  knowWhereHaveToOpenModal,
+  updateModalVisibility,
+} from "../../slices/userSlice/user";
 import { useDispatch, useSelector } from "react-redux";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
 import DateRangePicker from "./DatePickerComponent";
@@ -47,29 +51,42 @@ const style = {
   p: 1,
 };
 
-export default function AddSportModal({ onAddSport }) {
+export default function AddSportModal({
+  sportData,
+  dataSupport,
+  success,
+  apiFunction,
+}) {
   const dispatch = useDispatch();
-  const { isModalVisible } = useSelector(userDataSelector);
+  const { isModalVisible, setEditData, buttonClickedForModal } =
+    useSelector(userDataSelector);
 
   const handleOpen = () => {
-    console.log("sjfbsjdsjdbfdf");
+    reset({
+      sportname: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      type: "",
+      bonus: null,
+      stack: "",
+    });
+    dispatch(knowWhereHaveToOpenModal("addSport"));
     dispatch(updateModalVisibility(true));
   };
   const handleClose = () => {
+    dispatch(getUserDataForEdit(""));
     dispatch(updateModalVisibility(false));
-    reset();
   };
-
-  const [addUpdateSport, { data: addUpdateSportData }] =
-    useGetAddUpdateSportApiByNameMutation();
-
-  console.log(addUpdateSportData, "LISTTTT");
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    setValue,
+    getValues,
+    result,
     reset,
     setError,
   } = useForm({
@@ -79,63 +96,106 @@ export default function AddSportModal({ onAddSport }) {
       description: "",
       type: "",
       bonus: "",
+      startDate: "",
+      endDate: "",
       stack: "",
-
-      startDate: null,
-      endDate: null,
     },
     criteriaMode: "all",
     shouldFocusError: true,
   });
 
-  console.log(errors, "KK");
+  const onReset = async (userValue) => {
+    let result = await Promise.resolve({
+      sportname: userValue?.sportname,
+      description: userValue?.description,
+      startDate: userValue?.startDate,
+      endDate: userValue?.endDate,
+      type: userValue?.type,
+      bonus: userValue?.bonus == true ? "True" : "False",
+    });
+
+    reset(result);
+  };
+
+  React.useEffect(() => {
+    if (setEditData?.length && buttonClickedForModal === "edit") {
+      onReset(setEditData[0]);
+    }
+  }, [setEditData]);
 
   const onSubmit = async (data) => {
-    console.log(data, "sjhdjkhs");
+    let updated = getValues();
+    let finalPayload = {
+      ...updated,
+      bonus: updated.bonus == "True" ? true : false,
+    };
+    console.log(data, getValues(), finalPayload, "sjhdjkhs");
 
-    if (!data.startDate || !data.endDate) {
-      setError("startDate", {
-        type: "manual",
-        message: "Both start and end dates are required",
-      });
-      setError("endDate", {
-        type: "manual",
-        message: "Both start and end dates are required",
-      });
-      return;
-    }
-    if (data.endDate < data.startDate) {
-      setError("endDate", {
-        type: "manual",
-        message: "End date cannot be before start date",
-      });
-      return;
-    }
+    // if (!data.startDate || !data.endDate) {
+    //   setError("startDate", {
+    //     type: "manual",
+    //     message: "Both start and end dates are required",
+    //   });
+    //   setError("endDate", {
+    //     type: "manual",
+    //     message: "Both start and end dates are required",
+    //   });
+    //   return;
+    // }
+    // if (data.endDate < data.startDate) {
+    //   setError("endDate", {
+    //     type: "manual",
+    //     message: "End date cannot be before start date",
+    //   });
+    //   return;
+    // }
     try {
-      const result = await addUpdateSport({
+      console.log(data, "dataaaa");
+
+      const result = await apiFunction({
         ...data,
-        bonus: data.bonus === "True", // Convert to boolean
+        bonus: data.bonus === "True",
+        id: sportData?._id,
       }).unwrap();
+      // reset({
+      //   sportname: "",
+      //   description: "",
+      //   startDate: "",
+      //   endDate: "",
+      //   type: "",
+      //   bonus: null,
+      //   stack: "",
+      // });
+
       console.log(result, "RESULT_sport");
       if (result?.code === 200) {
         dispatch(
           handleNotification({
             state: true,
-            message: addUpdateSportData?.message,
-            severity: addUpdateSportData?.code,
+            message: dataSupport?.message,
+            severity: dataSupport?.code,
           })
         );
-        handleClose(); // Close the modal after submission
+        reset({
+          sportname: "",
+          description: "",
+          startDate: "",
+          endDate: "",
+          type: "",
+          bonus: null,
+          stack: "",
+        });
+        handleClose();
       }
 
-      onAddSport(result); // Call the callback with the new data
+      // onAddSport(result); // Call the callback with the new data
       reset();
     } catch (err) {
       dispatch(
         handleNotification({
           state: true,
-          message: addUpdateSportData?.message,
-          severity: addUpdateSportData?.code,
+          message: dataSupport?.message,
+          severity: dataSupport?.code,
         })
       );
       console.log(err, "the errr");
@@ -266,6 +326,7 @@ export default function AddSportModal({ onAddSport }) {
                     name="startDate"
                     name2="endDate"
                     errors={errors}
+                    register={register}
                   />
                 </Box>
               </div>
@@ -291,7 +352,7 @@ export default function AddSportModal({ onAddSport }) {
                   <Controller
                     name="type"
                     control={control}
-                    rules={{ required: "Sport Type is required" }}
+                    // rules={{ required: "Sport Type is required" }}
                     render={({ field }) => (
                       <Select
                         displayEmpty
@@ -300,6 +361,8 @@ export default function AddSportModal({ onAddSport }) {
                           height: "40px",
                         }}
                         {...field}
+                        {...register("type")}
+                        // onChange={handleChange}
                       >
                         <MenuItem disabled value="">
                           Sport Type
@@ -335,7 +398,7 @@ export default function AddSportModal({ onAddSport }) {
                   <Controller
                     name="bonus"
                     control={control}
-                    rules={{ required: "Round Bonus is required" }}
+                    // rules={{ required: "Round Bonus is required" }}
                     render={({ field }) => (
                       <Select
                         displayEmpty
@@ -344,12 +407,13 @@ export default function AddSportModal({ onAddSport }) {
                           height: "40px",
                         }}
                         {...field}
+                        {...register("bonus")}
                       >
                         <MenuItem disabled value="">
                           Bonus
                         </MenuItem>
-                        <MenuItem value="True">True</MenuItem>
-                        <MenuItem value="False">False</MenuItem>
+                        <MenuItem value={"True"}>True</MenuItem>
+                        <MenuItem value={"False"}>False</MenuItem>
                       </Select>
                     )}
                   />
