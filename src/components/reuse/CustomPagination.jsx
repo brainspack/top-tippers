@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Box, Skeleton, Pagination } from "@mui/material";
+import { useSelector } from "react-redux";
+import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
 
 const CustomPagination = (props) => {
   const { total, userList, rowsPerPage } = props;
   const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-
+  const [currentPage, setCurrentPage] = useState(0);
+  const { selectedSport, currentModule } = useSelector(manageSportSelector);
   const handlePageButtonClick = (e, pageNumber) => {
     setCurrentPage(pageNumber);
     const reqParams = {
-      search_string: "",
-      page: pageNumber,
+      page: pageNumber - 1,
       sortValue: "",
       sortOrder: "",
     };
-    // if(id){
-    //   reqParams.sport=id
-    // }
+    if (selectedSport) {
+      if (currentModule === "round") {
+        reqParams.sportId = selectedSport === "all" ? "" : selectedSport;
+      } else {
+        reqParams.sport = selectedSport === "all" ? "" : selectedSport;
+      }
+    }
     userList(reqParams);
   };
 
@@ -30,6 +35,9 @@ const CustomPagination = (props) => {
     }
   }, [rowsPerPage, total]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [selectedSport, currentModule]);
   return (
     <Box
       sx={{

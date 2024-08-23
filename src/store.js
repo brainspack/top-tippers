@@ -14,13 +14,17 @@ import deleteTeamApi from "./api/DeleteTeam";
 import teamDetailApi from "./api/TeamDetail";
 import addTeamApi from "./api/AddNewTeam";
 import updateTeamApi from "./api/UpdateTeam";
+import listRoundsApi from "./api/ListRounds";
+import deleteRoundApi from "./api/DeleteRound";
 import snackbarReducer from "../src/slices/Snackbar";
 import userReducer from "../src/slices/userSlice/user";
 import manageReducer from "./slices/manageTeam/manageTeam";
+import manageRoundReducer from "./slices/manageRound/manageRound";
 import userListCompetitionApi from "./api/listCompetition";
 import userListSportApi from "./api/listSport";
 import deleteSportApi from "./api/DeleteSport";
 import addUpdateSportApi from "./api/AddUpdateSport";
+import deleteCompetitionApi from "./api/DeleteCompetition";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
@@ -29,6 +33,7 @@ export const store = configureStore({
     snackbar: snackbarReducer,
     userSlice: userReducer,
     manageSlice: manageReducer,
+    manageRoundSlice: manageRoundReducer,
     manageSportSlice: manageSportReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
@@ -49,6 +54,9 @@ export const store = configureStore({
     [addTeamApi.reducerPath]: addTeamApi.reducer,
     [updateTeamApi.reducerPath]: updateTeamApi.reducer,
     [addUpdateSportApi.reducerPath]: addUpdateSportApi.reducer,
+    [listRoundsApi.reducerPath]: listRoundsApi.reducer,
+    [deleteRoundApi.reducerPath]: deleteRoundApi.reducer,
+    [deleteCompetitionApi.reducerPath]: deleteCompetitionApi.reducer,
     [setInviteAndCompButtonApi.reducerPath]: setInviteAndCompButtonApi.reducer,
     [sendSportNotificaticationApi.reducerPath]:
       sendSportNotificaticationApi.reducer,
@@ -74,6 +82,10 @@ export const store = configureStore({
       addTeamApi.middleware,
       updateTeamApi.middleware,
       addUpdateSportApi.middleware,
+      listRoundsApi.middleware,
+      deleteRoundApi.middleware,
+      deleteCompetitionApi.middleware,
+      setInviteAndCompButtonApi.middleware,
       setInviteAndCompButtonApi.middleware,
       sendSportNotificaticationApi.middleware
     ),

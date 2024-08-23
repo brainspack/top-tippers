@@ -29,18 +29,21 @@ import AddIcon from "@mui/icons-material/Add";
 
 import CustomSelect from "./CustomSelect";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
-import { updateListSport } from "../../slices/manageTeam/manageTeam";
+import {
+  setCurrentModule,
+  updateSportList,
+  updateTeamList,
+} from "../../slices/manageTeam/manageTeam";
 import AddTeamModal from "./AddTeamModal";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { AddSportBtn } from "./masterStyled";
+import { useAddTeamByNameMutation } from "../../api/AddNewTeam";
 
-const ManageUsers = () => {
+const ManageTeam = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { teamData } = useSelector(manageSportSelector);
-  {
-    teamData?.data?.map((ele) => console.log(ele.teamLogo, "ELE"));
-  }
+  const { teamData, sportData } = useSelector(manageSportSelector);
+
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -49,14 +52,24 @@ const ManageUsers = () => {
       setModalContent("Do you want to delete this record?");
       setAction(() => async () => {
         try {
-          await userDeleteApi({ teamId: id }).unwrap();
-          dispatch(
-            handleNotification({
-              state: true,
-              message: userDeleteData?.message,
-              severity: userDeleteData?.code,
-            })
-          );
+          const response = await userDeleteApi({ teamId: id }).unwrap();
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
         } catch (error) {
           dispatch(
             handleNotification({
@@ -74,9 +87,9 @@ const ManageUsers = () => {
   const closeModal = () => {
     setModal(false);
   };
-  // const handleOpen = () => {
-  //   dispatch(updateModalVisibility(true));
-  // };
+  const handleOpen = () => {
+    dispatch(updateModalVisibility(true));
+  };
 
   const [
     teamList,
@@ -104,12 +117,23 @@ const ManageUsers = () => {
   ] = useDeleteTeamByNameMutation();
   const [
     listSportApi,
-    { data: listSportData, isLoading, error: listSportError },
+    {
+      data: listSportData,
+      isLoading,
+      error: listSportError,
+      success: listSportSuccess,
+    },
   ] = useGetUserListSportApiByNameMutation();
 
   useEffect(() => {
-    if (data && data?.data) dispatch(updateListSport(data));
-  }, [data, userListSuccess]);
+    if (listSportData && listSportData?.data)
+      dispatch(updateSportList(listSportData));
+  }, [listSportData]);
+  const [addTeamApi, { data: addTeamData, isSuccess: addTeamSuccess }] =
+    useAddTeamByNameMutation();
+  useEffect(() => {
+    if (data && data?.data) dispatch(updateTeamList(data));
+  }, [data, userListSuccess, addTeamSuccess]);
 
   useEffect(() => {
     const reqParams = {
@@ -118,7 +142,7 @@ const ManageUsers = () => {
       sortOrder: "",
     };
     teamList(reqParams);
-  }, [deactivateUserSuccess, userDeleteSuccess]);
+  }, [deactivateUserSuccess, userDeleteSuccess, addTeamSuccess]);
 
   const columns = [
     {
@@ -160,7 +184,7 @@ const ManageUsers = () => {
         }),
         customBodyRender: (data, value) => {
           {
-            console.log(value, "VALUE");
+            // console.log(value, "VALUE");
           }
           return (
             <>
@@ -269,13 +293,9 @@ const ManageUsers = () => {
     },
   };
   const { isModalVisible, modalSportName } = useSelector(userDataSelector);
-
-  const handleOpen = () => {
-    // if (data?.data?.sport?.sportname) {
-    //   dispatch(setModalSportName(data.data.sport.sportname));
-    // }
-    dispatch(updateModalVisibility(true));
-  };
+  useEffect(() => {
+    dispatch(setCurrentModule("team"));
+  }, []);
   return (
     <>
       <ManageUsersContainer>
@@ -289,7 +309,14 @@ const ManageUsers = () => {
                 width: "30%",
               }}
             >
-              <CustomSelect data={listSportData} listSportApi={listSportApi} />
+              <CustomSelect
+                data={listSportData}
+                listSportApi={listSportApi}
+                sportData={sportData}
+                teamListApi={teamList}
+                teamListData={data}
+                userListSuccess={userListSuccess}
+              />
               <AddSportBtn disableRipple onClick={handleOpen}>
                 <AddIcon sx={{ mr: 1 }} />
                 Add Team
@@ -300,6 +327,8 @@ const ManageUsers = () => {
                 open={isModalVisible}
                 onClose={() => dispatch(updateModalVisibility(false))}
                 initialSportName={modalSportName}
+                sportData={sportData}
+                addTeamApi={addTeamApi}
               />
             </Box>
           </Box>
@@ -323,4 +352,4 @@ const ManageUsers = () => {
     </>
   );
 };
-export default ManageUsers;
+export default ManageTeam;

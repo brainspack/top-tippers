@@ -36,6 +36,7 @@ import {
   updateSendModalVisibility,
 } from "../../slices/userSlice/user";
 import { useGetSetInviteAndCompButtonApiByNameMutation } from "../../api/setInviteAndCompButton";
+import ControlledSwitches from "../SwitchComponent";
 import { updateSportData } from "../../slices/manageSport/manageSport";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 import { useGetAddUpdateSportApiByNameMutation } from "../../api/AddUpdateSport";
@@ -60,14 +61,24 @@ const ManageSport = (props) => {
       setModalContent("Do you want to delete this record?");
       setAction(() => async () => {
         try {
-          await SportDeleteApi({ sportId: id }).unwrap();
-          dispatch(
-            handleNotification({
-              state: true,
-              message: sportDeleteData?.message,
-              severity: sportDeleteData?.code,
-            })
-          );
+          const response = await SportDeleteApi({ sportId: id }).unwrap();
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
         } catch (error) {
           dispatch(
             handleNotification({
@@ -122,7 +133,7 @@ const ManageSport = (props) => {
 
   const [userSetInvite, { data: setInviteButtonData }] =
     useGetSetInviteAndCompButtonApiByNameMutation();
-
+  console.log(setInviteButtonData, "setInviteButtonData");
   console.log(listSportData, "LISTSPORT");
   useEffect(() => {
     if (listSportData && listSportData?.data)
