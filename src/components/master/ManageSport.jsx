@@ -25,22 +25,32 @@ import Switch from "@mui/material/Switch";
 import { AddSportBtn } from "./masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import AddSportModal from "./AddSportModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "../reuse/CustomModal";
 import { handleNotification } from "../../slices/Snackbar";
 import { useDeleteSportByNameMutation } from "../../api/DeleteSport";
-import { updateModalVisibility } from "../../slices/userSlice/user";
+import {
+  updateModalVisibility,
+  getUserDataForEdit,
+  knowWhereHaveToOpenModal,
+  updateSendModalVisibility,
+} from "../../slices/userSlice/user";
 import { useGetSetInviteAndCompButtonApiByNameMutation } from "../../api/setInviteAndCompButton";
 import ControlledSwitches from "../SwitchComponent";
+import { updateSportData } from "../../slices/manageSport/manageSport";
+import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
+import { useGetAddUpdateSportApiByNameMutation } from "../../api/AddUpdateSport";
+import SendSportModal from "./SendSportModal";
+import SportControlledSwitches from "./SportSwitchComponent";
 const ManageSport = (props) => {
   const dispatch = useDispatch();
-  const [listSport, setListSportData] = useState([]);
-  const [checked, setChecked] = useState(false);
 
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
-
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUserName, setSelectedUserName] = useState(null);
+  const { sportData } = useSelector(manageSportDataSelector);
   // const handleChange = (event) => {
   //   const setInvite = tableMeta.rowData[6];
   //   setInviteAndComp({setInvite :})
@@ -87,21 +97,48 @@ const ManageSport = (props) => {
     setModal(false);
   };
 
-  const handleOpen = () => {
-    console.log("sjfbsjdsjdbfdf");
+  const [
+    addUpdateSport,
+    { data: addUpdateSportData, isSuccess: updataSportSuccess },
+  ] = useGetAddUpdateSportApiByNameMutation();
+
+  const handleEditClick = (rowData) => {
+    const payload = [
+      {
+        sportname: rowData?.rowData[0],
+        startDate: rowData?.rowData[1],
+        endDate: rowData?.rowData[2],
+        type: rowData?.rowData[3],
+        description: rowData?.rowData[4],
+        bonus: rowData?.rowData[5],
+      },
+    ];
+
+    // setSelectedSport(rowData);
+    dispatch(getUserDataForEdit(payload));
+    dispatch(knowWhereHaveToOpenModal("edit"));
     dispatch(updateModalVisibility(true));
   };
-  const handleEditClick = (rowData) => {
-    dispatch(updateModalVisibility(true));
+  const handleSendOpen = (rowData) => {
+    const sendSportDataId = rowData?.rowData[6];
+    const sportName = rowData?.rowData[0];
+    console.log(sportName, "jskajks");
+    setSelectedUserId(sendSportDataId);
+    setSelectedUserName(sportName);
+    dispatch(updateSendModalVisibility(true));
   };
 
-  const [userListSport, { data: listSportData }] =
+  const [userListSport, { data: listSportData, isSuccess: userSportSuccess }] =
     useGetUserListSportApiByNameMutation();
 
   const [userSetInvite, { data: setInviteButtonData }] =
     useGetSetInviteAndCompButtonApiByNameMutation();
   console.log(setInviteButtonData, "setInviteButtonData");
   console.log(listSportData, "LISTSPORT");
+  useEffect(() => {
+    if (listSportData && listSportData?.data)
+      dispatch(updateSportData(listSportData));
+  }, [listSportData, userSportSuccess]);
 
   const [
     SportDeleteApi,
@@ -113,17 +150,46 @@ const ManageSport = (props) => {
     },
   ] = useDeleteSportByNameMutation();
 
-  const TableSportData = async (data) => {
-    try {
-      const result = await userListSport({ body: data }).unwrap();
-      console.log(result, "RESULT");
+  // const TableSportData = async (data) => {
+  //   try {
+  //     const result = await userListSport({ body: data }).unwrap();
+  //     console.log(result, "RESULT");
 
-      setListSportData(result.data);
-    } catch (err) {
-      console.log(err, "the errr");
+  //     setListSportData(result.data);
+  //   } catch (err) {
+  //     console.log(err, "the errr");
+  //   }
+  //   await listSportData;
+  // };
+  const setInviteAndComp = async (id) => {
+    try {
+      await userSetInvite({ sportId: id }).unwrap();
+      dispatch(
+        handleNotification({
+          state: true,
+          message: userSetInvite?.message,
+          severity: userSetInvite?.code,
+        })
+      );
+      // const reqParams = {
+      //   search_string: "",
+      //   page: 0,
+      //   sortValue: "",
+      //   sortOrder: "",
+      // };
+      // TableSportData(reqParams);
+    } catch (error) {
+      dispatch(
+        handleNotification({
+          state: true,
+          message: userSetInvite?.message,
+          severity: userSetInvite?.code,
+        })
+      );
     }
-    await listSportData;
   };
+
+  // console.log(setInviteButton, "LISTTTT");
 
   useEffect(() => {
     const reqParams = {
@@ -132,9 +198,9 @@ const ManageSport = (props) => {
       sortValue: "",
       sortOrder: "",
     };
-    TableSportData(reqParams);
+    userListSport(reqParams);
     // setInviteAndComp();
-  }, [sportDeleteSuccess]);
+  }, [sportDeleteSuccess, updataSportSuccess]);
 
   const columns = [
     {
@@ -221,6 +287,7 @@ const ManageSport = (props) => {
           },
         }),
         customBodyRender: (value, rowData) => (
+          // const userId = rowData.rowData[6]
           <>
             <Box display="flex" gap="10px">
               <EditIcon
@@ -231,12 +298,16 @@ const ManageSport = (props) => {
                 sx={{ cursor: "pointer" }}
                 onClick={() => openModal(value, "delete")}
               />
-              <SendIcon sx={{ cursor: "pointer" }} />
+              <SendIcon
+                sx={{ cursor: "pointer" }}
+                onClick={() => handleSendOpen(rowData)}
+              />
             </Box>
           </>
         ),
       },
     },
+
     {
       name: "isInviteCompButton",
       label: "Invite&Comp Button",
@@ -252,8 +323,9 @@ const ManageSport = (props) => {
           },
         }),
         customBodyRender: (value, rowData) => {
+          // const id = tableMeta.rowData[6];
           return (
-            <ControlledSwitches
+            <SportControlledSwitches
               value={value}
               rowData={rowData}
               statusChangeApi={userSetInvite}
@@ -298,8 +370,17 @@ const ManageSport = (props) => {
         <ManageUsersWrapper>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>Sport</ManageUsersHeading>
-            <AddSportModal />
+            <AddSportModal
+              // sportData={selectedSport}
+              apiFunction={addUpdateSport}
+              dataSupport={addUpdateSportData}
+              success={updataSportSuccess}
+            />
           </Box>
+          <SendSportModal
+            sportDataName={selectedUserName}
+            sportDataId={selectedUserId}
+          />
           <SearchContainer>
             {/* <SearchWrapper> */}
             {/*
@@ -331,7 +412,7 @@ const ManageSport = (props) => {
               */}
             <ManageUserTableWrapper>
               <MUIDataTable
-                data={listSportData?.data}
+                data={sportData?.data}
                 columns={columns}
                 options={options}
               />

@@ -3,7 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   data: [],
   isModalVisible: false,
+  isSendModalVisible: false,
   modalSportName: "",
+  setEditData: null,
+  buttonClickedForModal: "",
 };
 
 export const userSlice = createSlice({
@@ -23,13 +26,30 @@ export const userSlice = createSlice({
     updateModalVisibility: (state, { payload }) => {
       state.isModalVisible = payload;
     },
+    updateSendModalVisibility: (state, { payload }) => {
+      state.isSendModalVisible = payload;
+    },
     setModalSportName: (state, action) => {
       state.modalSportName = action.payload;
+    },
+    getUserDataForEdit: (state, { payload }) => {
+      // console.log(payload.rowData, payload, "DATA");
+      state.setEditData = payload;
+    },
+    knowWhereHaveToOpenModal: (state, { payload }) => {
+      console.log(payload);
+      state.buttonClickedForModal = payload;
     },
   },
 });
 
-export const { updateUserData, updateModalVisibility, setModalSportName } =
-  userSlice.actions;
+export const {
+  updateUserData,
+  updateModalVisibility,
+  setModalSportName,
+  getUserDataForEdit,
+  knowWhereHaveToOpenModal,
+  updateSendModalVisibility,
+} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -232,11 +232,10 @@
   padding: 6.5px 14px;
 }
 
-
-.css-o69gx8-MuiCardMedia-root{
+.css-o69gx8-MuiCardMedia-root {
   object-fit: contain !important;
 }
-.logoBox img{
+.logoBox img {
   height: 100%;
   width: 100%;
 }
@@ -246,6 +245,7 @@
   outline: none;
   height: 34px;
   width: 100%;
+  padding-left: 11px;
 }
 
 .react-datepicker__input-container .custom-date-picker {
