@@ -31,6 +31,7 @@ import { handleNotification } from "../../slices/Snackbar";
 import { useDeleteSportByNameMutation } from "../../api/DeleteSport";
 import { updateModalVisibility } from "../../slices/userSlice/user";
 import { useGetSetInviteAndCompButtonApiByNameMutation } from "../../api/setInviteAndCompButton";
+import ControlledSwitches from "../SwitchComponent";
 const ManageSport = (props) => {
   const dispatch = useDispatch();
   const [listSport, setListSportData] = useState([]);
@@ -50,14 +51,24 @@ const ManageSport = (props) => {
       setModalContent("Do you want to delete this record?");
       setAction(() => async () => {
         try {
-          await SportDeleteApi({ sportId: id }).unwrap();
-          dispatch(
-            handleNotification({
-              state: true,
-              message: sportDeleteData?.message,
-              severity: sportDeleteData?.code,
-            })
-          );
+          const response = await SportDeleteApi({ sportId: id }).unwrap();
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
         } catch (error) {
           dispatch(
             handleNotification({
@@ -87,9 +98,9 @@ const ManageSport = (props) => {
   const [userListSport, { data: listSportData }] =
     useGetUserListSportApiByNameMutation();
 
-  const [userSetInvite, { data: setInviteButton }] =
+  const [userSetInvite, { data: setInviteButtonData }] =
     useGetSetInviteAndCompButtonApiByNameMutation();
-
+  console.log(setInviteButtonData, "setInviteButtonData");
   console.log(listSportData, "LISTSPORT");
 
   const [
@@ -113,35 +124,6 @@ const ManageSport = (props) => {
     }
     await listSportData;
   };
-  const setInviteAndComp = async (id) => {
-    try {
-      await userSetInvite({ sportId: id }).unwrap();
-      dispatch(
-        handleNotification({
-          state: true,
-          message: userSetInvite?.message,
-          severity: userSetInvite?.code,
-        })
-      );
-      // const reqParams = {
-      //   search_string: "",
-      //   page: 0,
-      //   sortValue: "",
-      //   sortOrder: "",
-      // };
-      // TableSportData(reqParams);
-    } catch (error) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: userSetInvite?.message,
-          severity: userSetInvite?.code,
-        })
-      );
-    }
-  };
-
-  console.log(setInviteButton, "LISTTTT");
 
   useEffect(() => {
     const reqParams = {
@@ -269,12 +251,13 @@ const ManageSport = (props) => {
             justifyContent: "center",
           },
         }),
-        customBodyRender: (value, tableMeta) => {
-          const id = tableMeta.rowData[6];
+        customBodyRender: (value, rowData) => {
           return (
-            <Switch
-              checked={value}
-              // onChange={() => handleChange(tableMeta.rowData)}
+            <ControlledSwitches
+              value={value}
+              rowData={rowData}
+              statusChangeApi={userSetInvite}
+              deactivateUserData={setInviteButtonData}
             />
           );
         },

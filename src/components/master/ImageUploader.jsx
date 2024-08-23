@@ -23,26 +23,7 @@ const StyledBox = styled(Box)({
   color: "grey",
 });
 
-const ImageUploader = () => {
-  const [image, setImage] = useState(null);
-  console.log(image, "INSIDE IMAGE");
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        alert("Please select a valid image file.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+const ImageUploader = ({ handleImageChange, image }) => {
   return (
     <Box
       sx={{

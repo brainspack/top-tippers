@@ -1,5 +1,5 @@
-import * as React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect, Fragment } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -30,6 +30,7 @@ import useWindowWidth from "./useWindowWidth";
 import BasicMenu from "./ProfileMenu";
 import { ADMIN_LIST, MASTER_SUBHEADINGS } from "../../utils/constant";
 import { useMediaQuery } from "@mui/material";
+import CustomAccordian from "./AccordianCustom";
 
 const drawerWidth = 240;
 
@@ -78,15 +79,28 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function DashboardComponent({ content }) {
+const DashboardComponent = ({ content }) => {
+  const [expanded, setExpanded] = useState(false);
+  const handleAccordionToggle = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+  const location = useLocation();
+  useEffect(() => {
+    if (MASTER_SUBHEADINGS.some((ele) => ele.route === location.pathname)) {
+      setExpanded("masterPanel");
+    } else {
+      setExpanded(false);
+    }
+  }, [location.pathname]);
+
   const windowWidth = useWindowWidth();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.up("sm")); // Checks if the screen width is >= 'sm'
 
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (windowWidth < 899) {
       setOpen(false);
     }
@@ -101,7 +115,7 @@ export default function DashboardComponent({ content }) {
 
   // ============== left ===================
 
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
@@ -125,6 +139,7 @@ export default function DashboardComponent({ content }) {
       sx={{
         width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
         backgroundColor: "#383434",
+        // border: "1px solid red",
       }}
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -158,7 +173,12 @@ export default function DashboardComponent({ content }) {
             </ListItemButton>
           </NavLink>
         ))}
-        <Accordion className="accordion-master" elevation={0}>
+        {/* <Accordion
+          className="accordion-master"
+          elevation={0}
+          expanded={expanded === "masterPanel"} // Control expansion based on state
+          onChange={handleAccordionToggle("masterPanel")} // Handle accordion expansion
+        >
           <AccordionSummary
             className="accordion-master"
             expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
@@ -170,8 +190,17 @@ export default function DashboardComponent({ content }) {
           </AccordionSummary>
           {MASTER_SUBHEADINGS.map((ele) => (
             <>
-              <NavLink to={ele.route} className={"drawer-routes drawer-nav"}>
-                <AccordionDetails className="master-subheadings">
+              <NavLink
+                to={ele.route}
+                className={"drawer-routes drawer-nav"}
+                key={ele.label} // Ensure unique key
+                onClick={(e) => e.stopPropagation()}
+                // onClick={() => setExpanded("masterPanel")} // Keep accordion open on click
+              >
+                <AccordionDetails
+                  className="master-subheadings"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   {ele.icon}
 
                   {ele.label}
@@ -179,21 +208,10 @@ export default function DashboardComponent({ content }) {
               </NavLink>
             </>
           ))}
-        </Accordion>
+        </Accordion> */}
+        {/* <CustomAccordian /> */}
       </List>
       <Divider />
-      {/* <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </Box>
   );
 
@@ -206,7 +224,7 @@ export default function DashboardComponent({ content }) {
             {windowWidth < 899 ? (
               <>
                 {["left"].map((anchor) => (
-                  <React.Fragment key={anchor}>
+                  <Fragment key={anchor}>
                     <Button onClick={toggleDrawer(anchor, true)}>
                       {anchor}
                     </Button>
@@ -217,7 +235,7 @@ export default function DashboardComponent({ content }) {
                     >
                       {list(anchor)}
                     </Drawer>
-                  </React.Fragment>
+                  </Fragment>
                 ))}
               </>
             ) : (
@@ -292,7 +310,12 @@ export default function DashboardComponent({ content }) {
               </ListItemButton>
             </NavLink>
           ))}
-          <Accordion className="accordion-master" elevation={0}>
+          <Accordion
+            className="accordion-master"
+            elevation={0}
+            expanded={expanded === "masterPanel"} // Control expansion based on state
+            onChange={handleAccordionToggle("masterPanel")} // Handle accordion expansion
+          >
             <AccordionSummary
               className="accordion-master"
               expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
@@ -306,8 +329,17 @@ export default function DashboardComponent({ content }) {
             </AccordionSummary>
             {MASTER_SUBHEADINGS.map((ele) => (
               <>
-                <NavLink to={ele.route} className={"drawer-routes drawer-nav"}>
-                  <AccordionDetails className="master-subheadings">
+                <NavLink
+                  to={ele.route}
+                  className={"drawer-routes drawer-nav"}
+                  key={ele.label}
+                  // onClick={(e) => e.stopPropagation()}
+                  onClick={() => setExpanded("masterPanel")}
+                >
+                  <AccordionDetails
+                    className="master-subheadings"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     {ele.icon}
 
                     {ele.label}
@@ -320,10 +352,10 @@ export default function DashboardComponent({ content }) {
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>
         <DrawerHeader />
-
-        {/* <DashboardContent /> */}
         {content}
       </Main>
     </Box>
   );
-}
+};
+
+export default DashboardComponent;
