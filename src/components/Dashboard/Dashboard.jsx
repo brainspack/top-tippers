@@ -28,9 +28,14 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import useWindowWidth from "./useWindowWidth";
 import BasicMenu from "./ProfileMenu";
-import { ADMIN_LIST, MASTER_SUBHEADINGS } from "../../utils/constant";
+import {
+  ADMIN_LIST,
+  ADMIN_LIST_TWO,
+  MASTER_SUBHEADINGS,
+} from "../../utils/constant";
 import { useMediaQuery } from "@mui/material";
-import CustomAccordian from "./AccordianCustom";
+import CustomAccordion from "../reuse/CustomAccordian";
+// import CustomAccordian from "./AccordianCustom";
 
 const drawerWidth = 240;
 
@@ -80,18 +85,18 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const DashboardComponent = ({ content }) => {
-  const [expanded, setExpanded] = useState(false);
-  const handleAccordionToggle = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-  const location = useLocation();
-  useEffect(() => {
-    if (MASTER_SUBHEADINGS.some((ele) => ele.route === location.pathname)) {
-      setExpanded("masterPanel");
-    } else {
-      setExpanded(false);
-    }
-  }, [location.pathname]);
+  // const [expanded, setExpanded] = useState(false);
+  // const handleAccordionToggle = (panel) => (event, isExpanded) => {
+  //   setExpanded(isExpanded ? panel : false);
+  // };
+  // const location = useLocation();
+  // useEffect(() => {
+  //   if (MASTER_SUBHEADINGS.some((ele) => ele.route === location.pathname)) {
+  //     setExpanded("masterPanel");
+  //   } else {
+  //     setExpanded(false);
+  //   }
+  // }, [location.pathname]);
 
   const windowWidth = useWindowWidth();
   const navigate = useNavigate();
@@ -210,6 +215,7 @@ const DashboardComponent = ({ content }) => {
           ))}
         </Accordion> */}
         {/* <CustomAccordian /> */}
+        {/* <CustomAccordion /> */}
       </List>
       <Divider />
     </Box>
@@ -293,16 +299,17 @@ const DashboardComponent = ({ content }) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-
+        {/* sx={{ border: "1px solid red" }} */}
+        {/* drawer-nav */}
         <List>
           {ADMIN_LIST.map((text, index) => (
             <NavLink
-              className={"drawer-routes"}
+              className={"drawer-routes drawer-nav"}
               to={text.route}
               key={text}
               disablePadding
             >
-              <ListItemButton disableRipple className={"drawer-nav"}>
+              <ListItemButton disableRipple>
                 <ListItemIcon>{text.icon}</ListItemIcon>
 
                 <ListItemText primary={text.label} />
@@ -310,7 +317,7 @@ const DashboardComponent = ({ content }) => {
               </ListItemButton>
             </NavLink>
           ))}
-          <Accordion
+          {/* <Accordion
             className="accordion-master"
             elevation={0}
             expanded={expanded === "masterPanel"} // Control expansion based on state
@@ -347,7 +354,25 @@ const DashboardComponent = ({ content }) => {
                 </NavLink>
               </>
             ))}
-          </Accordion>
+          </Accordion> */}
+          {/* <CustomAccordian /> */}
+          <CustomAccordion data={MASTER_SUBHEADINGS} />
+          {/* <CustomAccordion data={ADMIN_LIST_TWO} /> */}
+          {ADMIN_LIST_TWO.map((text, index) => (
+            <NavLink
+              className={"drawer-routes drawer-nav"}
+              to={text.route}
+              key={text}
+              disablePadding
+            >
+              <ListItemButton disableRipple>
+                <ListItemIcon>{text.icon}</ListItemIcon>
+
+                <ListItemText primary={text.label} />
+                {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
+              </ListItemButton>
+            </NavLink>
+          ))}
         </List>
       </Drawer>
       <Main sx={{ backgroundColor: "#fafafb" }} open={open}>

@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   roundData: {},
-  //   sportData: {},
+  roundsEditData: null,
+  updateEditData: null,
+  isSelectedMode: "",
 };
 
 export const manageRoundSlice = createSlice({
@@ -12,25 +14,23 @@ export const manageRoundSlice = createSlice({
     updateRoundList: (state, { payload }) => {
       state.roundData = payload;
     },
-    // updateSportList: (state, { payload }) => {
-    //   const newData = [
-    //     {
-    //       _id: "all",
-    //       sportname: "All",
-    //     },
-    //     ...payload.data,
-    //   ];
-    //   console.log(newData, "newData");
-    //   console.log(payload, "PAYLOAD");
-    //   const newObj = {
-    //     ...payload,
-    //     data: newData,
-    //   };
-    //   console.log(newObj, "NEWOBJ");
-    //   state.sportData = newObj;
-    // },
+    getRoundsDataForEdit: (state, { payload }) => {
+      state.roundsEditData = payload;
+    },
+    getUpdateDataForEdit: (state, { payload }) => {
+      state.roundsEditData = payload;
+    },
+
+    setSelectedMode: (state, { payload }) => {
+      state.isSelectedMode = payload;
+    },
   },
 });
 
-export const { updateRoundList, updateSportList } = manageRoundSlice.actions;
+export const {
+  updateRoundList,
+  getRoundsDataForEdit,
+  setSelectedMode,
+  getUpdateDataForEdit,
+} = manageRoundSlice.actions;
 export default manageRoundSlice.reducer;

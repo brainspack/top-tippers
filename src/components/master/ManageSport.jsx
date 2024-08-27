@@ -90,7 +90,6 @@ const ManageSport = (props) => {
         }
       });
     }
-
     setModal(true);
   };
   const closeModal = () => {
@@ -114,7 +113,6 @@ const ManageSport = (props) => {
       },
     ];
 
-    // setSelectedSport(rowData);
     dispatch(getUserDataForEdit(payload));
     dispatch(knowWhereHaveToOpenModal("edit"));
     dispatch(updateModalVisibility(true));
