@@ -28,40 +28,26 @@ const style = {
   width: 470,
   bgcolor: "background.paper",
   boxShadow: 24,
-  height: "270px",
+  height: "auto",
   p: 1,
 };
 
-export default function SendSportModal({ sportDataId, sportDataName }) {
+export default function SendSportModal({
+  sportDataId,
+  sportDataName,
+  sendSportNotify,
+}) {
   console.log(sportDataId, "iddd");
 
   const dispatch = useDispatch();
   const { isSendModalVisible } = useSelector(userDataSelector);
-  const handleSendOpen = () => {
-    dispatch(updateSendModalVisibility(true));
-  };
+
   const handleSendClose = () => {
     dispatch(updateSendModalVisibility(false));
     reset();
   };
 
   console.log("insendSport Modal");
-  const [
-    sendSportNotify,
-    { data: sendSportData, isSuccess: sendSportSuccess },
-  ] = useGetSendSportNotificaticationApiByNameMutation();
-
-  // const SendSportData = async (data) => {
-  //     try {
-  //       const result = await sendSportNotify({ body: data }).unwrap();
-  //       console.log(result, "RESULT");
-
-  //       setListSportData(result.data);
-  //     } catch (err) {
-  //       console.log(err, "the errr");
-  //     }
-  //     await sendSportData;
-  //   };
 
   const {
     register,
@@ -73,7 +59,6 @@ export default function SendSportModal({ sportDataId, sportDataName }) {
   });
 
   const onSubmit = async (data) => {
-    // Handle form submission
     console.log(data);
     try {
       console.log(data, "dataaaa");
@@ -87,27 +72,32 @@ export default function SendSportModal({ sportDataId, sportDataName }) {
         dispatch(
           handleNotification({
             state: true,
-            message: sendSportData?.message,
-            severity: sendSportData?.code,
+            message: result?.message,
+            severity: result?.code,
           })
         );
         handleSendClose();
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
       }
 
-      // onAddSport(result); // Call the callback with the new data
       reset();
     } catch (err) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: sendSportData?.message,
-          severity: sendSportData?.code,
-        })
-      );
       console.log(err, "the errr");
     }
-    // await addUpdateSportData;
   };
+
+  const formatInput = (value) => {
+    if (!value) return value;
+    return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
+  };
+
   return (
     <div>
       <Modal
@@ -133,7 +123,7 @@ export default function SendSportModal({ sportDataId, sportDataName }) {
               sx={{
                 mt: 1,
                 padding: "0 15px 12px",
-                height: "160px",
+                height: "auto",
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -164,11 +154,9 @@ export default function SendSportModal({ sportDataId, sportDataName }) {
                   }}
                   {...register("title", {
                     required: "title is required",
+                    setValueAs: (value) => formatInput(value),
                   })}
-                  // value={userDetails?.sportname}
-                  // onChange={handleChange}
                 />
-                {/*  defaultValues.sportname ? defaultValues.sportname : "" */}
               </div>
               <div className="errorMsgParent">
                 <FormHelperText sx={{ color: "#d32f2f" }}>
@@ -199,6 +187,7 @@ export default function SendSportModal({ sportDataId, sportDataName }) {
                   }}
                   {...register("message", {
                     required: "description is required",
+                    setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
