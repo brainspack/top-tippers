@@ -51,30 +51,53 @@ export const ADMIN_LIST = [
 ];
 export const MASTER_SUBHEADINGS = [
   {
+    id: 1,
     label: "Manage Sports",
     icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/sport",
   },
   {
+    id: 2,
     label: "Manage Team",
     icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/team",
   },
   {
+    id: 3,
     label: "Manage Round",
     icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/round",
   },
   {
+    id: 4,
     label: "Manage Game",
     icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/game",
   },
   {
+    id: 5,
     label: "Manage Comp...",
     icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/competition",
   },
+];
+
+export const ADMIN_LIST_TWO = [
+  {
+    label: "Article",
+    route: "/admin/ladder",
+    icon: <DashboardIcon sx={{ color: "white" }} />,
+  },
+  // {
+  //   label: "Banter",
+  //   route: "/admin/users",
+  //   icon: <PersonIcon sx={{ color: "white" }} />,
+  // },
+  // {
+  //   label: "Messaging",
+  //   route: "/admin/messaging",
+  //   icon: <EmailIcon sx={{ color: "white" }} />,
+  // },
 ];
 
 export const DASHBOARD_CARD_DATA = [

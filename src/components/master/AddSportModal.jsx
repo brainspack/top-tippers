@@ -9,8 +9,8 @@ import {
 } from "./masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
-
 import {
+  Divider,
   FormControl,
   FormHelperText,
   MenuItem,
@@ -195,7 +195,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box sx={{}}>
+          <Box>
             <SportModalHeading
               id="modal-modal-title"
               variant="h6"
@@ -456,6 +456,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                 </FormHelperText>
               </div>
             </Box>
+
             <Box
               sx={{
                 display: "flex",

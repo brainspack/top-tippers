@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
-import {
-  setModalSportName,
-  updateModalVisibility,
-  updateUserData,
-} from "../../slices/userSlice/user";
+import { updateModalVisibility } from "../../slices/userSlice/user";
 import { handleNotification } from "../../slices/Snackbar";
 import {
   ManageUsersContainer,
@@ -19,12 +14,9 @@ import {
   ManageUserTableWrapper,
   SearchContainer,
 } from "../ManageUsers/ManangeUsersStyled";
-import ControlledSwitches from "../SwitchComponent";
 import CustomModal from "../reuse/CustomModal";
 import CustomPagination from "../reuse/CustomPagination";
-
 import AddIcon from "@mui/icons-material/Add";
-
 import CustomSelect from "./CustomSelect";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
 import {
@@ -32,21 +24,28 @@ import {
   updateSportList,
   updateTeamList,
 } from "../../slices/manageTeam/manageTeam";
-import AddTeamModal from "./AddTeamModal";
-// import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import { useListRoundsByNameMutation } from "../../api/ListRounds";
 import { useDeleteRoundByNameMutation } from "../../api/DeleteRound";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
-import { useAddTeamByNameMutation } from "../../api/AddNewTeam";
 import { AddSportBtn } from "./masterStyled";
 import EditIcon from "@mui/icons-material/Edit";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
-import { updateRoundList } from "../../slices/manageRound/manageRound";
+import {
+  getRoundsDataForEdit,
+  getUpdateDataForEdit,
+  setSelectedMode,
+  updateRoundList,
+} from "../../slices/manageRound/manageRound";
+import AddRoundModal from "./AddRoundModal";
+import { useAddRoundByNameMutation } from "../../api/AddNewRound";
+import { useUpdateRoundByNameMutation } from "../../api/UpdateRound";
+import { format } from "date-fns";
+import moment from "moment";
 const ManageRound = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sportData } = useSelector(manageSportSelector);
-  const { roundData } = useSelector(manageRoundSelector);
+  const { roundData, isSelectedMode, roundsEditData, updateEditData } =
+    useSelector(manageRoundSelector);
 
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
@@ -92,9 +91,9 @@ const ManageRound = () => {
   const closeModal = () => {
     setModal(false);
   };
-  const handleOpen = () => {
-    dispatch(updateModalVisibility(true));
-  };
+
+  const [addRoundApi, { data: addRoundData, isSuccess: addRoundSuccess }] =
+    useAddRoundByNameMutation();
 
   const [
     listRoundsApi,
@@ -124,13 +123,20 @@ const ManageRound = () => {
       success: listSportSuccess,
     },
   ] = useGetUserListSportApiByNameMutation();
+  const [
+    updateRoundApi,
+    {
+      data: updateRoundData,
+      isLoading: updateRoundLoading,
+      isSuccess: updateRoundSuccess,
+    },
+  ] = useUpdateRoundByNameMutation();
 
   useEffect(() => {
     if (listSportData && listSportData?.data)
       dispatch(updateSportList(listSportData));
   }, [listSportData]);
-  const [addTeamApi, { data: addTeamData, isSuccess: addTeamSuccess }] =
-    useAddTeamByNameMutation();
+
   useEffect(() => {
     if (listRoundsData && listRoundsData?.data)
       dispatch(updateRoundList(listRoundsData));
@@ -143,7 +149,35 @@ const ManageRound = () => {
       sortOrder: "",
     };
     listRoundsApi(reqParams);
-  }, [userDeleteSuccess, addTeamSuccess]);
+  }, [userDeleteSuccess, addRoundSuccess, updateRoundSuccess]);
+  const handleAddRound = () => {
+    dispatch(setSelectedMode("round"));
+    dispatch(updateModalVisibility(true));
+  };
+
+  const handleEditRound = (value, rowData) => {
+    console.log(rowData?.rowData, "ROWDATA");
+    console.log(rowData?.rowData[2], "ROUNDTYPE");
+    dispatch(setSelectedMode("edit"));
+
+    const formattedStartDate = moment(rowData?.rowData[3].startDate).format(
+      "L"
+    );
+    const formattedEndDate = moment(rowData?.rowData[3].endDate).format("L");
+    const payload = [
+      {
+        roundno: rowData?.rowData[0],
+        roundname: rowData?.rowData[1],
+        roundtype: rowData?.rowData[2],
+        sportId: rowData?.rowData[3]._id,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        roundId: rowData?.rowData[4],
+      },
+    ];
+    dispatch(getRoundsDataForEdit(payload));
+    dispatch(updateModalVisibility(true));
+  };
 
   const columns = [
     {
@@ -213,7 +247,10 @@ const ManageRound = () => {
           return (
             <>
               <Box display="flex" gap="10px">
-                <EditIcon sx={{ cursor: "pointer" }} />
+                <EditIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => handleEditRound(value, rowData)}
+                />
                 <DeleteIcon
                   sx={{ cursor: "pointer" }}
                   onClick={() => openModal(value, "delete")}
@@ -252,7 +289,6 @@ const ManageRound = () => {
       );
     },
   };
-  const { isModalVisible, modalSportName } = useSelector(userDataSelector);
   useEffect(() => {
     dispatch(setCurrentModule("round"));
   }, []);
@@ -277,22 +313,20 @@ const ManageRound = () => {
                 teamListApi={listRoundsApi}
                 teamListData={listRoundsData}
                 userListSuccess={listRoundsSuccess}
-                // func={ dispatch(updateRoundList(listRoundsData));}
                 mode="round"
                 func={() => dispatch(updateModalVisibility(false))}
               />
-              <AddSportBtn disableRipple onClick={handleOpen}>
+              <AddSportBtn disableRipple onClick={handleAddRound}>
                 <AddIcon sx={{ mr: 1 }} />
                 Add Round
               </AddSportBtn>{" "}
-              <AddTeamModal
+              <AddRoundModal
                 data={listSportData}
                 listSportApi={listSportApi}
-                open={isModalVisible}
                 onClose={() => dispatch(updateModalVisibility(false))}
-                initialSportName={modalSportName}
-                sportData={sportData}
-                addTeamApi={addTeamApi}
+                addRoundApi={addRoundApi}
+                initialData={isSelectedMode === "edit" ? roundsEditData : ""}
+                updateRoundApi={updateRoundApi}
               />
             </Box>
           </Box>

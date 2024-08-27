@@ -89,18 +89,19 @@ import {
 } from "../../slices/manageTeam/manageTeam";
 import { updateRoundList } from "../../slices/manageRound/manageRound";
 
-const CustomSelect = ({
-  data,
-  listSportApi,
-  sportData,
-  teamListApi,
-  teamListData,
-  userListSuccess,
-  mode,
-}) => {
-  const [selectedSport, setSelectedSport] = useState("");
-  console.log(selectedSport);
+const CustomSelect = (props) => {
+  const {
+    data,
+    listSportApi,
+    sportData,
+    teamListApi,
+    teamListData,
+    userListSuccess,
+    mode,
+  } = props;
   const dispatch = useDispatch();
+
+  const [selectedSport, setSelectedSport] = useState("");
 
   const handleSportChange = (event) => {
     const selectedValue = event.target.value;

@@ -77,7 +77,6 @@ const ManageSport = (props) => {
         }
       });
     }
-
     setModal(true);
   };
   const closeModal = () => {

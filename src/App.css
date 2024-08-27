@@ -109,9 +109,13 @@
   border: none !important;
 }
 
-.active .drawer-nav {
+/* .active .drawer-nav {
+  background-color: #e5a842;
+} */
+.drawer-routes.active {
   background-color: #e5a842;
 }
+
 
 .user-menu {
   font-size: 14px !important;
@@ -262,4 +266,39 @@
   margin-top: 2px;
   margin-bottom: 5px;
   height: 15px;
+}
+/* Apply cursor not-allowed to any disabled FormControl */
+.MuiFormControl-root.Mui-disabled {
+  cursor: not-allowed !important;
+  color:red !important
+}
+
+/* Apply cursor not-allowed to disabled Select component */
+.MuiSelect-root.Mui-disabled,
+.MuiSelect-select.Mui-disabled,
+.MuiOutlinedInput-notchedOutline.Mui-disabled {
+  cursor: not-allowed !important;
+  color:red !important
+  /* background-color: #f0f0f0;
+  border: 1px solid #ddd; */
+ 
+}
+
+/* Apply cursor not-allowed to the notched outline (border) of OutlinedInput when disabled */
+.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  cursor: not-allowed !important;
+  color:red !important
+  /* background-color: #f0f0f0;
+  border: 1px solid #ddd; */
+}
+
+/* Apply cursor not-allowed to OutlinedInput input area when disabled */
+.MuiOutlinedInput-input.Mui-disabled {
+  cursor: not-allowed !important;
+  color:red !important
+}
+/* In your CSS file or <style> tag */
+.date-picker-disabled {
+  cursor: not-allowed !important;
+
 }
