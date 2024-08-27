@@ -16,25 +16,27 @@ const DateRangePicker = ({
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  useEffect(() => {
-    if (control) {
-      console.log(control, "CONTROL");
-      // setStartDate()
+  // useEffect(() => {
+  //   if (control) {
+  //     console.log(control, "CONTROL");
+  //     // setStartDate()
+  //   }
+  // }, [control]);
+
+  // // Effect to update the end date's minimum date when start date changes
+  // useEffect(() => {
+  //   if (startDate && startDate > endDate) {
+  //     setEndDate(null); // Reset end date if it's before the new start date
+  //   }
+  // }, [startDate]);
+
+  const validateEndDate = (value) => {
+    if (startDate && value && new Date(value) <= new Date(startDate)) {
+      return "End date must be after start date";
     }
-  }, [control]);
-
-  // Effect to update the end date's minimum date when start date changes
-  useEffect(() => {
-    if (startDate && startDate > endDate) {
-      setEndDate(null); // Reset end date if it's before the new start date
-    }
-  }, [startDate]);
-
-  console.log(startDate, endDate, "START");
-
-  const handleChange = (data) => {
-    console.log(data);
+    return true;
   };
+
   return (
     <Box
       sx={{
@@ -46,7 +48,7 @@ const DateRangePicker = ({
       <Controller
         name={name}
         control={control}
-        // rules={{ required: "Start date is required" }} // Add validation rules here
+        rules={{ required: "Start date is required" }}
         render={({ field }) => {
           return (
             <>
@@ -65,8 +67,10 @@ const DateRangePicker = ({
                   }}
                   // onBlur={onBlur}
                   selectsStart
+                  dateFormat="MM/dd/yyyy"
                   // startDate={value}
-                  endDate={null}
+                  endDate={field.value ? field.value : null}
+                  minDate={field.value ? new Date(field.value) : null}
                   placeholderText="Start date"
                   className="customize-date-picker"
                   {...register(name)}
@@ -87,7 +91,7 @@ const DateRangePicker = ({
       <Controller
         name={name2}
         control={control}
-        // rules={{ required: "End date is required" }} // Add validation rules here
+        rules={{ required: "End date is required", validate: validateEndDate }}
         render={({ field }) => {
           return (
             <>
@@ -103,6 +107,7 @@ const DateRangePicker = ({
                   // value={endDate}
                   selected={field.value}
                   onChange={(date) => {
+                    setEndDate(date);
                     field.onChange(date);
                     console.log(date, "VAl");
                     // setEndDate(date);
@@ -111,13 +116,15 @@ const DateRangePicker = ({
                   // onChange={handleChange}
                   // onBlur={onBlur}
                   selectsEnd
-                  startDate={null}
+                  startDate={startDate}
+                  // startDate={field.value ? field.value : null}
                   // endDate={value}
                   // minDate={null}
-                  minDate={startDate} // Disable dates before the start date
+                  minDate={startDate}
+                  dateFormat="MM/dd/yyyy"
                   placeholderText="End date"
                   className="customize-date-picker"
-                  {...register(name)}
+                  {...register(name2)}
                   {...field}
                 />
                 {/* {errors[name2] && ( */}
