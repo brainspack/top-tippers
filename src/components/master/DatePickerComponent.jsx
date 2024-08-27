@@ -15,12 +15,28 @@ const DateRangePicker = ({
 }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  // useEffect(() => {
+  //   if (control) {
+  //     console.log(control, "CONTROL");
+  //     // setStartDate()
+  //   }
+  // }, [control]);
+
+  // // Effect to update the end date's minimum date when start date changes
+  // useEffect(() => {
+  //   if (startDate && startDate > endDate) {
+  //     setEndDate(null); // Reset end date if it's before the new start date
+  //   }
+  // }, [startDate]);
+
   const validateEndDate = (value) => {
     if (startDate && value && new Date(value) <= new Date(startDate)) {
       return "End date must be after start date";
     }
     return true;
   };
+
   return (
     <Box
       sx={{
@@ -55,6 +71,7 @@ const DateRangePicker = ({
                   disabled={isDisabled}
                   selectsStart
                   dateFormat="MM/dd/yyyy"
+                  // startDate={value}
                   endDate={field.value ? field.value : null}
                   minDate={field.value ? new Date(field.value) : null}
                   placeholderText="Start date"

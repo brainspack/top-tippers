@@ -5,7 +5,7 @@ export const userListSportApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
     getUserListSportApiByName: builders.mutation({
-      query: ({ body }) => ({
+      query: (body) => ({
         url: "/api/sport/listSport",
         method: "POST",
         body: body,

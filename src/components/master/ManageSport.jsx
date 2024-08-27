@@ -1,29 +1,17 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
-  DropDownBox,
   ManageUsersContainer,
   ManageUsersHeading,
   ManageUsersWrapper,
   ManageUserTableWrapper,
   SearchContainer,
-  SearchWrapper,
-  // ManageUserTableWrapper,
-  // Search,
-  // SearchContainer,
-  // SearchIconWrapper,
-  // SearchWrapper,
-  // StyledInputBase,
 } from "../ManageUsers/ManangeUsersStyled";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import MUIDataTable from "mui-datatables";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import EditIcon from "@mui/icons-material/Edit";
-import Switch from "@mui/material/Switch";
-import { AddSportBtn } from "./masterStyled";
-import AddIcon from "@mui/icons-material/Add";
 import AddSportModal from "./AddSportModal";
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "../reuse/CustomModal";
@@ -36,12 +24,15 @@ import {
   updateSendModalVisibility,
 } from "../../slices/userSlice/user";
 import { useGetSetInviteAndCompButtonApiByNameMutation } from "../../api/setInviteAndCompButton";
-import ControlledSwitches from "../SwitchComponent";
 import { updateSportData } from "../../slices/manageSport/manageSport";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 import { useGetAddUpdateSportApiByNameMutation } from "../../api/AddUpdateSport";
 import SendSportModal from "./SendSportModal";
 import SportControlledSwitches from "./SportSwitchComponent";
+import CustomPagination from "../reuse/CustomPagination";
+import { useGetSendSportNotificaticationApiByNameMutation } from "../../api/SendSportNotificatication";
+import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
+import moment from "moment";
 const ManageSport = (props) => {
   const dispatch = useDispatch();
 
@@ -51,10 +42,6 @@ const ManageSport = (props) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState(null);
   const { sportData } = useSelector(manageSportDataSelector);
-  // const handleChange = (event) => {
-  //   const setInvite = tableMeta.rowData[6];
-  //   setInviteAndComp({setInvite :})
-  // };
 
   const openModal = (id, type) => {
     if (type === "delete") {
@@ -101,17 +88,58 @@ const ManageSport = (props) => {
     { data: addUpdateSportData, isSuccess: updataSportSuccess },
   ] = useGetAddUpdateSportApiByNameMutation();
 
+  const [
+    userListSport,
+    {
+      data: listSportData,
+      isSuccess: userSportSuccess,
+      isLoading: sportDataFetching,
+    },
+  ] = useGetUserListSportApiByNameMutation();
+
+  const [
+    sendSportNotify,
+    { data: sendSportData, isSuccess: sendSportSuccess },
+  ] = useGetSendSportNotificaticationApiByNameMutation();
+
+  const [
+    userSetInvite,
+    { data: setInviteButtonData, isSuccess: setInviteSuccess },
+  ] = useGetSetInviteAndCompButtonApiByNameMutation();
+
+  const [
+    SportDeleteApi,
+    {
+      data: sportDeleteData,
+      isLoading: sportDeleteLoading,
+      error: sportDeleteError,
+      isSuccess: sportDeleteSuccess,
+    },
+  ] = useDeleteSportByNameMutation();
+
   const handleEditClick = (rowData) => {
+    const stackValue = sportData?.data?.filter((e) => {
+      if (e._id === rowData?.rowData[6]) {
+        return e;
+      }
+    });
+    console.log(stackValue[0]?.stack, "thisIsStack");
+    const formattedStartDate = moment(rowData?.rowData[1]).format("L");
+
+    const formattedEndDate = moment(rowData?.rowData[2]).format("L");
     const payload = [
       {
         sportname: rowData?.rowData[0],
-        startDate: rowData?.rowData[1],
-        endDate: rowData?.rowData[2],
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
         type: rowData?.rowData[3],
         description: rowData?.rowData[4],
         bonus: rowData?.rowData[5],
+        id: rowData?.rowData[6],
+        stack: stackValue?.length ? stackValue[0].stack : "",
       },
     ];
+    console.log(payload, "payyload");
 
     dispatch(getUserDataForEdit(payload));
     dispatch(knowWhereHaveToOpenModal("edit"));
@@ -126,68 +154,10 @@ const ManageSport = (props) => {
     dispatch(updateSendModalVisibility(true));
   };
 
-  const [userListSport, { data: listSportData, isSuccess: userSportSuccess }] =
-    useGetUserListSportApiByNameMutation();
-
-  const [userSetInvite, { data: setInviteButtonData }] =
-    useGetSetInviteAndCompButtonApiByNameMutation();
-  console.log(setInviteButtonData, "setInviteButtonData");
-  console.log(listSportData, "LISTSPORT");
   useEffect(() => {
     if (listSportData && listSportData?.data)
       dispatch(updateSportData(listSportData));
   }, [listSportData, userSportSuccess]);
-
-  const [
-    SportDeleteApi,
-    {
-      data: sportDeleteData,
-      isLoading: sportDeleteLoading,
-      error: sportDeleteError,
-      isSuccess: sportDeleteSuccess,
-    },
-  ] = useDeleteSportByNameMutation();
-
-  // const TableSportData = async (data) => {
-  //   try {
-  //     const result = await userListSport({ body: data }).unwrap();
-  //     console.log(result, "RESULT");
-
-  //     setListSportData(result.data);
-  //   } catch (err) {
-  //     console.log(err, "the errr");
-  //   }
-  //   await listSportData;
-  // };
-  const setInviteAndComp = async (id) => {
-    try {
-      await userSetInvite({ sportId: id }).unwrap();
-      dispatch(
-        handleNotification({
-          state: true,
-          message: userSetInvite?.message,
-          severity: userSetInvite?.code,
-        })
-      );
-      // const reqParams = {
-      //   search_string: "",
-      //   page: 0,
-      //   sortValue: "",
-      //   sortOrder: "",
-      // };
-      // TableSportData(reqParams);
-    } catch (error) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: userSetInvite?.message,
-          severity: userSetInvite?.code,
-        })
-      );
-    }
-  };
-
-  // console.log(setInviteButton, "LISTTTT");
 
   useEffect(() => {
     const reqParams = {
@@ -197,8 +167,12 @@ const ManageSport = (props) => {
       sortOrder: "",
     };
     userListSport(reqParams);
-    // setInviteAndComp();
-  }, [sportDeleteSuccess, updataSportSuccess]);
+  }, [
+    sportDeleteSuccess,
+    updataSportSuccess,
+    setInviteSuccess,
+    sendSportSuccess,
+  ]);
 
   const columns = [
     {
@@ -285,19 +259,18 @@ const ManageSport = (props) => {
           },
         }),
         customBodyRender: (value, rowData) => (
-          // const userId = rowData.rowData[6]
           <>
             <Box display="flex" gap="10px">
               <EditIcon
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: "pointer", color: "#000000de" }}
                 onClick={() => handleEditClick(rowData)}
               ></EditIcon>
               <DeleteIcon
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: "pointer", color: "#000000de" }}
                 onClick={() => openModal(value, "delete")}
               />
               <SendIcon
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: "pointer", color: "#000000de" }}
                 onClick={() => handleSendOpen(rowData)}
               />
             </Box>
@@ -321,7 +294,6 @@ const ManageSport = (props) => {
           },
         }),
         customBodyRender: (value, rowData) => {
-          // const id = tableMeta.rowData[6];
           return (
             <SportControlledSwitches
               value={value}
@@ -344,23 +316,27 @@ const ManageSport = (props) => {
     selectableRows: false,
     pagination: true,
     rowsPerPage: 10,
-    // customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-    //   return (
-    //     <>
-    //       <CustomPagination
-    //         total={data?.totalCount}
-    //         page={page}
-    //         rowsPerPage={rowsPerPage}
-    //         changeRowsPerPage={changeRowsPerPage}
-    //         changePage={changePage}
-    //         userList={userList}
-    //         userData={userData}
-    //         isLoading={isLoading}
-    //       />
-    //     </>
-    //   );
-    // },
+    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      return (
+        <>
+          <CustomPagination
+            total={sportData?.totalCount}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            changeRowsPerPage={changeRowsPerPage}
+            changePage={changePage}
+            userList={userListSport}
+            userData={sportData?.data}
+            isLoading={sportDataFetching}
+          />
+        </>
+      );
+    },
   };
+
+  useEffect(() => {
+    dispatch(setCurrentModule("sport"));
+  }, []);
 
   return (
     <>
@@ -378,36 +354,9 @@ const ManageSport = (props) => {
           <SendSportModal
             sportDataName={selectedUserName}
             sportDataId={selectedUserId}
+            sendSportNotify={sendSportNotify}
           />
           <SearchContainer>
-            {/* <SearchWrapper> */}
-            {/*
-              <Box sx={{ width: "45%" }}>
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon sx={{ color: "primary.secondary" }} />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ "aria-label": "search" }}
-                    color="rgb(13, 25, 51)"
-                    onChange={onHandleSearch}
-                  />
-                </Search>
-              </Box>
-              <DropDownBox>
-                <UserMenu />
-              </DropDownBox>
-              <CustomModal
-              modal={modal}
-              closeModal={closeModal}
-              userid={view}
-              userDeleteApi={userDeleteApi}
-              userDeleteData={userDeleteData}
-              userDeleteLoading={userDeleteLoading}
-              permanentDelete={permanentDelete}
-              />
-              */}
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={sportData?.data}

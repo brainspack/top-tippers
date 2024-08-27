@@ -1,7 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {
   AddSportBtn,
@@ -20,10 +18,6 @@ import {
   Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
 import {
   getUserDataForEdit,
@@ -33,9 +27,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
 import DateRangePicker from "./DatePickerComponent";
-import { useGetAddUpdateSportApiByNameMutation } from "../../api/AddUpdateSport";
 import { Controller, useForm } from "react-hook-form";
-import { ADD_SPORT_DATA } from "../../utils/constant";
 import { handleNotification } from "../../slices/Snackbar";
 
 const style = {
@@ -50,15 +42,11 @@ const style = {
   p: 1,
 };
 
-export default function AddSportModal({
-  sportData,
-  dataSupport,
-  success,
-  apiFunction,
-}) {
+export default function AddSportModal({ success, dataSupport, apiFunction }) {
   const dispatch = useDispatch();
   const { isModalVisible, setEditData, buttonClickedForModal } =
     useSelector(userDataSelector);
+  // console.log(setEditData[0]);
 
   const handleOpen = () => {
     reset({
@@ -83,11 +71,9 @@ export default function AddSportModal({
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-    setValue,
     getValues,
-    result,
     reset,
-    setError,
+    clearErrors,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -103,7 +89,10 @@ export default function AddSportModal({
     shouldFocusError: true,
   });
 
+  console.log(getValues(), errors, "ashg");
+
   const onReset = async (userValue) => {
+    console.log(userValue, "useraValue");
     let result = await Promise.resolve({
       sportname: userValue?.sportname,
       description: userValue?.description,
@@ -111,68 +100,32 @@ export default function AddSportModal({
       endDate: userValue?.endDate,
       type: userValue?.type,
       bonus: userValue?.bonus == true ? "True" : "False",
+      stack: userValue?.stack,
     });
 
     reset(result);
   };
 
-  React.useEffect(() => {
-    if (setEditData?.length && buttonClickedForModal === "edit") {
-      onReset(setEditData[0]);
-    }
-  }, [setEditData]);
-
   const onSubmit = async (data) => {
     let updated = getValues();
-    let finalPayload = {
-      ...updated,
-      bonus: updated.bonus == "True" ? true : false,
-    };
-    console.log(data, getValues(), finalPayload, "sjhdjkhs");
 
-    // if (!data.startDate || !data.endDate) {
-    //   setError("startDate", {
-    //     type: "manual",
-    //     message: "Both start and end dates are required",
-    //   });
-    //   setError("endDate", {
-    //     type: "manual",
-    //     message: "Both start and end dates are required",
-    //   });
-    //   return;
-    // }
-    // if (data.endDate < data.startDate) {
-    //   setError("endDate", {
-    //     type: "manual",
-    //     message: "End date cannot be before start date",
-    //   });
-    //   return;
-    // }
+    console.log(updated, data, "JJ");
+
     try {
-      console.log(data, "dataaaa");
-
       const result = await apiFunction({
         ...data,
         bonus: data.bonus === "True",
-        id: sportData?._id,
+        sportId: setEditData?.length ? setEditData[0]?.id : "",
       }).unwrap();
-      // reset({
-      //   sportname: "",
-      //   description: "",
-      //   startDate: "",
-      //   endDate: "",
-      //   type: "",
-      //   bonus: null,
-      //   stack: "",
-      // });
 
-      console.log(result, "RESULT_sport");
+      console.log(result, updated, "RESULT");
+
       if (result?.code === 200) {
         dispatch(
           handleNotification({
             state: true,
-            message: dataSupport?.message,
-            severity: dataSupport?.code,
+            message: result?.message,
+            severity: result?.code,
           })
         );
         reset({
@@ -185,11 +138,19 @@ export default function AddSportModal({
           stack: "",
         });
         handleClose();
+        // } else if (result?.code !== 200 || result?.code === 409) {
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
       }
-
-      // onAddSport(result); // Call the callback with the new data
-      reset();
     } catch (err) {
+      console.log(err, "errr");
+
       dispatch(
         handleNotification({
           state: true,
@@ -197,9 +158,28 @@ export default function AddSportModal({
           severity: dataSupport?.code,
         })
       );
-      console.log(err, "the errr");
     }
-    // await addUpdateSportData;
+  };
+
+  React.useEffect(() => {
+    if (setEditData?.length && buttonClickedForModal === "edit") {
+      onReset(setEditData[0]);
+    }
+  }, [setEditData]);
+
+  const formatInput = (value) => {
+    if (typeof value === "string") {
+      if (!value) return value;
+      return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
+    }
+  };
+
+  // const noSpaces = (value) => {
+  //   return /^\s/.test(value) ? "Spaces are not allowed at the beginning" : true;
+  // };
+
+  const isNumber = (value) => {
+    return /^[0-9]*$/.test(value) || "Only numeric values are allowed";
   };
 
   return (
@@ -261,6 +241,8 @@ export default function AddSportModal({
                   }}
                   {...register("sportname", {
                     required: "Sport Name is required",
+                    // validate: noSpaces,
+                    setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
@@ -269,7 +251,6 @@ export default function AddSportModal({
                   {errors.sportname?.message}
                 </FormHelperText>
               </div>
-              {/* )} */}
 
               <div
                 style={{
@@ -297,6 +278,8 @@ export default function AddSportModal({
                   }}
                   {...register("description", {
                     required: "Description is required",
+                    // validate: noSpaces,
+                    setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
@@ -346,12 +329,13 @@ export default function AddSportModal({
                 <FormControl
                   sx={{ m: 1 }}
                   fullWidth
-                  error={Boolean(errors.type)}
+                  // error={Boolean(errors.type)}
+                  {...register("type")}
                 >
                   <Controller
                     name="type"
                     control={control}
-                    // rules={{ required: "Sport Type is required" }}
+                    rules={{ required: "Sport Type is required" }}
                     render={({ field }) => (
                       <Select
                         displayEmpty
@@ -366,8 +350,12 @@ export default function AddSportModal({
                         <MenuItem disabled value="">
                           Sport Type
                         </MenuItem>
-                        <MenuItem value="Regular">Regular</MenuItem>
-                        <MenuItem value="Draw">Draw</MenuItem>
+                        <MenuItem value="Regular" {...register("type")}>
+                          Regular
+                        </MenuItem>
+                        <MenuItem value="Draw" {...register("type")}>
+                          Draw
+                        </MenuItem>
                       </Select>
                     )}
                   />
@@ -393,11 +381,14 @@ export default function AddSportModal({
                   inputLabel="Round Bonus:"
                 />
 
-                <FormControl sx={{ m: 1, minWidth: 353 }}>
+                <FormControl
+                  sx={{ m: 1, minWidth: 353 }}
+                  {...register("bonus")}
+                >
                   <Controller
                     name="bonus"
                     control={control}
-                    // rules={{ required: "Round Bonus is required" }}
+                    rules={{ required: "Round Bonus is required" }}
                     render={({ field }) => (
                       <Select
                         displayEmpty
@@ -411,8 +402,12 @@ export default function AddSportModal({
                         <MenuItem disabled value="">
                           Bonus
                         </MenuItem>
-                        <MenuItem value={"True"}>True</MenuItem>
-                        <MenuItem value={"False"}>False</MenuItem>
+                        <MenuItem value={"True"} {...register("bonus")}>
+                          True
+                        </MenuItem>
+                        <MenuItem value={"False"} {...register("bonus")}>
+                          False
+                        </MenuItem>
                       </Select>
                     )}
                   />
@@ -451,6 +446,7 @@ export default function AddSportModal({
                   }}
                   {...register("stack", {
                     required: "Stack Value is required",
+                    // setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
