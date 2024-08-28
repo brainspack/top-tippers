@@ -18,18 +18,18 @@ const ControlledSwitches = ({
     const sportsInviteId = rowData.rowData[6];
     console.log(sportsInviteId, "INSIDE SPORTS ID");
     setChecked(event.target.checked);
-    // if (userId) {
-    //   statusChangeApi({ userId: userId });
-    // } else if (teamId) {
-    //   statusChangeApi({ teamId: teamId });
-    // }
-    if (sportsInviteId) {
-      statusChangeApi({
-        sportId: sportsInviteId,
-        isInviteCompButton: event.target.checked,
-      });
-      console.log(deactivateUserData?.message, "deactivateUserData?.message");
+    if (userId) {
+      statusChangeApi({ userId: userId });
+    } else if (teamId) {
+      statusChangeApi({ teamId: teamId });
     }
+    // if (sportsInviteId) {
+    //   statusChangeApi({
+    //     sportId: sportsInviteId,
+    //     isInviteCompButton: event.target.checked,
+    //   });
+    //   console.log(deactivateUserData?.message, "deactivateUserData?.message");
+    // }
 
     if (deactivateUserData?.code === 200) {
       dispatch(
