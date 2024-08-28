@@ -8,37 +8,49 @@ const SportControlledSwitches = ({
   rowData,
   deactivateUserData,
 }) => {
-  const [checked, setChecked] = useState(false);
+  console.log(deactivateUserData?.message, "deactivateUserData?.message");
+  const [checked, setChecked] = useState(value);
   console.log(checked, "CHECKED");
   const dispatch = useDispatch();
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
+    const isChecked = event.target.checked;
     const sportsInviteId = rowData.rowData[6];
-    console.log(sportsInviteId, "INSIDE SPORTS ID");
-    setChecked(event.target.checked);
 
     if (sportsInviteId) {
-      statusChangeApi({
-        sportId: sportsInviteId,
-        isInviteCompButton: event.target.checked,
-      });
-      console.log(deactivateUserData?.message, "deactivateUserData?.message");
-    }
-    if (deactivateUserData?.code === 200) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: deactivateUserData?.message,
-          severity: deactivateUserData?.code,
-        })
-      );
-    } else {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: deactivateUserData?.message,
-          severity: deactivateUserData?.code,
-        })
-      );
+      try {
+        const response = await statusChangeApi({
+          sportId: sportsInviteId,
+          isInviteCompButton: isChecked,
+        }).unwrap();
+
+        console.log(response, "res");
+
+        if (response?.code === 200) {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: response?.message,
+              severity: response?.code,
+            })
+          );
+        } else {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: response?.message,
+              severity: response?.code,
+            })
+          );
+        }
+      } catch (error) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: "An error occurred",
+            severity: "error",
+          })
+        );
+      }
     }
   };
   useEffect(() => {

@@ -107,6 +107,7 @@ const ManageSport = (props) => {
     { data: setInviteButtonData, isSuccess: setInviteSuccess },
   ] = useGetSetInviteAndCompButtonApiByNameMutation();
 
+  console.log(setInviteButtonData, "ASD");
   const [
     SportDeleteApi,
     {
@@ -154,7 +155,7 @@ const ManageSport = (props) => {
   useEffect(() => {
     if (listSportData && listSportData?.data)
       dispatch(updateSportData(listSportData));
-  }, [listSportData, userSportSuccess]);
+  }, [listSportData]);
 
   useEffect(() => {
     const reqParams = {
@@ -180,7 +181,11 @@ const ManageSport = (props) => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
+          style: {
+            backgroundColor: "#e5a842",
+            color: "white",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -191,7 +196,11 @@ const ManageSport = (props) => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
+          style: {
+            backgroundColor: "#e5a842",
+            color: "white",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -202,7 +211,11 @@ const ManageSport = (props) => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
+          style: {
+            backgroundColor: "#e5a842",
+            color: "white",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -213,7 +226,11 @@ const ManageSport = (props) => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
+          style: {
+            backgroundColor: "#e5a842",
+            color: "white",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -224,7 +241,11 @@ const ManageSport = (props) => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
+          style: {
+            backgroundColor: "#e5a842",
+            color: "white",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -235,7 +256,11 @@ const ManageSport = (props) => {
         filter: true,
         sort: true,
         setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
+          style: {
+            backgroundColor: "#e5a842",
+            color: "white",
+            fontWeight: "600",
+          },
         }),
         customBodyRender: (value) => (
           <Typography>{value ? "Open" : "Close"}</Typography>
@@ -252,7 +277,8 @@ const ManageSport = (props) => {
         setCellHeaderProps: () => ({
           style: {
             backgroundColor: "#e5a842",
-            color: "black",
+            color: "white",
+            fontWeight: "600",
           },
         }),
         customBodyRender: (value, rowData) => (
@@ -285,7 +311,8 @@ const ManageSport = (props) => {
         setCellHeaderProps: () => ({
           style: {
             backgroundColor: "#e5a842",
-            color: "black",
+            color: "white",
+            fontWeight: "600",
             display: "flex",
             justifyContent: "center",
           },

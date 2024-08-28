@@ -16,8 +16,11 @@ const DateRangePicker = ({
 }) => {
   const [startDate, setStartDate] = useState(null);
   const watchValue = watch(name);
+
   console.log(watchValue, "watchh");
+
   console.log(startDate, control?._formValues, "control");
+
   const validateEndDate = (value) => {
     if (startDate && value && new Date(value) <= new Date(startDate)) {
       return "End date must be after start date";
@@ -46,9 +49,11 @@ const DateRangePicker = ({
         {...register(name, { required: "Start date is required" })}
         render={({ field }) => {
           console.log(field.value, "HJ");
+
           const isDisabled = Boolean(initialData);
           const handleChangeDate = (date) => {
             console.log(name, "namm");
+
             if (errors[name]) {
               clearErrors(name);
             }

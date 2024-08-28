@@ -101,7 +101,6 @@ const DashboardComponent = ({ content }) => {
   const windowWidth = useWindowWidth();
   const navigate = useNavigate();
   const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.up("sm")); // Checks if the screen width is >= 'sm'
 
   const [open, setOpen] = useState(true);
 
