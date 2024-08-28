@@ -9,44 +9,49 @@ const ControlledSwitches = ({
   rowData,
   deactivateUserData,
 }) => {
-  const [checked, setChecked] = useState(false);
-  console.log(checked, "CHECKED");
+  const [checked, setChecked] = useState(value);
   const dispatch = useDispatch();
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     const userId = rowData.rowData[5];
     const teamId = rowData.rowData[4];
-    const sportsInviteId = rowData.rowData[6];
-    console.log(sportsInviteId, "INSIDE SPORTS ID");
-    setChecked(event.target.checked);
-    // if (userId) {
-    //   statusChangeApi({ userId: userId });
-    // } else if (teamId) {
-    //   statusChangeApi({ teamId: teamId });
-    // }
-    if (sportsInviteId) {
-      statusChangeApi({
-        sportId: sportsInviteId,
-        isInviteCompButton: event.target.checked,
-      });
-      console.log(deactivateUserData?.message, "deactivateUserData?.message");
-    }
-
-    if (deactivateUserData?.code === 200) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: deactivateUserData?.message,
-          severity: deactivateUserData?.code,
-        })
-      );
-    } else {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: deactivateUserData?.message,
-          severity: deactivateUserData?.code,
-        })
-      );
+    if (userId) {
+      const response = await statusChangeApi({ userId: userId }).unwrap();
+      if (response?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: response?.message,
+            severity: response?.code,
+          })
+        );
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: response?.message,
+            severity: response?.code,
+          })
+        );
+      }
+    } else if (teamId) {
+      const response = await statusChangeApi({ teamId: teamId }).unwrap();
+      if (response?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: response?.message,
+            severity: response?.code,
+          })
+        );
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: response?.message,
+            severity: response?.code,
+          })
+        );
+      }
     }
   };
   useEffect(() => {

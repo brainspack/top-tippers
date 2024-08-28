@@ -252,10 +252,10 @@ const ManageTeam = () => {
               <Box display="flex" gap="10px">
                 <VisibilityIcon
                   onClick={() => navigate(`/admin/teamdetail/${value}`)}
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                 ></VisibilityIcon>
                 <DeleteIcon
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                   onClick={() => openModal(value, "delete")}
                 />
               </Box>

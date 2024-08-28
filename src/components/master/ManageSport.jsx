@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
@@ -123,7 +123,6 @@ const ManageSport = (props) => {
         return e;
       }
     });
-    console.log(stackValue[0]?.stack, "thisIsStack");
     const formattedStartDate = moment(rowData?.rowData[1]).format("L");
 
     const formattedEndDate = moment(rowData?.rowData[2]).format("L");
@@ -139,7 +138,6 @@ const ManageSport = (props) => {
         stack: stackValue?.length ? stackValue[0].stack : "",
       },
     ];
-    console.log(payload, "payyload");
 
     dispatch(getUserDataForEdit(payload));
     dispatch(knowWhereHaveToOpenModal("edit"));
@@ -148,7 +146,6 @@ const ManageSport = (props) => {
   const handleSendOpen = (rowData) => {
     const sendSportDataId = rowData?.rowData[6];
     const sportName = rowData?.rowData[0];
-    console.log(sportName, "jskajks");
     setSelectedUserId(sendSportDataId);
     setSelectedUserName(sportName);
     dispatch(updateSendModalVisibility(true));
@@ -262,15 +259,15 @@ const ManageSport = (props) => {
           <>
             <Box display="flex" gap="10px">
               <EditIcon
-                sx={{ cursor: "pointer", color: "#000000de" }}
+                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                 onClick={() => handleEditClick(rowData)}
               ></EditIcon>
               <DeleteIcon
-                sx={{ cursor: "pointer", color: "#000000de" }}
+                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                 onClick={() => openModal(value, "delete")}
               />
               <SendIcon
-                sx={{ cursor: "pointer", color: "#000000de" }}
+                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                 onClick={() => handleSendOpen(rowData)}
               />
             </Box>
@@ -345,7 +342,6 @@ const ManageSport = (props) => {
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>Sport</ManageUsersHeading>
             <AddSportModal
-              // sportData={selectedSport}
               apiFunction={addUpdateSport}
               dataSupport={addUpdateSportData}
               success={updataSportSuccess}
@@ -370,7 +366,6 @@ const ManageSport = (props) => {
               content={modalTitle}
               action={action}
             />
-            {/* </SearchWrapper> */}
           </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>

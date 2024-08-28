@@ -205,9 +205,11 @@ const ManageCompetition = () => {
           return (
             <>
               <Box display="flex" gap="10px">
-                <RestartAltIcon />
+                <RestartAltIcon
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                />
                 <DeleteIcon
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                   onClick={() => openModal(value, "delete")}
                 />
               </Box>

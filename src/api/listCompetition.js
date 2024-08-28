@@ -5,7 +5,7 @@ export const userListCompetitionApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
     getUserListCompetitionApiByName: builders.mutation({
-      query: ({ body }) => ({
+      query: (body) => ({
         url: "/api/competition/listCompetition",
         method: "POST",
         body: body,
@@ -14,5 +14,6 @@ export const userListCompetitionApi = createApi({
     }),
   }),
 });
-export const { useGetUserListCompetitionApiByNameMutation } = userListCompetitionApi;
+export const { useGetUserListCompetitionApiByNameMutation } =
+  userListCompetitionApi;
 export default userListCompetitionApi;

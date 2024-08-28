@@ -16,7 +16,6 @@ import {
 } from "../ManageUsers/ManangeUsersStyled";
 import CustomModal from "../reuse/CustomModal";
 import CustomPagination from "../reuse/CustomPagination";
-import AddIcon from "@mui/icons-material/Add";
 import CustomSelect from "./CustomSelect";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
 import {
@@ -41,7 +40,9 @@ import { useAddRoundByNameMutation } from "../../api/AddNewRound";
 import { useUpdateRoundByNameMutation } from "../../api/UpdateRound";
 import { format } from "date-fns";
 import moment from "moment";
+import { useForm } from "react-hook-form";
 const ManageRound = () => {
+  // const { reset } = useForm();
   const dispatch = useDispatch();
   const { sportData } = useSelector(manageSportSelector);
   const { roundData, isSelectedMode, roundsEditData, updateEditData } =
@@ -150,10 +151,6 @@ const ManageRound = () => {
     };
     listRoundsApi(reqParams);
   }, [userDeleteSuccess, addRoundSuccess, updateRoundSuccess]);
-  const handleAddRound = () => {
-    dispatch(setSelectedMode("round"));
-    dispatch(updateModalVisibility(true));
-  };
 
   const handleEditRound = (value, rowData) => {
     console.log(rowData?.rowData, "ROWDATA");
@@ -248,11 +245,11 @@ const ManageRound = () => {
             <>
               <Box display="flex" gap="10px">
                 <EditIcon
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                   onClick={() => handleEditRound(value, rowData)}
                 />
                 <DeleteIcon
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                   onClick={() => openModal(value, "delete")}
                 />
               </Box>
@@ -316,10 +313,7 @@ const ManageRound = () => {
                 mode="round"
                 func={() => dispatch(updateModalVisibility(false))}
               />
-              <AddSportBtn disableRipple onClick={handleAddRound}>
-                <AddIcon sx={{ mr: 1 }} />
-                Add Round
-              </AddSportBtn>{" "}
+
               <AddRoundModal
                 data={listSportData}
                 listSportApi={listSportApi}
