@@ -29,6 +29,7 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   height: "auto",
+  outline: "none",
   p: 1,
 };
 

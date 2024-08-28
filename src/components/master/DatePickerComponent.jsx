@@ -8,27 +8,18 @@ const DateRangePicker = ({
   name,
   name2,
   errors,
-  defaultStart,
-  defaultEnd,
   register,
   initialData,
+  watch,
+  clearErrors,
+  setValue,
 }) => {
   const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const watchValue = watch(name);
 
-  // useEffect(() => {
-  //   if (control) {
-  //     console.log(control, "CONTROL");
-  //     // setStartDate()
-  //   }
-  // }, [control]);
+  console.log(watchValue, "watchh");
 
-  // // Effect to update the end date's minimum date when start date changes
-  // useEffect(() => {
-  //   if (startDate && startDate > endDate) {
-  //     setEndDate(null); // Reset end date if it's before the new start date
-  //   }
-  // }, [startDate]);
+  console.log(startDate, control?._formValues, "control");
 
   const validateEndDate = (value) => {
     if (startDate && value && new Date(value) <= new Date(startDate)) {
@@ -36,6 +27,14 @@ const DateRangePicker = ({
     }
     return true;
   };
+
+  useEffect(() => {
+    console.log(control?._formValues, "EFFECY");
+    if (watchValue) {
+      setStartDate(watchValue);
+    }
+  }, [watchValue]);
+  console.log(startDate, "DO DO DO");
 
   return (
     <Box
@@ -49,9 +48,19 @@ const DateRangePicker = ({
         name={name}
         control={control}
         disabled={Boolean(initialData)}
-        rules={{ required: "Start date is required" }}
+        {...register(name, { required: "Start date is required" })}
         render={({ field }) => {
+          console.log(field.value, "HJ");
+
           const isDisabled = Boolean(initialData);
+          const handleChangeDate = (date) => {
+            console.log(name, "namm");
+
+            if (errors[name]) {
+              clearErrors(name);
+            }
+            setValue(name, date);
+          };
           return (
             <>
               <Box
@@ -59,9 +68,7 @@ const DateRangePicker = ({
               >
                 <DatePicker
                   selected={field.value}
-                  onChange={(date) => {
-                    field.onChange(date);
-                  }}
+                  onSelect={(date) => handleChangeDate(date)}
                   sx={{
                     width: "100%",
                     height: "34px",
@@ -69,25 +76,19 @@ const DateRangePicker = ({
                     cursor: Boolean(initialData) ? "not-allowed" : "pointer",
                   }}
                   disabled={isDisabled}
-                  selectsStart
                   dateFormat="MM/dd/yyyy"
-                  // startDate={value}
-                  endDate={field.value ? field.value : null}
-                  minDate={field.value ? new Date(field.value) : null}
                   placeholderText="Start date"
                   className={`customize-date-picker ${
                     isDisabled ? "date-picker-disabled" : ""
                   }`}
-                  {...register(name)}
+                  {...register(name, { required: "Start date is required" })}
                   {...field}
                 />
-                {/* {errors[name] && ( */}
                 <div className="errorMsgParent">
                   <FormHelperText sx={{ color: "#D32F2F" }}>
                     {errors[name]?.message}
                   </FormHelperText>
                 </div>
-                {/* )} */}
               </Box>
             </>
           );
@@ -100,6 +101,15 @@ const DateRangePicker = ({
         rules={{ required: "End date is required", validate: validateEndDate }}
         render={({ field }) => {
           const isDisabled = Boolean(initialData);
+          const handleChangeDate = (date) => {
+            console.log(name2, "namm");
+
+            if (errors[name2]) {
+              clearErrors(name2);
+            }
+            setValue(name2, date);
+          };
+
           return (
             <>
               <Box
@@ -112,22 +122,8 @@ const DateRangePicker = ({
                     marginTop: errors.description?.message ? "10px" : "0px",
                     cursor: Boolean(initialData) ? "not-allowed" : "pointer",
                   }}
-                  // value={endDate}
                   selected={field.value}
-                  onChange={(date) => {
-                    setEndDate(date);
-                    field.onChange(date);
-                    console.log(date, "VAl");
-                    // setEndDate(date);
-                    // onChange(date);
-                  }}
-                  // onChange={handleChange}
-                  // onBlur={onBlur}
-                  selectsEnd
-                  startDate={startDate}
-                  // startDate={field.value ? field.value : null}
-                  // endDate={value}
-                  // minDate={null}
+                  onSelect={(date) => handleChangeDate(date)}
                   minDate={startDate}
                   dateFormat="MM/dd/yyyy"
                   placeholderText="End date"
@@ -137,13 +133,11 @@ const DateRangePicker = ({
                   {...register(name2)}
                   {...field}
                 />
-                {/* {errors[name2] && ( */}
                 <div className="errorMsgParent">
                   <FormHelperText sx={{ color: "#D32F2F" }}>
                     {errors[name2]?.message}
                   </FormHelperText>
                 </div>
-                {/* )} */}
               </Box>
             </>
           );

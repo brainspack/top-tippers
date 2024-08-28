@@ -38,8 +38,9 @@ const style = {
   width: 470,
   bgcolor: "background.paper",
   boxShadow: 24,
-  height: "600px",
-  p: 1,
+  height: "584px",
+  outline: "none",
+  // p: 1,
 };
 
 export default function AddSportModal({ success, dataSupport, apiFunction }) {
@@ -72,8 +73,10 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
     control,
     formState: { errors, isSubmitting },
     getValues,
+    setValue,
     reset,
     clearErrors,
+    watch,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -88,8 +91,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
     criteriaMode: "all",
     shouldFocusError: true,
   });
-
-  console.log(getValues(), errors, "ashg");
 
   const onReset = async (userValue) => {
     console.log(userValue, "useraValue");
@@ -109,16 +110,12 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   const onSubmit = async (data) => {
     let updated = getValues();
 
-    console.log(updated, data, "JJ");
-
     try {
       const result = await apiFunction({
         ...data,
         bonus: data.bonus === "True",
         sportId: setEditData?.length ? setEditData[0]?.id : "",
       }).unwrap();
-
-      console.log(result, updated, "RESULT");
 
       if (result?.code === 200) {
         dispatch(
@@ -138,7 +135,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
           stack: "",
         });
         handleClose();
-        // } else if (result?.code !== 200 || result?.code === 409) {
       } else {
         dispatch(
           handleNotification({
@@ -149,8 +145,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
         );
       }
     } catch (err) {
-      console.log(err, "errr");
-
       dispatch(
         handleNotification({
           state: true,
@@ -172,14 +166,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
       if (!value) return value;
       return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
     }
-  };
-
-  // const noSpaces = (value) => {
-  //   return /^\s/.test(value) ? "Spaces are not allowed at the beginning" : true;
-  // };
-
-  const isNumber = (value) => {
-    return /^[0-9]*$/.test(value) || "Only numeric values are allowed";
   };
 
   return (
@@ -211,7 +197,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
               sx={{
                 mt: 1,
                 padding: "0 15px 12px",
-                height: "490px",
+                height: "475px",
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -241,7 +227,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                   }}
                   {...register("sportname", {
                     required: "Sport Name is required",
-                    // validate: noSpaces,
                     setValueAs: (value) => formatInput(value),
                   })}
                 />
@@ -278,7 +263,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                   }}
                   {...register("description", {
                     required: "Description is required",
-                    // validate: noSpaces,
                     setValueAs: (value) => formatInput(value),
                   })}
                 />
@@ -309,6 +293,9 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                     name2="endDate"
                     errors={errors}
                     register={register}
+                    watch={watch}
+                    clearErrors={clearErrors}
+                    setValue={setValue}
                   />
                 </Box>
               </div>
