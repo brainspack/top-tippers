@@ -20,6 +20,7 @@ import snackbarReducer from "../src/slices/Snackbar";
 import userReducer from "../src/slices/userSlice/user";
 import manageReducer from "./slices/manageTeam/manageTeam";
 import manageRoundReducer from "./slices/manageRound/manageRound";
+import manageGameReducer from "./slices/manageGame/manageGame";
 import userListCompetitionApi from "./api/listCompetition";
 import userListSportApi from "./api/listSport";
 import deleteSportApi from "./api/DeleteSport";
@@ -27,6 +28,8 @@ import addUpdateSportApi from "./api/AddUpdateSport";
 import addRoundApi from "./api/AddNewRound";
 import updateRoundApi from "./api/UpdateRound";
 import deleteCompetitionApi from "./api/DeleteCompetition";
+import deleteGameApi from "./api/DeleteGame";
+import listGamesApi from "./api/ListGames";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
@@ -36,6 +39,7 @@ export const store = configureStore({
     userSlice: userReducer,
     manageSlice: manageReducer,
     manageRoundSlice: manageRoundReducer,
+    manageGameSlice: manageGameReducer,
     manageSportSlice: manageSportReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
@@ -53,6 +57,7 @@ export const store = configureStore({
     [deleteTeamApi.reducerPath]: deleteTeamApi.reducer,
     [teamDetailApi.reducerPath]: teamDetailApi.reducer,
     [deleteSportApi.reducerPath]: deleteSportApi.reducer,
+    [deleteGameApi.reducerPath]: deleteGameApi.reducer,
     [addTeamApi.reducerPath]: addTeamApi.reducer,
     [addRoundApi.reducerPath]: addRoundApi.reducer,
     [updateTeamApi.reducerPath]: updateTeamApi.reducer,
@@ -60,6 +65,7 @@ export const store = configureStore({
     [listRoundsApi.reducerPath]: listRoundsApi.reducer,
     [deleteRoundApi.reducerPath]: deleteRoundApi.reducer,
     [updateRoundApi.reducerPath]: updateRoundApi.reducer,
+    [listGamesApi.reducerPath]: listGamesApi.reducer,
     [deleteCompetitionApi.reducerPath]: deleteCompetitionApi.reducer,
     [setInviteAndCompButtonApi.reducerPath]: setInviteAndCompButtonApi.reducer,
     [sendSportNotificaticationApi.reducerPath]:
@@ -90,6 +96,8 @@ export const store = configureStore({
       listRoundsApi.middleware,
       deleteRoundApi.middleware,
       updateRoundApi.middleware,
+      listGamesApi.middleware,
+      deleteGameApi.middleware,
       deleteCompetitionApi.middleware,
       setInviteAndCompButtonApi.middleware,
       setInviteAndCompButtonApi.middleware,

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import {
@@ -47,7 +47,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   const dispatch = useDispatch();
   const { isModalVisible, setEditData, buttonClickedForModal } =
     useSelector(userDataSelector);
-  // console.log(setEditData[0]);
 
   const handleOpen = () => {
     reset({
@@ -79,6 +78,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
     watch,
   } = useForm({
     mode: "onChange",
+
     defaultValues: {
       sportname: "",
       description: "",
@@ -93,7 +93,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   });
 
   const onReset = async (userValue) => {
-    console.log(userValue, "useraValue");
     let result = await Promise.resolve({
       sportname: userValue?.sportname,
       description: userValue?.description,
@@ -155,7 +154,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (setEditData?.length && buttonClickedForModal === "edit") {
       onReset(setEditData[0]);
     }
@@ -313,12 +312,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                   inputLabel="Sport Type:"
                 />
 
-                <FormControl
-                  sx={{ m: 1 }}
-                  fullWidth
-                  // error={Boolean(errors.type)}
-                  {...register("type")}
-                >
+                <FormControl sx={{ m: 1 }} fullWidth {...register("type")}>
                   <Controller
                     name="type"
                     control={control}
@@ -332,7 +326,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                         }}
                         {...field}
                         {...register("type")}
-                        // onChange={handleChange}
                       >
                         <MenuItem disabled value="">
                           Sport Type

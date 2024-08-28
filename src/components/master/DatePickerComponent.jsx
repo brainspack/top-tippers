@@ -27,7 +27,6 @@ const DateRangePicker = ({
     }
     return true;
   };
-
   useEffect(() => {
     console.log(control?._formValues, "EFFECY");
     if (watchValue) {
@@ -35,7 +34,6 @@ const DateRangePicker = ({
     }
   }, [watchValue]);
   console.log(startDate, "DO DO DO");
-
   return (
     <Box
       sx={{
@@ -103,13 +101,11 @@ const DateRangePicker = ({
           const isDisabled = Boolean(initialData);
           const handleChangeDate = (date) => {
             console.log(name2, "namm");
-
             if (errors[name2]) {
               clearErrors(name2);
             }
             setValue(name2, date);
           };
-
           return (
             <>
               <Box

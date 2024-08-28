@@ -13,6 +13,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import {
+  AddSportBtn,
   AddSportSubmitBtn,
   BackModalBtn,
   SportModalHeading,
@@ -24,6 +25,8 @@ import { handleNotification } from "../../slices/Snackbar";
 import { Controller, useForm } from "react-hook-form";
 import DateRangePicker from "./DatePickerComponent";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
+import { setSelectedMode } from "../../slices/manageRound/manageRound";
+import AddIcon from "@mui/icons-material/Add";
 
 const AddRoundModal = (props) => {
   const {
@@ -35,9 +38,7 @@ const AddRoundModal = (props) => {
     updateData,
     updateRoundApi,
   } = props;
-  console.log(initialData, "INITIAL DATA");
   const { updateEditData } = useSelector(manageRoundSelector);
-  console.log(updateEditData, "updateEditData");
   const dispatch = useDispatch();
   const { isModalVisible, modalSportName } = useSelector(userDataSelector);
 
@@ -59,11 +60,22 @@ const AddRoundModal = (props) => {
     control,
     formState: { errors, isSubmitting },
     setValue,
+    watch,
+    clearErrors,
     getValues,
     result,
     reset,
     setError,
   } = useForm({
+    defaultValues: {
+      roundno: "",
+      roundname: "",
+      roundtype: "",
+      sportId: "",
+      startDate: "",
+      endDate: "",
+      roundId: "",
+    },
     mode: "onChange",
     criteriaMode: "all",
     shouldFocusError: true,
@@ -141,9 +153,32 @@ const AddRoundModal = (props) => {
       reset();
     }
   }, [initialData, setValue, reset]);
+  const formatInput = (value) => {
+    if (typeof value === "string") {
+      if (!value) return value;
+      return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
+    }
+  };
+  const handleAddRound = () => {
+    reset({
+      roundno: "",
+      roundname: "",
+      roundtype: "",
+      sportId: "",
+      startDate: "",
+      endDate: "",
+      roundId: "",
+    });
+    dispatch(setSelectedMode("round"));
+    dispatch(updateModalVisibility(true));
+  };
 
   return (
     <>
+      <AddSportBtn disableRipple onClick={handleAddRound}>
+        <AddIcon sx={{ mr: 1 }} />
+        Add Round
+      </AddSportBtn>{" "}
       <Modal
         open={isModalVisible}
         onClose={onClose}
@@ -159,7 +194,8 @@ const AddRoundModal = (props) => {
             width: 400,
             bgcolor: "background.paper",
             boxShadow: 24,
-            height: "500px",
+            height: initialData ? "500px" : "530px",
+            // border: "1px solid red",
           }}
         >
           <form
@@ -182,13 +218,82 @@ const AddRoundModal = (props) => {
                   sx={{
                     mt: 1,
                     padding: "0 15px 12px",
-                    height: "367px",
+                    // border: "1px solid red",
+
+                    height: initialData ? "367px" : "400px",
                     display: "flex",
                     justifyContent: "space-between",
                     flexDirection: "column",
                   }}
                 >
-                  <>
+                  <div
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    <CustomAddSportLabel
+                      requiredInput="*"
+                      inputLabel="Selected Sports :"
+                    />
+
+                    <FormControl
+                      sx={{ m: 1 }}
+                      fullWidth
+                      {...register("sportId")}
+                    >
+                      <Controller
+                        name="sportId"
+                        disabled={Boolean(initialData)}
+                        control={control}
+                        rules={{ required: "Select Sport is required" }}
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            displayEmpty
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            sx={{
+                              fontSize: "14px",
+                              height: "40px",
+                            }}
+                            disabled={Boolean(initialData)}
+                            {...register("sportId")}
+                          >
+                            {data?.data?.length > 0 ? (
+                              data.data.map((sport) => (
+                                <MenuItem
+                                  key={sport._id}
+                                  value={sport._id}
+                                  {...register("sportId")}
+                                >
+                                  {sport.sportname}
+                                </MenuItem>
+                              ))
+                            ) : (
+                              <MenuItem disabled>No sports available</MenuItem>
+                            )}
+                          </Select>
+                        )}
+                      />
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <div className="errorMsgParent">
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.sportId?.message}
+                          </FormHelperText>
+                        </div>
+                      )}
+                    </FormControl>
+                  </div>
+
+                  {/* /////////////////////////////////////////////////////////////////////////// */}
+                  {/* <>
+
                     <CustomAddSportLabel
                       requiredInput="*"
                       inputLabel="Selected Sports :"
@@ -228,9 +333,11 @@ const AddRoundModal = (props) => {
                         )}
                       />
                     </FormControl>
-                  </>
+                  </> */}
 
-                  <CustomAddSportLabel
+                  {/* /////////////////////////////////////////////////////////////////////// */}
+                  {/* RoundNo. mine */}
+                  {/* <CustomAddSportLabel
                     requiredInput="*"
                     inputLabel="Round No:"
                   />
@@ -248,8 +355,91 @@ const AddRoundModal = (props) => {
                       required: "Sport Name is required",
                     })}
                     disabled={Boolean(initialData)}
-                  />
-                  <CustomAddSportLabel
+                  /> */}
+                  <div
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "5px",
+                    }}
+                  >
+                    <CustomAddSportLabel
+                      requiredInput="*"
+                      inputLabel="Round No:"
+                    />
+                    <OutlinedInput
+                      type="number"
+                      disabled={Boolean(initialData)}
+                      id="outlined-adornment-weight"
+                      sx={{
+                        width: "100%",
+                        height: "34px",
+                      }}
+                      aria-describedby="outlined-weight-helper-text"
+                      inputProps={{
+                        "aria-label": "weight",
+                      }}
+                      {...register("roundno", {
+                        required: "Round No. is required",
+                        // validate: noSpaces,
+                        // setValueAs: (value) => formatInput(value),
+                      })}
+                    />
+                  </div>
+                  {initialData ? (
+                    ""
+                  ) : (
+                    <div className="errorMsgParent">
+                      <FormHelperText sx={{ color: "#d32f2f" }}>
+                        {errors.roundno?.message}
+                      </FormHelperText>
+                    </div>
+                  )}
+
+                  {/* ////////////////////////////////////////////////////////////////////////                 */}
+                  <div
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "5px",
+                    }}
+                  >
+                    <CustomAddSportLabel
+                      requiredInput="*"
+                      inputLabel="Round Name:"
+                    />
+                    <OutlinedInput
+                      id="outlined-adornment-weight"
+                      sx={{
+                        width: "100%",
+                        height: "34px",
+                      }}
+                      aria-describedby="outlined-weight-helper-text"
+                      inputProps={{
+                        "aria-label": "weight",
+                      }}
+                      {...register("roundname", {
+                        required: "Round Name is required",
+                        // validate: noSpaces,
+                        setValueAs: (value) => formatInput(value),
+                      })}
+                    />
+                  </div>
+                  {initialData ? (
+                    ""
+                  ) : (
+                    <div className="errorMsgParent">
+                      <FormHelperText sx={{ color: "#d32f2f" }}>
+                        {errors.roundname?.message}
+                      </FormHelperText>
+                    </div>
+                  )}
+
+                  {/* <CustomAddSportLabel
                     requiredInput="*"
                     inputLabel="Round Name:"
                   />
@@ -264,8 +454,74 @@ const AddRoundModal = (props) => {
                     {...register("roundname", {
                       required: "Sport Name is required",
                     })}
-                  />
+                  /> */}
+
+                  {/* //////////////////////////////////////////////////////////////// */}
                   <div
+                    style={{
+                      height: "auto",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    <CustomAddSportLabel
+                      requiredInput="*"
+                      inputLabel="Select Type:"
+                    />
+
+                    <FormControl
+                      sx={{ m: 1 }}
+                      fullWidth
+                      {...register("roundtype")}
+                    >
+                      <Controller
+                        name="roundtype"
+                        disabled={Boolean(initialData)}
+                        control={control}
+                        rules={{ required: "Sport Type is required" }}
+                        render={({ field }) => (
+                          <Select
+                            displayEmpty
+                            sx={{
+                              fontSize: "14px",
+                              height: "40px",
+                            }}
+                            {...field}
+                            {...register("roundtype")}
+                          >
+                            <MenuItem disabled value="">
+                              Sport Type
+                            </MenuItem>
+                            <MenuItem
+                              value="Regular"
+                              {...register("roundtype")}
+                            >
+                              Regular
+                            </MenuItem>
+                            <MenuItem
+                              value="Playoffs"
+                              {...register("roundtype")}
+                            >
+                              Playoffs
+                            </MenuItem>
+                          </Select>
+                        )}
+                      />
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <div className="errorMsgParent">
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.roundtype?.message}
+                          </FormHelperText>
+                        </div>
+                      )}
+                    </FormControl>
+                  </div>
+
+                  {/* <div
                     style={{
                       height: "auto",
                       width: "100%",
@@ -317,7 +573,7 @@ const AddRoundModal = (props) => {
                         </FormHelperText>
                       </div>
                     </FormControl>
-                  </div>
+                  </div> */}
                   <div
                     style={{
                       height: "auto",
@@ -338,20 +594,24 @@ const AddRoundModal = (props) => {
                         name2="endDate"
                         errors={errors}
                         register={register}
+                        setValue={setValue}
+                        watch={watch}
+                        clearErrors={clearErrors}
                         initialData={initialData}
                       />
                     </Box>
                   </div>
                 </Box>
               </Box>
-              <Divider />
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "end",
                   width: "96%",
-                  height: "65px",
+                  // height:,
+                  height: initialData ? "65px" : "100px",
                   alignItems: "center",
+                  // border: "1px solid red",
                 }}
               >
                 <BackModalBtn onClick={onClose}>Back</BackModalBtn>

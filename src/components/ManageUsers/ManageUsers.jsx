@@ -285,15 +285,21 @@ const ManageUsers = () => {
             <>
               <Box display="flex" gap="10px">
                 <VisibilityIcon
-                sx={{cursor:"pointer"}}
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                   onClick={() => navigate(`/admin/userprofile/${value}`)}
                 ></VisibilityIcon>
-                <DeleteIcon sx={{cursor:"pointer"}} onClick={() => openModal(value, "delete")} />
+                <DeleteIcon
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                  onClick={() => openModal(value, "delete")}
+                />
 
                 {userData?.map((e) => {
                   if (e._id === value) {
                     return e.isVerified === "No" ? (
-                      <MailIcon sx={{cursor:"pointer"}} onClick={() => openModal(value, "verify")} />
+                      <MailIcon
+                        sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                        onClick={() => openModal(value, "verify")}
+                      />
                     ) : (
                       ""
                     );

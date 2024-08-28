@@ -14,13 +14,20 @@ const CustomPagination = (props) => {
       page: pageNumber - 1,
       sortValue: "",
       sortOrder: "",
+      // season: "current",
     };
     if (selectedSport) {
       if (currentModule === "round") {
         reqParams.sportId = selectedSport === "all" ? "" : selectedSport;
+      } else if (currentModule === "game") {
+        reqParams.season = "current";
+        reqParams.sport = selectedSport === "all" ? "" : selectedSport;
       } else {
         reqParams.sport = selectedSport === "all" ? "" : selectedSport;
       }
+    }
+    if (currentModule === "game") {
+      reqParams.season = "current";
     }
     userList(reqParams);
   };
@@ -33,7 +40,7 @@ const CustomPagination = (props) => {
     } else {
       setTotalPages(0);
     }
-  }, [rowsPerPage, total]);
+  }, [rowsPerPage, total, selectedSport]);
 
   useEffect(() => {
     setCurrentPage(0);
