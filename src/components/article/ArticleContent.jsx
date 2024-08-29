@@ -4,7 +4,7 @@ const ArticleContent = () => {
   return (
     <>
       <Box>
-        <Typography>Inside Article</Typography>
+        <Typography variant="h5">Inside Article</Typography>
       </Box>
     </>
   );

@@ -5,7 +5,7 @@ import { MASTER_SUBHEADINGS } from "../../utils/constant";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 
-const CustomAccordion = ({ data }) => {
+const CustomAccordion = ({ data, accordianHeading }) => {
   const location = useLocation();
   const initialExpanded = data.some((ele) => ele.route === location.pathname)
     ? "masterPanel"
@@ -42,7 +42,7 @@ const CustomAccordion = ({ data }) => {
         id="panel1-header"
       >
         <SpaceDashboardIcon sx={{ color: "white", marginRight: "32px" }} />
-        Master
+        {accordianHeading}
       </AccordionSummary>
       {data.map((ele) => (
         <NavLink

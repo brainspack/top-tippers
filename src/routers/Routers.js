@@ -13,6 +13,14 @@ import ManageGameComponent from "../containers/master/ManageGameComponent";
 import ManageCompetitionComponent from "../containers/master/ManageCompetitionComponent";
 import { OpenNotification } from "../components/Snackbar";
 import ArticlePage from "../containers/article/Article";
+import BanterPage from "../containers/banter/Banter";
+import FaqsPage from "../containers/cms/Faqs";
+import RulesPage from "../containers/cms/Rules";
+import AdsPage from "../containers/ads/Ads";
+import AdsReportContent from "../components/ads/AdsReportContent";
+import AdsReportPage from "../containers/ads/AdsReport";
+import ManageVersionPage from "../containers/manageVersion/ManageVersion";
+import SecretCompetitionPage from "../containers/secretCompetition/SecretCompetition";
 
 const Routers = () => {
   return (
@@ -35,7 +43,13 @@ const Routers = () => {
               element={<ManageCompetitionComponent />}
             />
             <Route path="ladder" element={<ArticlePage />} />
-            {/* <Route path="banter" element={<BanterPage />} /> */}
+            <Route path="banter" element={<BanterPage />} />
+            <Route path="questions" element={<FaqsPage />} />
+            <Route path="content" element={<RulesPage />} />
+            <Route path="ads" element={<AdsPage />} />
+            <Route path="adreport" element={<AdsReportPage />} />
+            <Route path="version" element={<ManageVersionPage />} />
+            <Route path="secretcomp" element={<SecretCompetitionPage />} />
           </Route>
         </Route>
       </Routes>

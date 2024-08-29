@@ -35,10 +35,8 @@ const AddRoundModal = (props) => {
     onClose,
     addRoundApi,
     initialData,
-    updateData,
     updateRoundApi,
   } = props;
-  const { updateEditData } = useSelector(manageRoundSelector);
   const dispatch = useDispatch();
   const { isModalVisible, modalSportName } = useSelector(userDataSelector);
 
@@ -62,7 +60,6 @@ const AddRoundModal = (props) => {
     setValue,
     watch,
     clearErrors,
-    getValues,
     result,
     reset,
     setError,
@@ -195,7 +192,6 @@ const AddRoundModal = (props) => {
             bgcolor: "background.paper",
             boxShadow: 24,
             height: initialData ? "500px" : "530px",
-            // border: "1px solid red",
           }}
         >
           <form
@@ -218,15 +214,13 @@ const AddRoundModal = (props) => {
                   sx={{
                     mt: 1,
                     padding: "0 15px 12px",
-                    // border: "1px solid red",
-
                     height: initialData ? "367px" : "400px",
                     display: "flex",
                     justifyContent: "space-between",
                     flexDirection: "column",
                   }}
                 >
-                  <div
+                  <Box
                     style={{
                       height: "auto",
                       width: "100%",
@@ -282,81 +276,15 @@ const AddRoundModal = (props) => {
                       {initialData ? (
                         ""
                       ) : (
-                        <div className="errorMsgParent">
+                        <Box className="errorMsgParent">
                           <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
                             {errors.sportId?.message}
                           </FormHelperText>
-                        </div>
+                        </Box>
                       )}
                     </FormControl>
-                  </div>
-
-                  {/* /////////////////////////////////////////////////////////////////////////// */}
-                  {/* <>
-
-                    <CustomAddSportLabel
-                      requiredInput="*"
-                      inputLabel="Selected Sports :"
-                    />
-                    <FormControl
-                      sx={{
-                        m: 1,
-                      }}
-                      fullWidth
-                    >
-                      <Controller
-                        name="sportId"
-                        control={control}
-                        defaultValue=""
-                        render={({ field }) => (
-                          <Select
-                            {...field}
-                            displayEmpty
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            sx={{
-                              fontSize: "14px",
-                              height: "40px",
-                            }}
-                            disabled={Boolean(initialData)}
-                          >
-                            {data?.data?.length > 0 ? (
-                              data.data.map((sport) => (
-                                <MenuItem key={sport._id} value={sport._id}>
-                                  {sport.sportname}
-                                </MenuItem>
-                              ))
-                            ) : (
-                              <MenuItem disabled>No sports available</MenuItem>
-                            )}
-                          </Select>
-                        )}
-                      />
-                    </FormControl>
-                  </> */}
-
-                  {/* /////////////////////////////////////////////////////////////////////// */}
-                  {/* RoundNo. mine */}
-                  {/* <CustomAddSportLabel
-                    requiredInput="*"
-                    inputLabel="Round No:"
-                  />
-                  <OutlinedInput
-                    type="number"
-                    sx={{
-                      width: "100%",
-                      height: "40px",
-                    }}
-                    aria-describedby="outlined-weight-helper-text"
-                    inputProps={{
-                      "aria-label": "weight",
-                    }}
-                    {...register("roundno", {
-                      required: "Sport Name is required",
-                    })}
-                    disabled={Boolean(initialData)}
-                  /> */}
-                  <div
+                  </Box>
+                  <Box
                     style={{
                       height: "auto",
                       width: "100%",
@@ -383,23 +311,19 @@ const AddRoundModal = (props) => {
                       }}
                       {...register("roundno", {
                         required: "Round No. is required",
-                        // validate: noSpaces,
-                        // setValueAs: (value) => formatInput(value),
                       })}
                     />
-                  </div>
+                  </Box>
                   {initialData ? (
                     ""
                   ) : (
-                    <div className="errorMsgParent">
+                    <Box className="errorMsgParent">
                       <FormHelperText sx={{ color: "#d32f2f" }}>
                         {errors.roundno?.message}
                       </FormHelperText>
-                    </div>
+                    </Box>
                   )}
-
-                  {/* ////////////////////////////////////////////////////////////////////////                 */}
-                  <div
+                  <Box
                     style={{
                       height: "auto",
                       width: "100%",
@@ -424,40 +348,20 @@ const AddRoundModal = (props) => {
                       }}
                       {...register("roundname", {
                         required: "Round Name is required",
-                        // validate: noSpaces,
                         setValueAs: (value) => formatInput(value),
                       })}
                     />
-                  </div>
+                  </Box>
                   {initialData ? (
                     ""
                   ) : (
-                    <div className="errorMsgParent">
+                    <Box className="errorMsgParent">
                       <FormHelperText sx={{ color: "#d32f2f" }}>
                         {errors.roundname?.message}
                       </FormHelperText>
-                    </div>
+                    </Box>
                   )}
-
-                  {/* <CustomAddSportLabel
-                    requiredInput="*"
-                    inputLabel="Round Name:"
-                  />
-                  <OutlinedInput
-                    id="outlined-adornment-weight"
-                    name="roundname"
-                    sx={{ width: "100%", height: "40px" }}
-                    aria-describedby="outlined-weight-helper-text"
-                    inputProps={{
-                      "aria-label": "weight",
-                    }}
-                    {...register("roundname", {
-                      required: "Sport Name is required",
-                    })}
-                  /> */}
-
-                  {/* //////////////////////////////////////////////////////////////// */}
-                  <div
+                  <Box
                     style={{
                       height: "auto",
                       width: "100%",
@@ -512,69 +416,15 @@ const AddRoundModal = (props) => {
                       {initialData ? (
                         ""
                       ) : (
-                        <div className="errorMsgParent">
+                        <Box className="errorMsgParent">
                           <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
                             {errors.roundtype?.message}
                           </FormHelperText>
-                        </div>
+                        </Box>
                       )}
                     </FormControl>
-                  </div>
-
-                  {/* <div
-                    style={{
-                      height: "auto",
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "10px",
-                    }}
-                  >
-                    <CustomAddSportLabel
-                      requiredInput="*"
-                      inputLabel="Select Type:"
-                    />
-
-                    <FormControl
-                      sx={{
-                        m: 1,
-                        "&.Mui-disabled": {
-                          cursor: "not-allowed",
-                        },
-                      }}
-                      fullWidth
-                      error={Boolean(errors.type)}
-                    >
-                      <Controller
-                        name="roundtype"
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            displayEmpty
-                            sx={{
-                              fontSize: "14px",
-                              height: "40px",
-                            }}
-                            {...field}
-                            {...register("roundtype")}
-                            disabled={Boolean(initialData)}
-                          >
-                            <MenuItem disabled value="">
-                              Sport Type
-                            </MenuItem>
-                            <MenuItem value="Regular">Regular</MenuItem>
-                            <MenuItem value="Playoffs">Playoffs</MenuItem>
-                          </Select>
-                        )}
-                      />
-                      <div className="errorMsgParent">
-                        <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                          {errors.type?.message}
-                        </FormHelperText>
-                      </div>
-                    </FormControl>
-                  </div> */}
-                  <div
+                  </Box>
+                  <Box
                     style={{
                       height: "auto",
                       width: "100%",
@@ -600,7 +450,7 @@ const AddRoundModal = (props) => {
                         initialData={initialData}
                       />
                     </Box>
-                  </div>
+                  </Box>
                 </Box>
               </Box>
               <Box
@@ -608,10 +458,8 @@ const AddRoundModal = (props) => {
                   display: "flex",
                   justifyContent: "end",
                   width: "96%",
-                  // height:,
                   height: initialData ? "65px" : "100px",
                   alignItems: "center",
-                  // border: "1px solid red",
                 }}
               >
                 <BackModalBtn onClick={onClose}>Back</BackModalBtn>
