@@ -27,6 +27,7 @@ import userListSportApi from "./api/listSport";
 import deleteSportApi from "./api/DeleteSport";
 import addUpdateSportApi from "./api/AddUpdateSport";
 import addRoundApi from "./api/AddNewRound";
+import addGameApi from "./api/AddNewGame";
 import updateRoundApi from "./api/UpdateRound";
 import deleteCompetitionApi from "./api/DeleteCompetition";
 import deleteGameApi from "./api/DeleteGame";
@@ -69,6 +70,7 @@ export const store = configureStore({
     [deleteGameApi.reducerPath]: deleteGameApi.reducer,
     [addTeamApi.reducerPath]: addTeamApi.reducer,
     [addRoundApi.reducerPath]: addRoundApi.reducer,
+    [addGameApi.reducerPath]: addGameApi.reducer,
     [updateTeamApi.reducerPath]: updateTeamApi.reducer,
     [addUpdateSportApi.reducerPath]: addUpdateSportApi.reducer,
     [listRoundsApi.reducerPath]: listRoundsApi.reducer,
@@ -105,6 +107,7 @@ export const store = configureStore({
       deleteSportApi.middleware,
       addTeamApi.middleware,
       addRoundApi.middleware,
+      addGameApi.middleware,
       updateTeamApi.middleware,
       addUpdateSportApi.middleware,
       listRoundsApi.middleware,

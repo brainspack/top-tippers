@@ -13,6 +13,7 @@ const DateRangePicker = ({
   watch,
   clearErrors,
   setValue,
+  mode,
 }) => {
   const [startDate, setStartDate] = useState(null);
   const watchValue = watch(name);
@@ -92,53 +93,64 @@ const DateRangePicker = ({
           );
         }}
       />
-      <Controller
-        name={name2}
-        control={control}
-        disabled={Boolean(initialData)}
-        rules={{ required: "End date is required", validate: validateEndDate }}
-        render={({ field }) => {
-          const isDisabled = Boolean(initialData);
-          const handleChangeDate = (date) => {
-            console.log(name2, "namm");
-            if (errors[name2]) {
-              clearErrors(name2);
-            }
-            setValue(name2, date);
-          };
-          return (
-            <>
-              <Box
-                sx={{ display: "flex", flexDirection: "column", width: "100%" }}
-              >
-                <DatePicker
+      {mode === "game" ? (
+        ""
+      ) : (
+        <Controller
+          name={name2}
+          control={control}
+          disabled={Boolean(initialData)}
+          rules={{
+            required: "End date is required",
+            validate: validateEndDate,
+          }}
+          render={({ field }) => {
+            const isDisabled = Boolean(initialData);
+            const handleChangeDate = (date) => {
+              console.log(name2, "namm");
+              if (errors[name2]) {
+                clearErrors(name2);
+              }
+              setValue(name2, date);
+            };
+            return (
+              <>
+                <Box
                   sx={{
+                    display: "flex",
+                    flexDirection: "column",
                     width: "100%",
-                    height: "34px",
-                    marginTop: errors.description?.message ? "10px" : "0px",
-                    cursor: Boolean(initialData) ? "not-allowed" : "pointer",
                   }}
-                  selected={field.value}
-                  onSelect={(date) => handleChangeDate(date)}
-                  minDate={startDate}
-                  dateFormat="MM/dd/yyyy"
-                  placeholderText="End date"
-                  className={`customize-date-picker ${
-                    isDisabled ? "date-picker-disabled" : ""
-                  }`}
-                  {...register(name2)}
-                  {...field}
-                />
-                <div className="errorMsgParent">
-                  <FormHelperText sx={{ color: "#D32F2F" }}>
-                    {errors[name2]?.message}
-                  </FormHelperText>
-                </div>
-              </Box>
-            </>
-          );
-        }}
-      />
+                >
+                  <DatePicker
+                    sx={{
+                      width: "100%",
+                      height: "34px",
+                      marginTop: errors.description?.message ? "10px" : "0px",
+                      cursor: Boolean(initialData) ? "not-allowed" : "pointer",
+                    }}
+                    selected={field.value}
+                    onSelect={(date) => handleChangeDate(date)}
+                    minDate={startDate}
+                    dateFormat="MM/dd/yyyy"
+                    placeholderText="End date"
+                    className={`customize-date-picker ${
+                      isDisabled ? "date-picker-disabled" : ""
+                    }`}
+                    {...register(name2)}
+                    {...field}
+                  />
+                  <div className="errorMsgParent">
+                    <FormHelperText sx={{ color: "#D32F2F" }}>
+                      {errors[name2]?.message}
+                    </FormHelperText>
+                  </div>
+                </Box>
+              </>
+            );
+          }}
+        />
+      )}
     </Box>
   );
 };
