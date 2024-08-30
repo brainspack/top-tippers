@@ -302,3 +302,12 @@
   cursor: not-allowed !important;
 
 }
+.css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 40px !important;
+}
+
+
+.css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+  font-size: 15px !important;
+  top: -9px !important;
+}

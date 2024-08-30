@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,7 +7,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SendIcon from "@mui/icons-material/Send";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
 import { updateModalVisibility } from "../../slices/userSlice/user";
 import { handleNotification } from "../../slices/Snackbar";
 import {
@@ -28,37 +26,38 @@ import {
   updateTeamList,
 } from "../../slices/manageTeam/manageTeam";
 import { useListRoundsByNameMutation } from "../../api/ListRounds";
-import { useDeleteRoundByNameMutation } from "../../api/DeleteRound";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
-import { AddSportBtn } from "./masterStyled";
 import EditIcon from "@mui/icons-material/Edit";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
 import {
   getRoundsDataForEdit,
-  getUpdateDataForEdit,
   setSelectedMode,
   updateRoundList,
 } from "../../slices/manageRound/manageRound";
-import AddRoundModal from "./AddRoundModal";
 import { useDeleteGameByNameMutation } from "../../api/DeleteGame";
-import { useAddRoundByNameMutation } from "../../api/AddNewRound";
-import { useUpdateRoundByNameMutation } from "../../api/UpdateRound";
 import { useListGamesByNameMutation } from "../../api/ListGames";
+import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import moment from "moment";
 import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
-import { updateGameList } from "../../slices/manageGame/manageGame";
+import {
+  updateAllTeamData,
+  updateGameList,
+} from "../../slices/manageGame/manageGame";
+import AddGameModal from "./AddGameModal";
+import { useAddGameByNameMutation } from "../../api/AddNewGame";
 const ManageGame = () => {
   const dispatch = useDispatch();
-  const { sportData } = useSelector(manageSportSelector);
-  const { roundData, isSelectedMode, roundsEditData, updateEditData } =
-    useSelector(manageRoundSelector);
-  const { gameData } = useSelector(manageGameSelector);
-  console.log(gameData, "GAMEDATA");
-
+  // const { sportData } = useSelector(manageSportSelector);
+  const { roundData } = useSelector(manageRoundSelector);
+  console.log(roundData, "ROUNDData");
+  const { gameData, allTeamData } = useSelector(manageGameSelector);
+  const { teamData, sportData } = useSelector(manageSportSelector);
+  console.log(allTeamData, "allTeamData");
+  console.log(gameData, "INSIDE GAME DATA");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
-  const openModal = (id, type) => {
+  const openModal = (id, type, rowData) => {
     if (type === "delete") {
       setModalContent(
         "Are you sure you want to delete this game. If these teams already played, then this may cause issues. If you need to make a change to this game, then edit it (don't delete it)"
@@ -97,6 +96,44 @@ const ManageGame = () => {
           );
         }
       });
+    } else if (type === "started") {
+      setModalContent("Are you sure you want to start this game");
+      setAction(() => async () => {
+        try {
+          const response = await addGameApi({
+            gameId: id,
+            selectedSeason: "current",
+            gameState: "started",
+            sportId: rowData?.rowData[0]._id,
+          }).unwrap();
+
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
+        } catch (error) {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: userDeleteData?.message,
+              severity: userDeleteData?.code,
+            })
+          );
+        }
+      });
     }
 
     setModal(true);
@@ -105,19 +142,46 @@ const ManageGame = () => {
     setModal(false);
   };
 
-  const [addRoundApi, { data: addRoundData, isSuccess: addRoundSuccess }] =
-    useAddRoundByNameMutation();
+  // ROUND API
+  const [
+    listRoundsApi,
+    {
+      data: listRoundsData,
+      isLoading: listRoundsLoading,
+      error: listRoundsError,
+      isSuccess: listRoundsSuccess,
+    },
+  ] = useListRoundsByNameMutation();
 
+  // ADD GAME API
+  const [
+    addGameApi,
+    {
+      data: addGameData,
+      isLoading: addGameLoading,
+      isSuccess: addGameSuccess,
+      isError: addGameError,
+    },
+  ] = useAddGameByNameMutation();
+
+  // TEAM LIST API
+  const [
+    teamListApi,
+    { data, isLoading: teamDataFetching, isSuccess: userListSuccess },
+  ] = useTeamListByNameMutation();
+
+  // GAME LIST API
   const [
     listGameApi,
     {
       data: listGamesData,
-      isLoading: teamDataFetching,
+      isLoading: teamGameFetching,
       error,
       isSuccess: listGameSuccess,
     },
   ] = useListGamesByNameMutation();
 
+  // DELETE GAME API
   const [
     userDeleteApi,
     {
@@ -127,6 +191,7 @@ const ManageGame = () => {
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteGameByNameMutation();
+  // LIST SPORT API
   const [
     listSportApi,
     {
@@ -136,20 +201,50 @@ const ManageGame = () => {
       success: listSportSuccess,
     },
   ] = useGetUserListSportApiByNameMutation();
-  const [
-    updateRoundApi,
-    {
-      data: updateRoundData,
-      isLoading: updateRoundLoading,
-      isSuccess: updateRoundSuccess,
-    },
-  ] = useUpdateRoundByNameMutation();
 
+  // TEAM LIST
+  useEffect(() => {
+    const fetchTeamList = async () => {
+      try {
+        const response = await teamListApi({
+          count: 1000,
+          season: "current",
+        }).unwrap();
+        console.log(response, "FETCH TEAM LIST");
+        // dispatch(updateTeamList(response));
+        dispatch(updateAllTeamData(response));
+      } catch (err) {
+        console.error("Error fetching sports data:", err);
+      }
+    };
+
+    fetchTeamList();
+  }, []);
+
+  // ROUND API
+  useEffect(() => {
+    const fetchRound = async () => {
+      try {
+        const response = await listRoundsApi({
+          count: 1000,
+          season: "current",
+        }).unwrap();
+        dispatch(updateRoundList(response));
+      } catch (err) {
+        console.error("Error fetching sports data:", err);
+      }
+    };
+
+    fetchRound();
+  }, []);
+
+  // SPORT API
   useEffect(() => {
     if (listSportData && listSportData?.data)
       dispatch(updateSportList(listSportData));
   }, [listSportData]);
 
+  // LIST GAME API
   useEffect(() => {
     if (listGamesData && listGamesData?.data)
       dispatch(updateGameList(listGamesData));
@@ -163,31 +258,31 @@ const ManageGame = () => {
       sortOrder: "",
     };
     listGameApi(reqParams);
-  }, [userDeleteSuccess, addRoundSuccess, updateRoundSuccess]);
+  }, [userDeleteSuccess]);
 
-  const handleEditRound = (value, rowData) => {
-    console.log(rowData?.rowData, "ROWDATA");
-    console.log(rowData?.rowData[2], "ROUNDTYPE");
-    dispatch(setSelectedMode("edit"));
+  // const handleEditRound = (value, rowData) => {
+  //   console.log(rowData?.rowData, "ROWDATA");
+  //   console.log(rowData?.rowData[2], "ROUNDTYPE");
+  //   dispatch(setSelectedMode("edit"));
 
-    const formattedStartDate = moment(rowData?.rowData[3].startDate).format(
-      "L"
-    );
-    const formattedEndDate = moment(rowData?.rowData[3].endDate).format("L");
-    const payload = [
-      {
-        roundno: rowData?.rowData[0],
-        roundname: rowData?.rowData[1],
-        roundtype: rowData?.rowData[2],
-        sportId: rowData?.rowData[3]._id,
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-        roundId: rowData?.rowData[4],
-      },
-    ];
-    dispatch(getRoundsDataForEdit(payload));
-    dispatch(updateModalVisibility(true));
-  };
+  //   const formattedStartDate = moment(rowData?.rowData[3].startDate).format(
+  //     "L"
+  //   );
+  //   const formattedEndDate = moment(rowData?.rowData[3].endDate).format("L");
+  //   const payload = [
+  //     {
+  //       roundno: rowData?.rowData[0],
+  //       roundname: rowData?.rowData[1],
+  //       roundtype: rowData?.rowData[2],
+  //       sportId: rowData?.rowData[3]._id,
+  //       startDate: formattedStartDate,
+  //       endDate: formattedEndDate,
+  //       roundId: rowData?.rowData[4],
+  //     },
+  //   ];
+  //   dispatch(getRoundsDataForEdit(payload));
+  //   dispatch(updateModalVisibility(true));
+  // };
 
   const columns = [
     {
@@ -300,10 +395,11 @@ const ManageGame = () => {
                 />
                 <EditIcon
                   sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => handleEditRound(value, rowData)}
+                  // onClick={() => handleEditRound(value, rowData)}
                 />
                 <SendIcon sx={{ cursor: "pointer", color: "#9f8e8ede" }} />
                 <HourglassTopIcon
+                  onClick={() => openModal(value, "started", rowData)}
                   sx={{ cursor: "pointer", color: "#9f8e8ede" }}
                 />
               </Box>
@@ -367,13 +463,15 @@ const ManageGame = () => {
                 mode="game"
               />
 
-              <AddRoundModal
+              <AddGameModal
                 data={listSportData}
                 listSportApi={listSportApi}
+                listRoundsApi={listRoundsApi}
                 onClose={() => dispatch(updateModalVisibility(false))}
-                addRoundApi={addRoundApi}
-                initialData={isSelectedMode === "edit" ? roundsEditData : ""}
-                updateRoundApi={updateRoundApi}
+                roundData={roundData}
+                gameData={gameData}
+                allTeamData={allTeamData}
+                addGameApi={addGameApi}
               />
             </Box>
           </Box>
