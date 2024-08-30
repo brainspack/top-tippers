@@ -30,7 +30,10 @@ import useWindowWidth from "./useWindowWidth";
 import BasicMenu from "./ProfileMenu";
 import {
   ADMIN_LIST,
+  ADMIN_LIST_THREE,
   ADMIN_LIST_TWO,
+  ADS_LIST,
+  CMS_LIST,
   MASTER_SUBHEADINGS,
 } from "../../utils/constant";
 import { useMediaQuery } from "@mui/material";
@@ -355,9 +358,28 @@ const DashboardComponent = ({ content }) => {
             ))}
           </Accordion> */}
           {/* <CustomAccordian /> */}
-          <CustomAccordion data={MASTER_SUBHEADINGS} />
-          {/* <CustomAccordion data={ADMIN_LIST_TWO} /> */}
+          <CustomAccordion
+            data={MASTER_SUBHEADINGS}
+            accordianHeading={"Master"}
+          />
           {ADMIN_LIST_TWO.map((text, index) => (
+            <NavLink
+              className={"drawer-routes drawer-nav"}
+              to={text.route}
+              key={text}
+              disablePadding
+            >
+              <ListItemButton disableRipple>
+                <ListItemIcon>{text.icon}</ListItemIcon>
+
+                <ListItemText primary={text.label} />
+                {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
+              </ListItemButton>
+            </NavLink>
+          ))}
+          <CustomAccordion data={CMS_LIST} accordianHeading={"CMS"} />
+          <CustomAccordion data={ADS_LIST} accordianHeading={"Ad Manage..."} />
+          {ADMIN_LIST_THREE.map((text, index) => (
             <NavLink
               className={"drawer-routes drawer-nav"}
               to={text.route}

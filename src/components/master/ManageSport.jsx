@@ -42,6 +42,7 @@ const ManageSport = (props) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState(null);
   const { sportData } = useSelector(manageSportDataSelector);
+  console.log(sportData, "dataa");
 
   const openModal = (id, type) => {
     if (type === "delete") {

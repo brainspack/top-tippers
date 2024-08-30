@@ -88,16 +88,45 @@ export const ADMIN_LIST_TWO = [
     route: "/admin/ladder",
     icon: <DashboardIcon sx={{ color: "white" }} />,
   },
-  // {
-  //   label: "Banter",
-  //   route: "/admin/users",
-  //   icon: <PersonIcon sx={{ color: "white" }} />,
-  // },
-  // {
-  //   label: "Messaging",
-  //   route: "/admin/messaging",
-  //   icon: <EmailIcon sx={{ color: "white" }} />,
-  // },
+  {
+    label: "Banter",
+    route: "/admin/banter",
+    icon: <PersonIcon sx={{ color: "white" }} />,
+  },
+];
+export const CMS_LIST = [
+  {
+    label: "FAQs",
+    route: "/admin/questions",
+  },
+  {
+    label: "Rules",
+    route: "/admin/content",
+  },
+];
+export const ADS_LIST = [
+  {
+    label: "Ads",
+    route: "/admin/ads",
+    icon: <DashboardIcon sx={{ color: "white" }} />,
+  },
+  {
+    label: "Report",
+    route: "/admin/adreport",
+    icon: <PersonIcon sx={{ color: "white" }} />,
+  },
+];
+export const ADMIN_LIST_THREE = [
+  {
+    label: "Manage Ver...",
+    route: "/admin/version",
+    icon: <DashboardIcon sx={{ color: "white" }} />,
+  },
+  {
+    label: "Secret Comp",
+    route: "/admin/secretcomp",
+    icon: <PersonIcon sx={{ color: "white" }} />,
+  },
 ];
 
 export const DASHBOARD_CARD_DATA = [
