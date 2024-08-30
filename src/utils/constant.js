@@ -98,12 +98,10 @@ export const CMS_LIST = [
   {
     label: "FAQs",
     route: "/admin/questions",
-    icon: <DashboardIcon sx={{ color: "white" }} />,
   },
   {
     label: "Rules",
     route: "/admin/content",
-    icon: <PersonIcon sx={{ color: "white" }} />,
   },
 ];
 export const ADS_LIST = [

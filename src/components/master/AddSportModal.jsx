@@ -93,6 +93,8 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   });
 
   const onReset = async (userValue) => {
+    console.log(userValue, "sjka");
+
     let result = await Promise.resolve({
       sportname: userValue?.sportname,
       description: userValue?.description,
@@ -426,7 +428,11 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                   }}
                   {...register("stack", {
                     required: "Stack Value is required",
-                    // setValueAs: (value) => formatInput(value),
+                    pattern: {
+                      value: /^\d+$/,
+                      message: "Stack Value must be a number",
+                    },
+                    setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>

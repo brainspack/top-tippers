@@ -21,6 +21,7 @@ import userReducer from "../src/slices/userSlice/user";
 import manageReducer from "./slices/manageTeam/manageTeam";
 import manageRoundReducer from "./slices/manageRound/manageRound";
 import manageGameReducer from "./slices/manageGame/manageGame";
+import faqsReducer from "./slices/FAQsSlice/faqs";
 import userListCompetitionApi from "./api/listCompetition";
 import userListSportApi from "./api/listSport";
 import deleteSportApi from "./api/DeleteSport";
@@ -32,7 +33,13 @@ import deleteGameApi from "./api/DeleteGame";
 import listGamesApi from "./api/ListGames";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
+import articleReducer from "./slices/Article/article";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
+import addUpdateQuestionApi from "./api/AddUpdateQuestion";
+import listQuestionApi from "./api/ListQuestion";
+import deleteQuestionApi from "./api/DeleteQuestion";
+import listTopicApi from "./api/listTopic";
+import ArticleGetAndSearchApi from "./api/GetAndSearchArticle";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -41,6 +48,8 @@ export const store = configureStore({
     manageRoundSlice: manageRoundReducer,
     manageGameSlice: manageGameReducer,
     manageSportSlice: manageSportReducer,
+    faqsSlice: faqsReducer,
+    articleSlice: articleReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
@@ -70,6 +79,11 @@ export const store = configureStore({
     [setInviteAndCompButtonApi.reducerPath]: setInviteAndCompButtonApi.reducer,
     [sendSportNotificaticationApi.reducerPath]:
       sendSportNotificaticationApi.reducer,
+    [addUpdateQuestionApi.reducerPath]: addUpdateQuestionApi.reducer,
+    [listQuestionApi.reducerPath]: listQuestionApi.reducer,
+    [deleteQuestionApi.reducerPath]: deleteQuestionApi.reducer,
+    [listTopicApi.reducerPath]: listTopicApi.reducer,
+    [ArticleGetAndSearchApi.reducerPath]: ArticleGetAndSearchApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -101,7 +115,12 @@ export const store = configureStore({
       deleteCompetitionApi.middleware,
       setInviteAndCompButtonApi.middleware,
       setInviteAndCompButtonApi.middleware,
-      sendSportNotificaticationApi.middleware
+      sendSportNotificaticationApi.middleware,
+      listQuestionApi.middleware,
+      deleteQuestionApi.middleware,
+      listTopicApi.middleware,
+      addUpdateQuestionApi.middleware,
+      ArticleGetAndSearchApi.middleware
     ),
 });
 setupListeners(store.dispatch);

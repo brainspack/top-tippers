@@ -1,24 +1,26 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import SendIcon from "@mui/icons-material/Send";
-import { useDispatch, useSelector } from "react-redux";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import { updateSendModalVisibility } from "../../slices/userSlice/user";
 import {
+  AddSportBtn,
   AddSportSubmitBtn,
   BackModalBtn,
   SportModalHeading,
-} from "./masterStyled";
+} from "../master/masterStyled";
+import AddIcon from "@mui/icons-material/Add";
+import SendIcon from "@mui/icons-material/Send";
+import { FormHelperText, OutlinedInput } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-import { FormHelperText, OutlinedInput } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import Textarea from "@mui/joy/Textarea";
-import { useGetSendSportNotificaticationApiByNameMutation } from "../../api/SendSportNotificatication";
 import { handleNotification } from "../../slices/Snackbar";
+import {
+  getFaqsDataForEdit,
+  updateAddFaqsModalVisibility,
+  updateModeForEdit,
+} from "../../slices/FAQsSlice/faqs";
+import { faqsDataSelector } from "../../slices/FAQsSlice/faqsSelectore";
 
 const style = {
   position: "absolute",
@@ -33,22 +35,37 @@ const style = {
   p: 1,
 };
 
-export default function SendSportModal({
-  sportDataId,
-  sportDataName,
-  sendSportNotify,
+export default function AddFaqsModal({
+  AddUpdateQuestionFaqs,
+  AddFaqsData,
+  faqsListTopicData,
 }) {
-  console.log(sportDataId, "iddd");
-
   const dispatch = useDispatch();
-  const { isSendModalVisible } = useSelector(userDataSelector);
+  const { isAddFaqsModalVisible, setEditFaqsData, setModeForFaqsEdit } =
+    useSelector(faqsDataSelector);
+  console.log(setEditFaqsData, "set");
+  const questionIdFaqs = faqsListTopicData?.data?.filter((e) => {
+    // console.log(e, "ee");
+    if (e.topicname === "FAQs") {
+      return e._id;
+    }
+  });
+  console.log(questionIdFaqs, "sett");
 
-  const handleSendClose = () => {
-    dispatch(updateSendModalVisibility(false));
-    reset();
+  const handleOpen = () => {
+    reset({
+      question: "",
+      answer: "",
+    });
+    dispatch(updateModeForEdit("addFaqs"));
+
+    dispatch(updateAddFaqsModalVisibility(true));
   };
 
-  console.log("insendSport Modal");
+  const handleFaqsClose = () => {
+    dispatch(getFaqsDataForEdit(""));
+    dispatch(updateAddFaqsModalVisibility(false));
+  };
 
   const {
     register,
@@ -59,14 +76,26 @@ export default function SendSportModal({
     mode: "onChange",
   });
 
+  const onReset = async (userValue) => {
+    console.log(userValue, "sjkaj");
+
+    let result = await Promise.resolve({
+      question: userValue?.question,
+      answer: userValue?.answer,
+    });
+
+    reset(result);
+  };
+
   const onSubmit = async (data) => {
     console.log(data);
     try {
       console.log(data, "dataaaa");
 
-      const result = await sendSportNotify({
+      const result = await AddUpdateQuestionFaqs({
         ...data,
-        sportId: sportDataId,
+        questionId: setEditFaqsData?.length ? setEditFaqsData[0]?.id : "",
+        topicId: questionIdFaqs[0]._id,
       }).unwrap();
       console.log(result, "RESULT_sport");
       if (result?.code === 200) {
@@ -77,7 +106,13 @@ export default function SendSportModal({
             severity: result?.code,
           })
         );
-        handleSendClose();
+        dispatch(updateModeForEdit("addFaqs"));
+        // setEditFaqsData([]);
+        reset({
+          question: "",
+          answer: "",
+        });
+        handleFaqsClose();
       } else {
         dispatch(
           handleNotification({
@@ -90,9 +125,21 @@ export default function SendSportModal({
 
       reset();
     } catch (err) {
-      console.log(err, "the errr");
+      dispatch(
+        handleNotification({
+          state: true,
+          message: AddFaqsData?.message,
+          severity: AddFaqsData?.code,
+        })
+      );
     }
   };
+
+  useEffect(() => {
+    if (setEditFaqsData?.length && setModeForFaqsEdit === "edit") {
+      onReset(setEditFaqsData[0]);
+    }
+  }, [setEditFaqsData]);
 
   const formatInput = (value) => {
     if (!value) return value;
@@ -100,10 +147,14 @@ export default function SendSportModal({
   };
 
   return (
-    <div>
+    <>
+      <AddSportBtn disableRipple onClick={handleOpen}>
+        <AddIcon sx={{ mr: 1 }} />
+        Add FAQs
+      </AddSportBtn>{" "}
       <Modal
-        open={isSendModalVisible}
-        onClose={handleSendClose}
+        open={isAddFaqsModalVisible}
+        onClose={handleFaqsClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -114,8 +165,8 @@ export default function SendSportModal({
               variant="h6"
               component="h3"
             >
-              {sportDataName}
-              <CloseIcon className="close-icon" onClick={handleSendClose} />
+              FAQs
+              <CloseIcon className="close-icon" onClick={handleFaqsClose} />
             </SportModalHeading>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,7 +174,7 @@ export default function SendSportModal({
               id="modal-modal-description"
               sx={{
                 mt: 1,
-                padding: "0 15px 12px",
+                padding: "0 15px 0px",
                 height: "auto",
                 display: "flex",
                 flexDirection: "column",
@@ -138,13 +189,10 @@ export default function SendSportModal({
                   gap: "5px",
                 }}
               >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Message Title:"
-                />
+                <CustomAddSportLabel requiredInput="*" inputLabel="FAQs" />
                 <OutlinedInput
                   id="outlined-adornment-weight"
-                  placeholder="Title"
+                  placeholder="FAQs"
                   sx={{
                     width: "100%",
                     height: "34px",
@@ -153,15 +201,15 @@ export default function SendSportModal({
                   inputProps={{
                     "aria-label": "weight",
                   }}
-                  {...register("title", {
-                    required: "title is required",
+                  {...register("question", {
+                    required: "Question is required",
                     setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
               <div className="errorMsgParent">
                 <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.title?.message}
+                  {errors.question?.message}
                 </FormHelperText>
               </div>
 
@@ -174,34 +222,31 @@ export default function SendSportModal({
                   gap: "5px",
                 }}
               >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Message Description:"
-                />
+                <CustomAddSportLabel requiredInput="*" inputLabel="Answer" />
                 <textarea
                   style={{
                     width: "100%",
-                    maxHeight: "auto",
+                    // maxHeight: "300px",
                     resize: "vertical",
                     padding: "5px 0px 0px 13px",
                     outline: "none",
-                    fontFamily: "Roboto, sans-serif",
+                    fontFamily: "Roboto, sans-serif ",
                     fontSize: "14px",
                     borderRadius: "4px",
                   }}
-                  placeholder="Description"
+                  placeholder="Answer"
                   sx={{
                     "--Textarea-focused": 1,
                   }}
-                  {...register("message", {
-                    required: "description is required",
+                  {...register("answer", {
+                    required: "Answer is required",
                     setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
               <div className="errorMsgParent">
                 <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.message?.message}
+                  {errors.answer?.message}
                 </FormHelperText>
               </div>
             </Box>
@@ -213,7 +258,7 @@ export default function SendSportModal({
                 height: "35px",
               }}
             >
-              <BackModalBtn onClick={handleSendClose}>Back</BackModalBtn>
+              <BackModalBtn onClick={handleFaqsClose}>Back</BackModalBtn>
               <AddSportSubmitBtn type="submit">
                 <SendIcon sx={{ mr: 1 }} />
                 Submit
@@ -222,6 +267,6 @@ export default function SendSportModal({
           </form>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }
