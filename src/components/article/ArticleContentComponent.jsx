@@ -1,10 +1,13 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
   ManageUsersWrapper,
   ManageUserTableWrapper,
   SearchContainer,
+  SearchIconWrapper,
+  StyledInputBase,
+  Search,
 } from "../ManageUsers/ManangeUsersStyled";
 import {
   articleDataSelector,
@@ -17,18 +20,20 @@ import { useLazyGetArticleGetAndSearchApiByNameQuery } from "../../api/GetAndSea
 import { useEffect, useState } from "react";
 import { updateArticleData } from "../../slices/Article/article";
 import MUIDataTable from "mui-datatables";
+import CustomPagination from "../reuse/CustomPagination";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
-import ArticlePagination from "./ArticlePagination";
+import { AddSportBtn } from "../master/masterStyled";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom";
 
 const ArticleContent = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { articleData } = useSelector(articleDataSelector);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [sortValue, setSortValue] = useState("");
-  const [sortOrder, setSortOrder] = useState("");
+  const [searchString, setSearchString] = useState("");
 
-  console.log(articleData?.data?.docs, "data");
+  console.log(articleData, "data");
 
   const [
     userListArticle,
@@ -39,11 +44,21 @@ const ArticleContent = () => {
     },
   ] = useLazyGetArticleGetAndSearchApiByNameQuery();
 
+  console.log(listArticleData, "skajk");
+
   useEffect(() => {
     if (listArticleData && listArticleData?.data)
       dispatch(updateArticleData(listArticleData));
   }, [listArticleData]);
 
+  const onHandleSearch = (e) => {
+    // const value = ;
+
+    const reqParams = {
+      search: e.target.value,
+    };
+    userListArticle(reqParams);
+  };
   useEffect(() => {
     const reqParams = {
       // search_string: "",
@@ -130,14 +145,15 @@ const ArticleContent = () => {
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <>
-          <ArticlePagination
-            total={articleData?.totalCount}
+          <CustomPagination
+            total={listArticleData?.data?.totalDocs}
+            mode="articlePage"
             page={page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
-            userListArticle={userListArticle}
-            userData={articleData?.data?.docs}
+            userList={userListArticle}
+            // userData={articleData?.data?.docs}
             isLoading={articleDataFetching}
           />
         </>
@@ -154,12 +170,26 @@ const ArticleContent = () => {
       <ManageUsersContainer>
         <ManageUsersWrapper>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <ManageUsersHeading>FAQs</ManageUsersHeading>
-            {/* <AddFaqsModal
-              AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
-              AddFaqsData={AddFaqsData}
-              faqsListTopicData={faqsListTopicData}
-            /> */}
+            <ManageUsersHeading>Article</ManageUsersHeading>
+            <Box sx={{ width: "45%" }}>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon sx={{ color: "primary.secondary" }} />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                  onChange={onHandleSearch}
+                />
+              </Search>
+            </Box>
+            <AddSportBtn
+              disableRipple
+              onClick={() => navigate("/admin/addearticle")}
+            >
+              <AddIcon sx={{ mr: 1 }} />
+              Add Article
+            </AddSportBtn>
           </Box>
 
           <SearchContainer>

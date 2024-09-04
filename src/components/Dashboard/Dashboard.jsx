@@ -180,6 +180,42 @@ const DashboardComponent = ({ content }) => {
             </ListItemButton>
           </NavLink>
         ))}
+        <CustomAccordion
+          data={MASTER_SUBHEADINGS}
+          accordianHeading={"Master"}
+        />
+        {ADMIN_LIST_TWO.map((text, index) => (
+          <NavLink
+            className={"drawer-routes drawer-nav"}
+            to={text.route}
+            key={text}
+            disablePadding
+          >
+            <ListItemButton disableRipple>
+              <ListItemIcon>{text.icon}</ListItemIcon>
+
+              <ListItemText primary={text.label} />
+              {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
+            </ListItemButton>
+          </NavLink>
+        ))}
+        <CustomAccordion data={CMS_LIST} accordianHeading={"CMS"} />
+        <CustomAccordion data={ADS_LIST} accordianHeading={"Ad Manage..."} />
+        {ADMIN_LIST_THREE.map((text, index) => (
+          <NavLink
+            className={"drawer-routes drawer-nav"}
+            to={text.route}
+            key={text}
+            disablePadding
+          >
+            <ListItemButton disableRipple>
+              <ListItemIcon>{text.icon}</ListItemIcon>
+
+              <ListItemText primary={text.label} />
+              {text.label === "Master" ? <KeyboardArrowDownIcon /> : ""}
+            </ListItemButton>
+          </NavLink>
+        ))}
         {/* <Accordion
           className="accordion-master"
           elevation={0}
@@ -234,7 +270,7 @@ const DashboardComponent = ({ content }) => {
                 {["left"].map((anchor) => (
                   <Fragment key={anchor}>
                     <Button onClick={toggleDrawer(anchor, true)}>
-                      {anchor}
+                      <MenuIcon sx={{ color: "black" }} />
                     </Button>
                     <Drawer
                       anchor={anchor}

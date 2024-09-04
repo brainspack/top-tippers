@@ -21,6 +21,7 @@ import AdsReportContent from "../components/ads/AdsReportContent";
 import AdsReportPage from "../containers/ads/AdsReport";
 import ManageVersionPage from "../containers/manageVersion/ManageVersion";
 import SecretCompetitionPage from "../containers/secretCompetition/SecretCompetition";
+import AddArticleComponent from "../components/article/AddArticleComponent";
 
 const Routers = () => {
   return (
@@ -38,11 +39,14 @@ const Routers = () => {
             <Route path="teamdetail/:teamId" element={<TeamDetailProfile />} />
             <Route path="round" element={<ManageRoundComponent />} />
             <Route path="game" element={<ManageGameComponent />} />
+
             <Route
               path="competition"
               element={<ManageCompetitionComponent />}
             />
             <Route path="ladder" element={<ArticlePage />} />
+            <Route path="addearticle" element={<AddArticleComponent />} />
+
             <Route path="banter" element={<BanterPage />} />
             <Route path="questions" element={<FaqsPage />} />
             <Route path="content" element={<RulesPage />} />

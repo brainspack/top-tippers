@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import DashboardComponent from "../../components/Dashboard/Dashboard";
-import DashboardContent from "../../components/DashboardContent/DashboardContent";
-import ArticleContent from "../../components/article/ArticleContent";
+import ArticleContent from "../../components/article/ArticleContentComponent";
 
 const ArticlePage = () => {
   return (

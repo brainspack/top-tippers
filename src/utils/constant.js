@@ -97,10 +97,12 @@ export const ADMIN_LIST_TWO = [
 export const CMS_LIST = [
   {
     label: "FAQs",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/questions",
   },
   {
     label: "Rules",
+    icon: <NavigateNextIcon sx={{ color: "white" }} />,
     route: "/admin/content",
   },
 ];
