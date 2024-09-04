@@ -40,20 +40,31 @@ import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import moment from "moment";
 import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
 import {
+  getGameDataForEdit,
+  setSelectedGameMode,
   updateAllTeamData,
+  updateDeclareWinnerData,
+  updateDeclareWinnerModalState,
+  updateFilteredGameData,
   updateGameList,
+  updateGameModalData,
+  updateGameModalState,
 } from "../../slices/manageGame/manageGame";
 import AddGameModal from "./AddGameModal";
 import { useAddGameByNameMutation } from "../../api/AddNewGame";
+import { useUpdateGameByNameMutation } from "../../api/UpdateGame";
+import { useSendGameNotificationApiByNameMutation } from "../../api/SendGameStartNotification";
+import { isDayjs } from "dayjs";
+import GameDetailsModal from "./GameDetailsModal";
+import { FILTERED_PAYLOAD } from "../../utils/constant";
+import DeclareWinnerModal from "./manageGame/DeclareWinnerModal";
+
 const ManageGame = () => {
   const dispatch = useDispatch();
-  // const { sportData } = useSelector(manageSportSelector);
   const { roundData } = useSelector(manageRoundSelector);
-  console.log(roundData, "ROUNDData");
-  const { gameData, allTeamData } = useSelector(manageGameSelector);
-  const { teamData, sportData } = useSelector(manageSportSelector);
-  console.log(allTeamData, "allTeamData");
-  console.log(gameData, "INSIDE GAME DATA");
+  const { gameData, allTeamData, editGameData, selectedGameMode } =
+    useSelector(manageGameSelector);
+  const { sportData } = useSelector(manageSportSelector);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -202,6 +213,20 @@ const ManageGame = () => {
     },
   ] = useGetUserListSportApiByNameMutation();
 
+  // Update Game Api
+  const [
+    updateGameApi,
+    {
+      data: updateGameData,
+      isLoading: updateGameLoading,
+      isSuccess: updateGameSuccess,
+    },
+  ] = useUpdateGameByNameMutation();
+
+  // GAME NOTICATION API
+  const [startGameNotificationApi, { data: startGameData }] =
+    useSendGameNotificationApiByNameMutation();
+
   // TEAM LIST
   useEffect(() => {
     const fetchTeamList = async () => {
@@ -258,32 +283,172 @@ const ManageGame = () => {
       sortOrder: "",
     };
     listGameApi(reqParams);
-  }, [userDeleteSuccess]);
+  }, [userDeleteSuccess, addGameSuccess]);
 
-  // const handleEditRound = (value, rowData) => {
-  //   console.log(rowData?.rowData, "ROWDATA");
-  //   console.log(rowData?.rowData[2], "ROUNDTYPE");
-  //   dispatch(setSelectedMode("edit"));
+  const handleEditGame = (value, rowData) => {
+    const filterData = listGamesData?.data?.filter((ele) => {
+      console.log(ele?._id, "INSIDE ELE");
+      return ele?._id === value;
+    });
+    console.log(filterData, "filterData");
 
-  //   const formattedStartDate = moment(rowData?.rowData[3].startDate).format(
-  //     "L"
-  //   );
-  //   const formattedEndDate = moment(rowData?.rowData[3].endDate).format("L");
-  //   const payload = [
-  //     {
-  //       roundno: rowData?.rowData[0],
-  //       roundname: rowData?.rowData[1],
-  //       roundtype: rowData?.rowData[2],
-  //       sportId: rowData?.rowData[3]._id,
-  //       startDate: formattedStartDate,
-  //       endDate: formattedEndDate,
-  //       roundId: rowData?.rowData[4],
-  //     },
-  //   ];
-  //   dispatch(getRoundsDataForEdit(payload));
-  //   dispatch(updateModalVisibility(true));
-  // };
+    const formattedDate = moment(filterData[0]?.gameDate).format("L");
 
+    const newformatedTm = new Date(filterData[0]?.gameTime);
+    const formattedTime = moment(newformatedTm).format("HH:mm");
+    console.log(formattedTime, "formattedTime");
+
+    const payload = [
+      {
+        sportId: filterData[0]?.sport?._id,
+        round: filterData[0]?.round?._id,
+        date: formattedDate,
+        time: formattedTime,
+        homeTeamPoints: filterData[0]?.homeTeamPoints,
+        awayTeamPoints: filterData[0]?.awayTeamPoints,
+        homeTeam: filterData[0]?.homeTeam?._id,
+        awayTeam: filterData[0]?.awayTeam?._id,
+        eventId: filterData[0]?.eventId,
+        kingbotTipping: filterData[0]?.kingbotTipping,
+      },
+    ];
+    dispatch(getGameDataForEdit(payload));
+    dispatch(setSelectedGameMode("editGame"));
+    dispatch(updateModalVisibility(true));
+  };
+
+  const onSendGameNotification = async (value) => {
+    console.log(value, "START GAME");
+    const response = await startGameNotificationApi({
+      gameId: value,
+      selectedSeason: "current",
+    }).unwrap();
+    console.log(response, "RESPONSE");
+  };
+  const onOpenDeclareWinnerModal = (value) => {
+    const filterUpdateGameResultData = listGamesData?.data?.filter((ele) => {
+      return ele?._id === value;
+    });
+    // console.log(filterUpdateGameData, "filterUpdateGameData");
+    dispatch(updateDeclareWinnerData(filterUpdateGameResultData));
+
+    dispatch(updateDeclareWinnerModalState(true));
+  };
+  const onOpenGameModal = (value) => {
+    const filterGameData = listGamesData?.data?.filter((ele) => {
+      return ele?._id === value;
+    });
+    dispatch(updateFilteredGameData(filterGameData));
+    console.log(filterGameData, "HELLO");
+    const formattedRoundStartDate = moment(
+      filterGameData[0].round.startDate
+    ).format("ddd MMM DD YYYY");
+    const formattedRoundEndDate = moment(
+      filterGameData[0].round.endDate
+    ).format("ddd MMM DD YYYY");
+    const formattedGameDate = moment(filterGameData[0].gameDate).format(
+      "ddd MMM DD YYYY"
+    );
+    const formattedGameTime = moment(filterGameData[0].gameDate).format(
+      "HH:mm"
+    );
+
+    const payload = [
+      {
+        id: 1,
+        title: "Sports:",
+        content: filterGameData[0].sport.sportname,
+      },
+      {
+        id: 2,
+        title: "Season:",
+        content: filterGameData[0].season,
+      },
+      {
+        id: 3,
+        title: "Round No:",
+        content: filterGameData[0].round.roundno,
+      },
+      {
+        id: 4,
+        title: "Round Name:",
+        content: filterGameData[0].round.roundname,
+      },
+      {
+        id: 5,
+        title: "Round Start Date:",
+        content: formattedRoundStartDate,
+      },
+      {
+        id: 6,
+        title: "Round End Date:",
+        content: formattedRoundEndDate,
+      },
+      {
+        id: 7,
+        title: "Home Team:",
+        content: filterGameData[0].homeTeam.teamname,
+      },
+      {
+        id: 8,
+        title: "Away Team:",
+        content: filterGameData[0].awayTeam.teamname,
+      },
+      {
+        id: 9,
+        title: "Home Team Points:",
+        content: filterGameData[0].homeTeamPoints,
+      },
+      {
+        id: 10,
+        title: "Away Team Points:",
+        content: filterGameData[0].awayTeamPoints,
+      },
+      {
+        id: 11,
+        title: "Date:",
+        content: formattedGameDate,
+      },
+      {
+        id: 12,
+        title: "Time:",
+        content: formattedGameTime,
+      },
+      {
+        id: 13,
+        title: "Winner:",
+        content: filterGameData[0].winningTeam,
+      },
+      {
+        id: 14,
+        title: "Home Topsport Odds:",
+        content: filterGameData[0].homeTopTipperPoints,
+      },
+      {
+        id: 15,
+        title: "	Away Topsport Odds:",
+        content: filterGameData[0].awayTopTipperPoints,
+      },
+      {
+        id: 16,
+        title: "Draw Point:",
+        content: filterGameData[0].drawPoints,
+      },
+      {
+        id: 17,
+        title: "Event ID:",
+        content: filterGameData[0].eventId,
+      },
+      {
+        id: 18,
+        title: "Kingbot Tipping:",
+        content: filterGameData[0].kingbotTipping,
+      },
+    ];
+    dispatch(updateGameModalData(payload));
+    // dispatch(updateGameModalData(FILTERED_PAYLOAD));
+    dispatch(updateGameModalState(true));
+  };
   const columns = [
     {
       name: "sport",
@@ -384,9 +549,11 @@ const ManageGame = () => {
               <Box display="flex" gap="10px">
                 <VisibilityIcon
                   sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                  onClick={() => onOpenGameModal(value)}
                 />
                 <CheckCircleIcon
                   sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                  onClick={() => onOpenDeclareWinnerModal(value)}
                 />
 
                 <DeleteIcon
@@ -395,9 +562,12 @@ const ManageGame = () => {
                 />
                 <EditIcon
                   sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  // onClick={() => handleEditRound(value, rowData)}
+                  onClick={() => handleEditGame(value, rowData)}
                 />
-                <SendIcon sx={{ cursor: "pointer", color: "#9f8e8ede" }} />
+                <SendIcon
+                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                  onClick={() => onSendGameNotification(value)}
+                />
                 <HourglassTopIcon
                   onClick={() => openModal(value, "started", rowData)}
                   sx={{ cursor: "pointer", color: "#9f8e8ede" }}
@@ -472,6 +642,10 @@ const ManageGame = () => {
                 gameData={gameData}
                 allTeamData={allTeamData}
                 addGameApi={addGameApi}
+                updateGameApi={updateGameApi}
+                initialData={
+                  selectedGameMode === "editGame" ? editGameData : ""
+                }
               />
             </Box>
           </Box>
@@ -488,6 +662,14 @@ const ManageGame = () => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+            />
+            <GameDetailsModal
+              onClose={() => dispatch(updateGameModalState(false))}
+              handleOpen={onOpenGameModal}
+            />
+            <DeclareWinnerModal
+              onClose={() => dispatch(updateDeclareWinnerModalState(false))}
+              addGameApi={addGameApi}
             />
           </SearchContainer>
         </ManageUsersWrapper>

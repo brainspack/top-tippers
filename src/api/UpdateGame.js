@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../utils/constant";
-export const addGameApi = createApi({
-  reducerPath: "addGameApi",
+export const updateGameApi = createApi({
+  reducerPath: "updateGameApi",
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
-    addGameByName: builders.mutation({
-      query: (body) => ({
-        url: "/api/game/addGames",
+    updateGameByName: builders.mutation({
+      query: ({ body }) => ({
+        url: "/api/game/updateGame",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },
@@ -14,5 +14,5 @@ export const addGameApi = createApi({
     }),
   }),
 });
-export const { useAddGameByNameMutation } = addGameApi;
-export default addGameApi;
+export const { useUpdateGameByNameMutation } = updateGameApi;
+export default updateGameApi;
