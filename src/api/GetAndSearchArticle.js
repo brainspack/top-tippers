@@ -6,7 +6,7 @@ export const ArticleGetAndSearchApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
     getArticleGetAndSearchApiByName: builders.query({
-      query: ({ page, rowsPerPage, sortValue, sortOrder }) => ({
+      query: ({ page, rowsPerPage, search, sortValue, sortOrder }) => ({
         url: "api/article/getAndSearchArticle",
         method: "GET",
         params: {
@@ -14,6 +14,7 @@ export const ArticleGetAndSearchApi = createApi({
           limit: rowsPerPage,
           sortValue,
           sortOrder,
+          search,
         },
         headers: { Authorization: `Bearer${localStorage.token}` },
       }),

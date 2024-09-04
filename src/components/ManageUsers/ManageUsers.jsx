@@ -332,7 +332,7 @@ const ManageUsers = () => {
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
             userList={userList}
-            userData={userData}
+            // userData={userData}
             isLoading={isLoading}
           />
         </>

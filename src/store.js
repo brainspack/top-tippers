@@ -35,12 +35,15 @@ import listGamesApi from "./api/ListGames";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
 import articleReducer from "./slices/Article/article";
+import listContentReducer from "./slices/ListContentSlice/listContent";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
 import listQuestionApi from "./api/ListQuestion";
 import deleteQuestionApi from "./api/DeleteQuestion";
 import listTopicApi from "./api/listTopic";
 import ArticleGetAndSearchApi from "./api/GetAndSearchArticle";
+import userListContentApi from "./api/listContent";
+import addUpdateContentApi from "./api/addUpdateContent";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -51,6 +54,7 @@ export const store = configureStore({
     manageSportSlice: manageSportReducer,
     faqsSlice: faqsReducer,
     articleSlice: articleReducer,
+    listContentSlice: listContentReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
@@ -86,6 +90,8 @@ export const store = configureStore({
     [deleteQuestionApi.reducerPath]: deleteQuestionApi.reducer,
     [listTopicApi.reducerPath]: listTopicApi.reducer,
     [ArticleGetAndSearchApi.reducerPath]: ArticleGetAndSearchApi.reducer,
+    [userListContentApi.reducerPath]: userListContentApi.reducer,
+    [addUpdateContentApi.reducerPath]: addUpdateContentApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -123,7 +129,9 @@ export const store = configureStore({
       deleteQuestionApi.middleware,
       listTopicApi.middleware,
       addUpdateQuestionApi.middleware,
-      ArticleGetAndSearchApi.middleware
+      ArticleGetAndSearchApi.middleware,
+      userListContentApi.middleware,
+      addUpdateContentApi.middleware
     ),
 });
 setupListeners(store.dispatch);
