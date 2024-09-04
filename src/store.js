@@ -40,7 +40,9 @@ import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
 import listQuestionApi from "./api/ListQuestion";
 import deleteQuestionApi from "./api/DeleteQuestion";
+import sendGameNotificationApi from "./api/SendGameStartNotification";
 import listTopicApi from "./api/listTopic";
+import updateGameApi from "./api/UpdateGame";
 import ArticleGetAndSearchApi from "./api/GetAndSearchArticle";
 import userListContentApi from "./api/listContent";
 import addUpdateContentApi from "./api/addUpdateContent";
@@ -75,6 +77,7 @@ export const store = configureStore({
     [addTeamApi.reducerPath]: addTeamApi.reducer,
     [addRoundApi.reducerPath]: addRoundApi.reducer,
     [addGameApi.reducerPath]: addGameApi.reducer,
+    [sendGameNotificationApi.reducerPath]: sendGameNotificationApi.reducer,
     [updateTeamApi.reducerPath]: updateTeamApi.reducer,
     [addUpdateSportApi.reducerPath]: addUpdateSportApi.reducer,
     [listRoundsApi.reducerPath]: listRoundsApi.reducer,
@@ -89,6 +92,7 @@ export const store = configureStore({
     [listQuestionApi.reducerPath]: listQuestionApi.reducer,
     [deleteQuestionApi.reducerPath]: deleteQuestionApi.reducer,
     [listTopicApi.reducerPath]: listTopicApi.reducer,
+    [updateGameApi.reducerPath]: updateGameApi.reducer,
     [ArticleGetAndSearchApi.reducerPath]: ArticleGetAndSearchApi.reducer,
     [userListContentApi.reducerPath]: userListContentApi.reducer,
     [addUpdateContentApi.reducerPath]: addUpdateContentApi.reducer,
@@ -116,6 +120,7 @@ export const store = configureStore({
       addGameApi.middleware,
       updateTeamApi.middleware,
       addUpdateSportApi.middleware,
+      sendGameNotificationApi.middleware,
       listRoundsApi.middleware,
       deleteRoundApi.middleware,
       updateRoundApi.middleware,
@@ -128,6 +133,7 @@ export const store = configureStore({
       listQuestionApi.middleware,
       deleteQuestionApi.middleware,
       listTopicApi.middleware,
+      updateGameApi.middleware,
       addUpdateQuestionApi.middleware,
       ArticleGetAndSearchApi.middleware,
       userListContentApi.middleware,

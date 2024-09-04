@@ -307,7 +307,14 @@
 }
 
 
-.css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+/* .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
   font-size: 15px !important;
   top: -9px !important;
+} */
+
+.winnerSelect .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+  top: -3px !important;
+}
+.winnerSelect .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+  height: 50px !important;
 }

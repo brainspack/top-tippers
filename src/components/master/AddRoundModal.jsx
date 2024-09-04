@@ -138,6 +138,7 @@ const AddRoundModal = (props) => {
     }
   };
   useEffect(() => {
+    console.log("🚀 ~ useEffect ~ initialData:", initialData);
     if (initialData) {
       setValue("roundno", initialData[0]?.roundno);
       setValue("roundname", initialData[0]?.roundname);
