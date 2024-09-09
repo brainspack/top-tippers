@@ -1,5 +1,7 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { CustomCancelButton, CustomDeleteButton } from "./reuseStyled";
 
 const style = {
   position: "absolute",
@@ -7,17 +9,16 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
+  height: 370,
   bgcolor: "background.paper",
-  // border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   outline: "none",
+  borderRadius: "10px",
 };
 
 const CustomModal = (props) => {
   const { modal, closeModal, content, action } = props;
-
-  const dispatch = useDispatch();
 
   return (
     <div>
@@ -28,21 +29,37 @@ const CustomModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box>
-            <Typography variant="h6">{content}</Typography>
+          <Box
+            sx={{
+              height: "100%",
+              width: "100%",
+              // border: "1px solid red",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Box>
+              <CancelIcon sx={{ color: "#f15e5e", fontSize: "90px" }} />
+            </Box>
+            <Box>
+              <Typography>Are You Sure ?</Typography>
+            </Box>
+            <Box>
+              <Typography>{content}</Typography>
+            </Box>
             <Box
-              display={"flex"}
-              justifyContent={"space-around"}
-              marginTop={"10px"}
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                width: "100%",
+              }}
             >
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={closeModal}
-              >
+              <CustomCancelButton onClick={closeModal}>
                 Cancel
-              </Button>
-              <Button
+              </CustomCancelButton>
+              <CustomDeleteButton
                 variant="contained"
                 color="error"
                 onClick={() => {
@@ -50,8 +67,8 @@ const CustomModal = (props) => {
                   closeModal();
                 }}
               >
-                Ok
-              </Button>
+                Delete
+              </CustomDeleteButton>
             </Box>
           </Box>
         </Box>

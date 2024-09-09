@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -64,6 +64,7 @@ const ManageGame = () => {
   const { roundData } = useSelector(manageRoundSelector);
   const { gameData, allTeamData, editGameData, selectedGameMode } =
     useSelector(manageGameSelector);
+  // console.log(gameData, "GAME DATA");
 
   console.log(gameData, "sjajas");
 
@@ -286,53 +287,28 @@ const ManageGame = () => {
       sortOrder: "",
     };
     listGameApi(reqParams);
-  }, [userDeleteSuccess, addGameSuccess]);
+  }, [userDeleteSuccess, addGameSuccess, updateGameSuccess]);
 
-  const handleEditGame = (value, rowData) => {
-    const filterData = listGamesData?.data?.filter((ele) => {
-      console.log(ele?._id, "INSIDE ELE");
+  const handleEditGame = (value) => {
+    const filterData = gameData?.data?.filter((ele) => {
       return ele?._id === value;
     });
     console.log(filterData, "filterData");
-
-    const formattedDate = moment(filterData[0]?.gameDate).format("L");
-
-    const newformatedTm = new Date(filterData[0]?.gameTime);
-    const formattedTime = moment(newformatedTm).format("HH:mm");
-    console.log(formattedTime, "formattedTime");
-
-    const payload = [
-      {
-        sportId: filterData[0]?.sport?._id,
-        round: filterData[0]?.round?._id,
-        date: formattedDate,
-        time: formattedTime,
-        homeTeamPoints: filterData[0]?.homeTeamPoints,
-        awayTeamPoints: filterData[0]?.awayTeamPoints,
-        homeTeam: filterData[0]?.homeTeam?._id,
-        awayTeam: filterData[0]?.awayTeam?._id,
-        eventId: filterData[0]?.eventId,
-        kingbotTipping: filterData[0]?.kingbotTipping,
-      },
-    ];
-    dispatch(getGameDataForEdit(payload));
+    dispatch(getGameDataForEdit(filterData));
     dispatch(setSelectedGameMode("editGame"));
     dispatch(updateModalVisibility(true));
   };
 
   const onSendGameNotification = async (value) => {
-    console.log(value, "START GAME");
     const response = await startGameNotificationApi({
       gameId: value,
       selectedSeason: "current",
     }).unwrap();
-    console.log(response, "RESPONSE");
   };
   const onOpenDeclareWinnerModal = (value) => {
     const filterUpdateGameResultData = listGamesData?.data?.filter((ele) => {
       return ele?._id === value;
     });
-    // console.log(filterUpdateGameData, "filterUpdateGameData");
     dispatch(updateDeclareWinnerData(filterUpdateGameResultData));
 
     dispatch(updateDeclareWinnerModalState(true));
@@ -352,30 +328,31 @@ const ManageGame = () => {
     const formattedGameDate = moment(filterGameData[0].gameDate).format(
       "ddd MMM DD YYYY"
     );
-    const formattedGameTime = moment(filterGameData[0].gameDate).format(
+    const formattedGameTime = moment(filterGameData[0].gameTime).format(
       "HH:mm"
     );
+    console.log(formattedGameTime, "formattedGameTime");
 
     const payload = [
       {
         id: 1,
         title: "Sports:",
-        content: filterGameData[0].sport.sportname,
+        content: filterGameData[0]?.sport.sportname,
       },
       {
         id: 2,
         title: "Season:",
-        content: filterGameData[0].season,
+        content: filterGameData[0]?.season,
       },
       {
         id: 3,
         title: "Round No:",
-        content: filterGameData[0].round.roundno,
+        content: filterGameData[0]?.round.roundno,
       },
       {
         id: 4,
         title: "Round Name:",
-        content: filterGameData[0].round.roundname,
+        content: filterGameData[0]?.round.roundname,
       },
       {
         id: 5,
@@ -390,22 +367,22 @@ const ManageGame = () => {
       {
         id: 7,
         title: "Home Team:",
-        content: filterGameData[0].homeTeam.teamname,
+        content: filterGameData[0]?.homeTeam.teamname,
       },
       {
         id: 8,
         title: "Away Team:",
-        content: filterGameData[0].awayTeam.teamname,
+        content: filterGameData[0]?.awayTeam.teamname,
       },
       {
         id: 9,
         title: "Home Team Points:",
-        content: filterGameData[0].homeTeamPoints,
+        content: filterGameData[0]?.homeTeamPoints,
       },
       {
         id: 10,
         title: "Away Team Points:",
-        content: filterGameData[0].awayTeamPoints,
+        content: filterGameData[0]?.awayTeamPoints,
       },
       {
         id: 11,
@@ -420,36 +397,35 @@ const ManageGame = () => {
       {
         id: 13,
         title: "Winner:",
-        content: filterGameData[0].winningTeam,
+        content: filterGameData[0]?.winningTeam,
       },
       {
         id: 14,
         title: "Home Topsport Odds:",
-        content: filterGameData[0].homeTopTipperPoints,
+        content: filterGameData[0]?.homeTopTipperPoints,
       },
       {
         id: 15,
         title: "	Away Topsport Odds:",
-        content: filterGameData[0].awayTopTipperPoints,
+        content: filterGameData[0]?.awayTopTipperPoints,
       },
       {
         id: 16,
         title: "Draw Point:",
-        content: filterGameData[0].drawPoints,
+        content: filterGameData[0]?.drawPoints,
       },
       {
         id: 17,
         title: "Event ID:",
-        content: filterGameData[0].eventId,
+        content: filterGameData[0]?.eventId,
       },
       {
         id: 18,
         title: "Kingbot Tipping:",
-        content: filterGameData[0].kingbotTipping,
+        content: filterGameData[0]?.kingbotTipping,
       },
     ];
     dispatch(updateGameModalData(payload));
-    // dispatch(updateGameModalData(FILTERED_PAYLOAD));
     dispatch(updateGameModalState(true));
   };
   const columns = [
@@ -550,31 +526,77 @@ const ManageGame = () => {
           return (
             <>
               <Box display="flex" gap="10px">
-                <VisibilityIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => onOpenGameModal(value)}
-                />
-                <CheckCircleIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => onOpenDeclareWinnerModal(value)}
-                />
+                <Tooltip title="View Details" placement="top" arrow>
+                  <VisibilityIcon
+                    sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                    onClick={() => onOpenGameModal(value)}
+                  />
+                </Tooltip>
 
-                <DeleteIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => openModal(value, "delete")}
-                />
-                <EditIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => handleEditGame(value, rowData)}
-                />
-                <SendIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => onSendGameNotification(value)}
-                />
-                <HourglassTopIcon
-                  onClick={() => openModal(value, "started", rowData)}
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                />
+                {gameData?.data?.map((e) => {
+                  if (e._id === value) {
+                    return e.gameState === "open" ? (
+                      <>
+                        <Tooltip title="Declare Winner" placement="top" arrow>
+                          <CheckCircleIcon
+                            sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                            onClick={() => onOpenDeclareWinnerModal(value)}
+                          />
+                        </Tooltip>
+                      </>
+                    ) : (
+                      <Tooltip
+                        title="Winner Already Declared"
+                        placement="top"
+                        arrow
+                      >
+                        <CheckCircleIcon
+                          sx={{ cursor: "not-allowed", color: "#d3d3d3" }}
+                        />
+                      </Tooltip>
+                    );
+                  }
+                })}
+
+                <Tooltip title="Delete" placement="top" arrow>
+                  <DeleteIcon
+                    sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                    onClick={() => openModal(value, "delete")}
+                  />
+                </Tooltip>
+                <Tooltip title="Edit" placement="top" arrow>
+                  <EditIcon
+                    sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                    onClick={() => handleEditGame(value, rowData)}
+                  />
+                </Tooltip>
+
+                {gameData?.data?.map((e) => {
+                  if (e._id === value) {
+                    return e.winningTeam === "" ? (
+                      <>
+                        <Tooltip
+                          title="Send Game Start Notification"
+                          placement="top"
+                          arrow
+                        >
+                          <SendIcon
+                            sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                            onClick={() => onSendGameNotification(value)}
+                          />
+                        </Tooltip>
+                        <Tooltip title="Start Game" placement="top" arrow>
+                          <HourglassTopIcon
+                            onClick={() => openModal(value, "started", rowData)}
+                            sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+                          />
+                        </Tooltip>
+                      </>
+                    ) : (
+                      ""
+                    );
+                  }
+                })}
               </Box>
             </>
           );

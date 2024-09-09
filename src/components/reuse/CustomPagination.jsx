@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Box, Skeleton, Pagination } from "@mui/material";
 import { useSelector } from "react-redux";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
-
 const CustomPagination = (props) => {
   const { total, userList, rowsPerPage, mode } = props;
   const [totalPages, setTotalPages] = useState(0);
@@ -31,7 +30,6 @@ const CustomPagination = (props) => {
     }
     userList(reqParams);
   };
-
   useEffect(() => {
     if (rowsPerPage && total !== undefined) {
       const pages = Math.ceil(total / rowsPerPage);
@@ -41,7 +39,6 @@ const CustomPagination = (props) => {
       setTotalPages(0);
     }
   }, [rowsPerPage, total, selectedSport]);
-
   useEffect(() => {
     setCurrentPage(0);
   }, [selectedSport, currentModule]);
@@ -67,5 +64,4 @@ const CustomPagination = (props) => {
     </Box>
   );
 };
-
 export default CustomPagination;

@@ -44,11 +44,10 @@ export const GameDetailsHeading = styled(Typography)(() => ({
 }));
 export const GameDetailsTitle = styled(Typography)(() => ({
   color: "#1b1525 !important",
-  fontWeight: 600,
-  fontSize: "16px !important",
+  fontWeight: 550,
+  fontSize: "15px !important",
 }));
 export const GameDetailContent = styled(Typography)(() => ({
   color: "#777181 !important",
-  // fontWeight: 400,
   fontSize: "14px !important",
 }));

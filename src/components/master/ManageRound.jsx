@@ -153,8 +153,6 @@ const ManageRound = () => {
   }, [userDeleteSuccess, addRoundSuccess, updateRoundSuccess]);
 
   const handleEditRound = (value, rowData) => {
-    console.log(rowData?.rowData, "ROWDATA");
-    console.log(rowData?.rowData[2], "ROUNDTYPE");
     dispatch(setSelectedMode("edit"));
 
     const formattedStartDate = moment(rowData?.rowData[3].startDate).format(

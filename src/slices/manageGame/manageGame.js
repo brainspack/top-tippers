@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   gameData: {},
   allTeamData: {},
-  editGameData: null,
+  editGameData: [],
   selectedGameMode: "",
   openGameModal: false,
   gameModalData: [],
