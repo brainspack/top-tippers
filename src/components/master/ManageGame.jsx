@@ -65,6 +65,9 @@ const ManageGame = () => {
   const { gameData, allTeamData, editGameData, selectedGameMode } =
     useSelector(manageGameSelector);
   // console.log(gameData, "GAME DATA");
+
+  console.log(gameData, "sjajas");
+
   const { sportData } = useSelector(manageSportSelector);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
