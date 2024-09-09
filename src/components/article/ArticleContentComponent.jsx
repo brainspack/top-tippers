@@ -44,8 +44,6 @@ const ArticleContent = () => {
     },
   ] = useLazyGetArticleGetAndSearchApiByNameQuery();
 
-  console.log(listArticleData, "skajk");
-
   useEffect(() => {
     if (listArticleData && listArticleData?.data)
       dispatch(updateArticleData(listArticleData));

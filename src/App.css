@@ -302,15 +302,19 @@
   cursor: not-allowed !important;
 
 }
-.css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root{
-  height: 40px !important;
+.gameTimePicker .css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 35px !important;
+  font-size: 14px !important;
+}
+.gameTimePicker .css-i4bv87-MuiSvgIcon-root{
+  height:20px !important
+
 }
 
-
-/* .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+.gameTimePicker .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
   font-size: 15px !important;
   top: -9px !important;
-} */
+}
 
 .winnerSelect .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
   top: -3px !important;

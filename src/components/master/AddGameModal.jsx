@@ -48,9 +48,10 @@ const AddGameModal = (props) => {
   const dispatch = useDispatch();
   const { isModalVisible, modalSportName } = useSelector(userDataSelector);
   const { sportData } = useSelector(manageSportSelector);
-  const { selectedGameMode } = useSelector(manageGameSelector);
-  console.log(selectedGameMode, "selectedGameMode");
+  const { selectedGameMode, editGameData } = useSelector(manageGameSelector);
+  console.log(editGameData, "editGameData");
   const { roundData } = useSelector(manageRoundSelector);
+  const formattedDate = moment(editGameData?.gameDate).format("L");
 
   const {
     register,
@@ -93,6 +94,7 @@ const AddGameModal = (props) => {
       gameState: "open",
       season: "current",
       selectedSeason: "current",
+      winningTeam: "",
     }).unwrap();
     if (response?.code === 200) {
       dispatch(
@@ -123,16 +125,30 @@ const AddGameModal = (props) => {
     }
   };
   const onHandleUpdate = async (data) => {
+    console.log(data, "DATA");
+    const formattedDate = moment(data?.date).format(
+      "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
+    );
     const body = {
-      // roundId: initialData[0]?.roundId ? initialData[0]?.roundId : "",
-      // startDate: data?.startDate,
-      // endDate: data?.endDate,
-      // roundname: data?.roundname,
+      awayTeam: data?.awayTeam,
+      awayTeamPoints: data?.awayTeamPoints,
+      eventId: data?.eventId,
+      gameDate: formattedDate,
+      gameId: editGameData[0]._id,
+      gameState: "open",
+      gameTime: data?.time,
+      homeTeam: data?.homeTeam,
+      homeTeamPoints: data?.homeTeamPoints,
+      kingbotTipping: data?.kingbotTipping,
+      round: data?.round,
+      selectedSeason: "current",
+      sport: data?.sportId,
+      winningTeam: data?.winningTeam,
     };
+
     const response = await updateGameApi({
-      body: data,
+      body: body,
     }).unwrap();
-    console.log(response, "RESPOSNE");
     if (response?.code === 200) {
       dispatch(
         handleNotification({
@@ -156,13 +172,12 @@ const AddGameModal = (props) => {
   const [filteredRounds, setFilteredRounds] = useState([]);
   const selectedSportId = watch("sportId");
   useEffect(() => {
-    console.log("🚀 ~ AddGameModal ~ selectedSportId:", selectedSportId);
     if (selectedSportId) {
       const filtered = roundData?.data.filter(
         (round) => round?.sport?._id === selectedSportId
       );
       setFilteredRounds(filtered);
-      setValue("round", "");
+      // setValue("round", "");
     } else {
       setFilteredRounds([]);
     }
@@ -175,45 +190,40 @@ const AddGameModal = (props) => {
         (team) => team?.sport?._id === selectedSportId
       );
       setSelectTeam(filteredTeams);
-
-      setValue("homeTeam", "");
-      setValue("awayTeam", "");
+      // setValue("homeTeam", "");
+      // setValue("awayTeam", "");
     }
   }, [selectedSportId, allTeamData, setValue]);
-
-  console.log(initialData, "INITIAL");
   useEffect(() => {
-    if (initialData) {
-      setValue("awayTeam", initialData[0]?.awayTeam);
-      setValue("awayTeamPoints", initialData[0]?.awayTeamPoints);
-      setValue("date", initialData[0]?.date);
-      setValue("eventId", initialData[0]?.eventId);
-      setValue("homeTeam", initialData[0]?.homeTeam);
-      setValue("homeTeamPoints", initialData[0]?.homeTeamPoints);
-      setValue("kingbotTipping", initialData[0]?.kingbotTipping);
-      setValue("round", initialData[0]?.round);
-      setValue("sportId", initialData[0]?.sportId);
-      // setValue("time", initialData[0]?.time);
+    if (selectedGameMode === "editGame") {
+      setValue("awayTeam", editGameData[0]?.awayTeam?._id);
+      setValue("awayTeamPoints", editGameData[0]?.awayTeamPoints);
+      setValue("date", formattedDate);
+      setValue("eventId", editGameData[0]?.eventId);
+      setValue("homeTeam", editGameData[0]?.homeTeam?._id);
+      setValue("homeTeamPoints", editGameData[0]?.homeTeamPoints);
+      setValue("kingbotTipping", editGameData[0]?.kingbotTipping);
+      setValue("round", editGameData[0]?.round?._id);
+      setValue("sportId", editGameData[0]?.sport?._id);
+      setValue("time", editGameData[0]?.gameTime);
     } else {
       reset();
     }
-  }, [initialData, setValue, reset]);
-  // const formatInput = (value) => {
-  //   if (typeof value === "string") {
-  //     if (!value) return value;
-  //     return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
-  //   }
-  // };
+  }, [editGameData, setValue, reset]);
   const handleAddRound = () => {
-    // reset({
-    //   roundno: "",
-    //   roundname: "",
-    //   roundtype: "",
-    //   sportId: "",
-    //   startDate: "",
-    //   endDate: "",
-    //   roundId: "",
-    // });
+    reset({
+      sportId: "",
+      round: "",
+      awayTeam: "",
+      homeTeam: "",
+      date: "",
+      time: "",
+      homeTeamPoints: "",
+      awayTeamPoints: "",
+      eventId: "",
+      kingbotTipping: "",
+    });
+
     dispatch(setSelectedGameMode("addGame"));
     dispatch(setSelectedMode("round"));
     dispatch(updateModalVisibility(true));
@@ -263,7 +273,7 @@ const AddGameModal = (props) => {
                 sx={{
                   mt: 1,
                   padding: "0 15px 12px",
-                  height: "auto",
+                  height: initialData ? "650px" : "auto",
                   display: "flex",
                   justifyContent: "space-between",
                   flexDirection: "column",
@@ -312,11 +322,16 @@ const AddGameModal = (props) => {
                         </Select>
                       )}
                     />
-
                     <Box className="errorMsgParent">
-                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                        {errors.sportId?.message}
-                      </FormHelperText>
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <>
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.sportId?.message}
+                          </FormHelperText>
+                        </>
+                      )}
                     </Box>
                   </FormControl>
                 </Box>
@@ -354,8 +369,8 @@ const AddGameModal = (props) => {
                           {filteredRounds.length > 0 ? (
                             filteredRounds.map((rounds) => (
                               <MenuItem
-                                key={rounds._id}
-                                value={rounds._id}
+                                key={rounds?._id}
+                                value={rounds?._id}
                                 {...register("round")}
                               >
                                 {rounds?.roundname}
@@ -369,9 +384,15 @@ const AddGameModal = (props) => {
                     />
 
                     <Box className="errorMsgParent">
-                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                        {errors?.round?.message}
-                      </FormHelperText>
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <>
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.round?.message}
+                          </FormHelperText>
+                        </>
+                      )}
                     </Box>
                   </FormControl>
                 </Box>
@@ -413,8 +434,8 @@ const AddGameModal = (props) => {
                           {selectTeam.length > 0 ? (
                             selectTeam.map((team) => (
                               <MenuItem
-                                key={team._id}
-                                value={team._id}
+                                key={team?._id}
+                                value={team?._id}
                                 {...register("homeTeam")}
                               >
                                 {team?.teamname}
@@ -428,9 +449,15 @@ const AddGameModal = (props) => {
                     />
 
                     <Box className="errorMsgParent">
-                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                        {errors.homeTeam?.message}
-                      </FormHelperText>
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <>
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.homeTeam?.message}
+                          </FormHelperText>
+                        </>
+                      )}
                     </Box>
                   </FormControl>
                 </Box>
@@ -472,8 +499,8 @@ const AddGameModal = (props) => {
                           {selectTeam.length > 0 ? (
                             selectTeam.map((team) => (
                               <MenuItem
-                                key={team._id}
-                                value={team._id}
+                                key={team?._id}
+                                value={team?._id}
                                 {...register("awayTeam")}
                               >
                                 {team?.teamname}
@@ -487,9 +514,15 @@ const AddGameModal = (props) => {
                     />
 
                     <Box className="errorMsgParent">
-                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                        {errors.awayTeam?.message}
-                      </FormHelperText>
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <>
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.awayTeam?.message}
+                          </FormHelperText>
+                        </>
+                      )}
                     </Box>
                   </FormControl>
                 </Box>
@@ -521,6 +554,7 @@ const AddGameModal = (props) => {
                         clearErrors={clearErrors}
                         // initialData={initialData}
                         mode="game"
+                        selectedGameMode={selectedGameMode}
                       />
                     </Box>
                   </Box>
@@ -537,8 +571,16 @@ const AddGameModal = (props) => {
                       requiredInput="*"
                       inputLabel="Select Time :"
                     />
-                    <Box sx={{ display: "flex" }}>
-                      <CustomTimePicker control={control} setValue={setValue} />
+                    <Box
+                      className="gameTimePicker"
+                      sx={{ display: "flex", flexDirection: "column" }}
+                    >
+                      <CustomTimePicker
+                        control={control}
+                        setValue={setValue}
+                        errors={errors}
+                        initialData={initialData}
+                      />
                     </Box>
                   </Box>
                 </Box>
@@ -573,9 +615,15 @@ const AddGameModal = (props) => {
                   />
 
                   <Box className="errorMsgParent">
-                    <FormHelperText sx={{ color: "#d32f2f" }}>
-                      {errors.homeTeamPoints?.message}
-                    </FormHelperText>
+                    {initialData ? (
+                      ""
+                    ) : (
+                      <>
+                        <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                          {errors.homeTeamPoints?.message}
+                        </FormHelperText>
+                      </>
+                    )}
                   </Box>
                 </Box>
 
@@ -609,9 +657,15 @@ const AddGameModal = (props) => {
                   />
 
                   <Box className="errorMsgParent">
-                    <FormHelperText sx={{ color: "#d32f2f" }}>
-                      {errors.awayTeamPoints?.message}
-                    </FormHelperText>
+                    {initialData ? (
+                      ""
+                    ) : (
+                      <>
+                        <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                          {errors.awayTeamPoints?.message}
+                        </FormHelperText>
+                      </>
+                    )}
                   </Box>
                 </Box>
 
@@ -645,9 +699,15 @@ const AddGameModal = (props) => {
                   />
 
                   <Box className="errorMsgParent">
-                    <FormHelperText sx={{ color: "#d32f2f" }}>
-                      {errors.eventId?.message}
-                    </FormHelperText>
+                    {initialData ? (
+                      ""
+                    ) : (
+                      <>
+                        <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                          {errors.eventId?.message}
+                        </FormHelperText>
+                      </>
+                    )}
                   </Box>
                 </Box>
                 <Box
@@ -707,11 +767,16 @@ const AddGameModal = (props) => {
                         </Select>
                       )}
                     />
-
                     <Box className="errorMsgParent">
-                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                        {errors.kingbotTipping?.message}
-                      </FormHelperText>
+                      {initialData ? (
+                        ""
+                      ) : (
+                        <>
+                          <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                            {errors.kingbotTipping?.message}
+                          </FormHelperText>
+                        </>
+                      )}
                     </Box>
                   </FormControl>
                 </Box>

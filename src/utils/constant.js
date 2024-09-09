@@ -16,17 +16,6 @@ import moment from "moment";
 // ================= URL ==================
 
 export const BASE_URL = "http://localhost:3019/";
-// const { filteredGameData } = useSelector(manageGameSelector);
-// const formattedRoundStartDate = moment(
-//   filteredGameData[0].round.startDate
-// ).format("ddd MMM DD YYYY");
-// const formattedRoundEndDate = moment(filteredGameData[0].round.endDate).format(
-//   "ddd MMM DD YYYY"
-// );
-// const formattedGameDate = moment(filteredGameData[0].gameDate).format(
-//   "ddd MMM DD YYYY"
-// );
-// const formattedGameTime = moment(filteredGameData[0].gameDate).format("HH:mm");
 
 export const LOGIN_DATA = [
   {
@@ -53,7 +42,7 @@ export const ADMIN_LIST = [
     icon: <DashboardIcon sx={{ color: "white" }} />,
   },
   {
-    label: "Manage Users",
+    label: "Manage User",
     route: "/admin/users",
     icon: <PersonIcon sx={{ color: "white" }} />,
   },
@@ -237,97 +226,3 @@ export const ADD_SPORT_DATA = [
     // REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
   },
 ];
-
-///////////////////////////// filtered game data
-// export const FILTERED_PAYLOAD = [
-//   {
-//     id: 1,
-//     title: "Sports:",
-//     content: filteredGameData[0].sport.sportname,
-//   },
-//   {
-//     id: 2,
-//     title: "Season:",
-//     content: filteredGameData[0].season,
-//   },
-//   {
-//     id: 3,
-//     title: "Round No:",
-//     content: filteredGameData[0].round.roundno,
-//   },
-//   {
-//     id: 4,
-//     title: "Round Name:",
-//     content: filteredGameData[0].round.roundname,
-//   },
-//   {
-//     id: 5,
-//     title: "Round Start Date:",
-//     content: formattedRoundStartDate,
-//   },
-//   {
-//     id: 6,
-//     title: "Round End Date:",
-//     content: formattedRoundEndDate,
-//   },
-//   {
-//     id: 7,
-//     title: "Home Team:",
-//     content: filteredGameData[0].homeTeam.teamname,
-//   },
-//   {
-//     id: 8,
-//     title: "Away Team:",
-//     content: filteredGameData[0].awayTeam.teamname,
-//   },
-//   {
-//     id: 9,
-//     title: "Home Team Points:",
-//     content: filteredGameData[0].homeTeamPoints,
-//   },
-//   {
-//     id: 10,
-//     title: "Away Team Points:",
-//     content: filteredGameData[0].awayTeamPoints,
-//   },
-//   {
-//     id: 11,
-//     title: "Date:",
-//     content: formattedGameDate,
-//   },
-//   {
-//     id: 12,
-//     title: "Time:",
-//     content: formattedGameTime,
-//   },
-//   {
-//     id: 13,
-//     title: "Winner:",
-//     content: filteredGameData[0].winningTeam,
-//   },
-//   {
-//     id: 14,
-//     title: "Home Topsport Odds:",
-//     content: filteredGameData[0].homeTopTipperPoints,
-//   },
-//   {
-//     id: 15,
-//     title: "	Away Topsport Odds:",
-//     content: filteredGameData[0].awayTopTipperPoints,
-//   },
-//   {
-//     id: 16,
-//     title: "Draw Point:",
-//     content: filteredGameData[0].drawPoints,
-//   },
-//   {
-//     id: 17,
-//     title: "Event ID:",
-//     content: filteredGameData[0].eventId,
-//   },
-//   {
-//     id: 18,
-//     title: "Kingbot Tipping:",
-//     content: filteredGameData[0].kingbotTipping,
-//   },
-// ];

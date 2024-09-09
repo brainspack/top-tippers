@@ -22,7 +22,7 @@ const GameDetailsModal = ({ onClose, handleOpen }) => {
   const { openGameModal, gameModalData, filterdGameData } =
     useSelector(manageGameSelector);
   // console.log(gameModalData, "gameModalData");
-  console.log(filterdGameData, "filterdGameData");
+  // console.log(filterdGameData, "filterdGameData");
 
   return (
     <div>
@@ -41,9 +41,7 @@ const GameDetailsModal = ({ onClose, handleOpen }) => {
             width: 570,
             bgcolor: "background.paper",
             boxShadow: 24,
-            // p: 2,
             height: 550,
-            // border: "1px solid red",
           }}
         >
           <Box>

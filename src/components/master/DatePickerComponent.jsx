@@ -14,6 +14,7 @@ const DateRangePicker = ({
   clearErrors,
   setValue,
   mode,
+  selectedGameMode,
 }) => {
   const [startDate, setStartDate] = useState(null);
   const watchValue = watch(name);
@@ -94,17 +95,21 @@ const DateRangePicker = ({
                   {...register(name, { required: "Start date is required" })}
                   {...field}
                 />
-                <div className="errorMsgParent">
-                  <FormHelperText sx={{ color: "#D32F2F" }}>
-                    {errors[name]?.message}
-                  </FormHelperText>
-                </div>
+                {selectedGameMode === "editGame" ? (
+                  ""
+                ) : (
+                  <div className="errorMsgParent">
+                    <FormHelperText sx={{ color: "#D32F2F" }}>
+                      {errors[name]?.message}
+                    </FormHelperText>
+                  </div>
+                )}
               </Box>
             </>
           );
         }}
       />
-      {mode === "gameArticle" ? (
+      {mode === "game" ? (
         ""
       ) : (
         <Controller
