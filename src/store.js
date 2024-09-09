@@ -35,6 +35,7 @@ import listGamesApi from "./api/ListGames";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
 import articleReducer from "./slices/Article/article";
+import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
@@ -46,6 +47,7 @@ import updateGameApi from "./api/UpdateGame";
 import ArticleGetAndSearchApi from "./api/GetAndSearchArticle";
 import userListContentApi from "./api/listContent";
 import addUpdateContentApi from "./api/addUpdateContent";
+import userListAdApi from "./api/listAd";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -56,6 +58,7 @@ export const store = configureStore({
     manageSportSlice: manageSportReducer,
     faqsSlice: faqsReducer,
     articleSlice: articleReducer,
+    adSlice: adReducer,
     listContentSlice: listContentReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
@@ -96,6 +99,7 @@ export const store = configureStore({
     [ArticleGetAndSearchApi.reducerPath]: ArticleGetAndSearchApi.reducer,
     [userListContentApi.reducerPath]: userListContentApi.reducer,
     [addUpdateContentApi.reducerPath]: addUpdateContentApi.reducer,
+    [userListAdApi.reducerPath]: userListAdApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -137,7 +141,8 @@ export const store = configureStore({
       addUpdateQuestionApi.middleware,
       ArticleGetAndSearchApi.middleware,
       userListContentApi.middleware,
-      addUpdateContentApi.middleware
+      addUpdateContentApi.middleware,
+      userListAdApi.middleware
     ),
 });
 setupListeners(store.dispatch);

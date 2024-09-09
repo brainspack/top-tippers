@@ -432,7 +432,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                       value: /^\d+$/,
                     },
                     message: "Stack Value must be a number",
-                    setValueAs: (value) => formatInput(value),
+                    // setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
