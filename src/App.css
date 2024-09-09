@@ -116,7 +116,6 @@
   background-color: #e5a842;
 }
 
-
 .user-menu {
   font-size: 14px !important;
 }
@@ -270,7 +269,7 @@
 /* Apply cursor not-allowed to any disabled FormControl */
 .MuiFormControl-root.Mui-disabled {
   cursor: not-allowed !important;
-  color:red !important
+  color: red !important;
 }
 
 /* Apply cursor not-allowed to disabled Select component */
@@ -278,16 +277,15 @@
 .MuiSelect-select.Mui-disabled,
 .MuiOutlinedInput-notchedOutline.Mui-disabled {
   cursor: not-allowed !important;
-  color:red !important
+  color: red !important;
   /* background-color: #f0f0f0;
   border: 1px solid #ddd; */
- 
 }
 
 /* Apply cursor not-allowed to the notched outline (border) of OutlinedInput when disabled */
 .Mui-disabled .MuiOutlinedInput-notchedOutline {
   cursor: not-allowed !important;
-  color:red !important
+  color: red !important;
   /* background-color: #f0f0f0;
   border: 1px solid #ddd; */
 }
@@ -295,26 +293,45 @@
 /* Apply cursor not-allowed to OutlinedInput input area when disabled */
 .MuiOutlinedInput-input.Mui-disabled {
   cursor: not-allowed !important;
-  color:red !important
+  color: red !important;
 }
 /* In your CSS file or <style> tag */
 .date-picker-disabled {
   cursor: not-allowed !important;
-
 }
-.css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root{
+.css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root {
   height: 40px !important;
 }
-
 
 /* .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
   font-size: 15px !important;
   top: -9px !important;
 } */
 
-.winnerSelect .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+.winnerSelect .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root {
   top: -3px !important;
 }
-.winnerSelect .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+.winnerSelect
+  .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
   height: 50px !important;
 }
+
+/* time picker in article form */
+
+/* .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0px 0px 0px 14px !important;
+}
+
+.css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root {
+  padding: 0px !important;
+}
+.css-1dba6qr-MuiFormControl-root-MuiTextField-root {
+  width: 100% !important;
+} */
+
+/* @media (max-width: 899.95px) {
+  .tss-1cibt4j-MUIDataTableBodyRow-root-MUIDataTableBody-lastStackedCell
+    td:last-child {
+    border-bottom: 1px solid #e5a842 !important;
+  }
+} */
