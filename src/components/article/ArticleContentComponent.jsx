@@ -26,6 +26,7 @@ import { AddSportBtn } from "../master/masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
+import ControlledSwitches from "../SwitchComponent";
 
 const ArticleContent = () => {
   const navigate = useNavigate();
@@ -99,6 +100,19 @@ const ArticleContent = () => {
             fontWeight: "600",
           },
         }),
+        customBodyRender: (value, rowData) => {
+          return (
+            <>
+              <ControlledSwitches
+              //   value={value}
+              //   rowData={rowData}
+              //   statusChangeApi={deactivateUser}
+              //   deactivateUserData={deactivateUserData}
+              //   userList={userList}
+              />
+            </>
+          );
+        },
       },
     },
 
