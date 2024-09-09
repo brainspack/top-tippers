@@ -40,6 +40,7 @@ import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
 import listQuestionApi from "./api/ListQuestion";
 import deleteQuestionApi from "./api/DeleteQuestion";
+import addArticleApi from "./api/AddArticle";
 import sendGameNotificationApi from "./api/SendGameStartNotification";
 import listTopicApi from "./api/listTopic";
 import updateGameApi from "./api/UpdateGame";
@@ -83,6 +84,7 @@ export const store = configureStore({
     [listRoundsApi.reducerPath]: listRoundsApi.reducer,
     [deleteRoundApi.reducerPath]: deleteRoundApi.reducer,
     [updateRoundApi.reducerPath]: updateRoundApi.reducer,
+    [addArticleApi.reducerPath]: addArticleApi.reducer,
     [listGamesApi.reducerPath]: listGamesApi.reducer,
     [deleteCompetitionApi.reducerPath]: deleteCompetitionApi.reducer,
     [setInviteAndCompButtonApi.reducerPath]: setInviteAndCompButtonApi.reducer,
@@ -118,6 +120,7 @@ export const store = configureStore({
       addTeamApi.middleware,
       addRoundApi.middleware,
       addGameApi.middleware,
+      addArticleApi.middleware,
       updateTeamApi.middleware,
       addUpdateSportApi.middleware,
       sendGameNotificationApi.middleware,

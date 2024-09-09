@@ -17,7 +17,6 @@ export const ArticleFormWrapper = styled(Box)(() => ({
 export const FormInner = styled(Box)(() => ({
   width: "100%",
   height: "70px",
-  //   backgroundColor: "red",
   display: "flex",
-  gap: "5px",
+  justifyContent: "space-between",
 }));
