@@ -7,6 +7,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import {
   Box,
+  Button,
   FormControl,
   FormHelperText,
   IconButton,
@@ -36,11 +37,17 @@ import { updateSportList } from "../../slices/manageTeam/manageTeam";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
 import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
 import UploadIcon from "@mui/icons-material/Upload";
+import CustomTimePicker from "../reuse/CustomTimePicker";
+import JoditEditor from "jodit-react";
+import TextEditor from "./TextEditor";
+import { useAddArticleByNameMutation } from "../../api/AddArticle";
+import { handleNotification } from "../../slices/Snackbar";
 
 function AddArticleForm() {
   const dispatch = useDispatch();
   const { roundData } = useSelector(manageRoundSelector);
   const { allTeamData, gameData } = useSelector(manageGameSelector);
+  const [content, setContent] = useState("");
 
   console.log(gameData, "sjakj");
 
@@ -82,6 +89,10 @@ function AddArticleForm() {
       isSuccess: listGameSuccess,
     },
   ] = useListGamesByNameMutation();
+
+  //  // ADD ARTICLE API
+  const [addArticleApi, { data: addArticleData }] =
+    useAddArticleByNameMutation();
 
   // TEAM LIST
   useEffect(() => {
@@ -158,15 +169,11 @@ function AddArticleForm() {
   } = useForm({
     mode: "onChange",
 
-    // defaultValues: {
-    //   sportname: "",
-    //   description: "",
-    //   type: "",
-    //   bonus: "",
-    //   startDate: "",
-    //   endDate: "",
-    //   stack: "",
-    // },
+    defaultValues: {
+      sportId: "",
+      sportIdd: "",
+      game: "",
+    },
     criteriaMode: "all",
     shouldFocusError: true,
   });
@@ -177,9 +184,8 @@ function AddArticleForm() {
   console.log(filteredGames, "ff");
 
   const selectedSportId = watch("sportId");
+  const selectedSportIdd = watch("sportIdd");
   const selectedRoundId = watch("roundId");
-
-  console.log(selectedRoundId, "skaj");
 
   useEffect(() => {
     if (selectedSportId) {
@@ -194,18 +200,17 @@ function AddArticleForm() {
   }, [selectedSportId, roundData, setValue]);
 
   const [selectTeam, setSelectTeam] = useState([]);
-  console.log(selectTeam, "SELECT TEAM");
 
   useEffect(() => {
-    if (selectedSportId) {
+    if (selectedSportIdd) {
       const filteredTeams = allTeamData?.data.filter(
-        (team) => team?.sport?._id === selectedSportId
+        (team) => team?.sport?._id === selectedSportIdd
       );
       setSelectTeam(filteredTeams);
 
       setValue("team", "");
     }
-  }, [selectedSportId, allTeamData, setValue]);
+  }, [selectedSportIdd, allTeamData, setValue]);
 
   // Filter games based on selected round
   useEffect(() => {
@@ -219,10 +224,50 @@ function AddArticleForm() {
     }
   }, [selectedRoundId, gameData]);
 
+  const onhandleSubmit = async (data) => {
+    // e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", data?.title);
+    formData.append("content", content);
+    formData.append("addedby", data?.addedby);
+    formData.append("files", data?.title);
+    formData.append("htmlFiles", data?.title);
+    formData.append("game", data?.game);
+    formData.append("url", data?.url);
+    formData.append("isActive", true);
+    formData.append("publishDateTime", data?.publishDateTime);
+    formData.append("teamId", data?.team);
+    formData.append("articleType", data?.title);
+
+    try {
+      const result = await addArticleApi(formData).unwrap();
+      if (result?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Failed to add Article:", error);
+    }
+  };
+
   return (
     <ArticleFormContainer>
       <ArticleFormWrapper>
-        <form>
+        <form onSubmit={handleSubmit(onhandleSubmit)}>
           <Box
             sx={{
               width: "100%",
@@ -236,10 +281,11 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "13px",
+                  gap: "10px",
                 }}
               >
                 <CustomAddSportLabel requiredInput="*" inputLabel="Title:" />
@@ -255,22 +301,23 @@ function AddArticleForm() {
                   }}
                   {...register("title", {
                     required: "Title is required",
-                    //   setValueAs: (value) => formatInput(value),
                   })}
                 />
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors.title?.message}
+                  </FormHelperText>
+                </div>
               </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.title?.message}
-                </FormHelperText>
-              </div>
+
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "13px",
+                  gap: "10px",
                 }}
               >
                 <CustomAddSportLabel requiredInput="*" inputLabel="Writter:" />
@@ -289,19 +336,21 @@ function AddArticleForm() {
                     //   setValueAs: (value) => formatInput(value),
                   })}
                 />
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors.addedby?.message}
+                  </FormHelperText>
+                </div>
               </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.addedby?.message}
-                </FormHelperText>
-              </div>
+
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "13px",
+                  gap: "10px",
                 }}
               >
                 <CustomAddSportLabel
@@ -320,22 +369,23 @@ function AddArticleForm() {
                   }}
                   {...register("url", {
                     required: "Url is required",
-                    //   setValueAs: (value) => formatInput(value),
                   })}
                 />
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors.url?.message}
+                  </FormHelperText>
+                </div>
               </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.url?.message}
-                </FormHelperText>
-              </div>
+
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "13px",
+                  gap: "10px",
                 }}
               >
                 <CustomAddSportLabel
@@ -386,7 +436,8 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -409,35 +460,31 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
                 }}
               >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Select start date and end date:"
-                />
-                <Box sx={{ display: "flex" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      sx={{ padding: "0px", height: "34px", width: "100%" }}
-                      components={["TimePicker"]}
-                    >
-                      <TimePicker
-                        {...register("time")}
-                        sx={{ padding: " !important" }}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                <CustomAddSportLabel requiredInput="*" inputLabel="Time:" />
+                <Box
+                  className="articleTimePicker"
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  <CustomTimePicker
+                    control={control}
+                    setValue={setValue}
+                    errors={errors}
+                  />
                 </Box>
               </div>
 
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -450,7 +497,7 @@ function AddArticleForm() {
                 <Controller
                   name="file"
                   control={control}
-                  rules={{ required: "File is required" }}
+                  // rules={{ required: "File is required" }}
                   render={({ field }) => (
                     <>
                       <input
@@ -486,16 +533,18 @@ function AddArticleForm() {
                     </>
                   )}
                 />
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors.file?.message}
+                  </FormHelperText>
+                </div>
               </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.file?.message}
-                </FormHelperText>
-              </div>
+
               <div
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "24%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -509,7 +558,7 @@ function AddArticleForm() {
                 <Controller
                   name="htmlFiles"
                   control={control}
-                  rules={{ required: "File is required" }}
+                  // rules={{ required: "File is required" }}
                   render={({ field }) => (
                     <>
                       <input
@@ -545,18 +594,19 @@ function AddArticleForm() {
                     </>
                   )}
                 />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.htmlFiles?.message}
-                </FormHelperText>
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors.htmlFiles?.message}
+                  </FormHelperText>
+                </div>
               </div>
             </FormInner>
             <FormInner>
               <Box
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "19%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -569,10 +619,10 @@ function AddArticleForm() {
                 <FormControl
                   fullWidth
                   error={!!errors.sportId}
-                  {...register("sportId")}
+                  {...register("sportIdd")}
                 >
                   <Controller
-                    name="sportId"
+                    name="sportIdd"
                     control={control}
                     rules={{ required: "Select Sport is required" }}
                     render={({ field }) => (
@@ -585,7 +635,7 @@ function AddArticleForm() {
                           fontSize: "14px",
                           height: "34px",
                         }}
-                        {...register("sportId")}
+                        {...register("sportIdd")}
                       >
                         <MenuItem sx={{ color: "grey !important" }} disabled>
                           Select a sport
@@ -594,7 +644,7 @@ function AddArticleForm() {
                           <MenuItem
                             key={sport?._id}
                             value={sport?._id}
-                            {...register("sportId")}
+                            {...register("sportIdd")}
                           >
                             {sport?.sportname}
                           </MenuItem>
@@ -604,7 +654,7 @@ function AddArticleForm() {
                   />
                   <Box className="errorMsgParent">
                     <FormHelperText sx={{ ml: 0, color: "#D32F2F" }}>
-                      {errors.sportId?.message}
+                      {errors.sportIdd?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
@@ -612,7 +662,8 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "19%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -651,7 +702,7 @@ function AddArticleForm() {
                             </MenuItem>
                           ))
                         ) : (
-                          <MenuItem disabled>No home team available</MenuItem>
+                          <MenuItem disabled>No team available</MenuItem>
                         )}
                       </Select>
                     )}
@@ -659,7 +710,7 @@ function AddArticleForm() {
 
                   <Box className="errorMsgParent">
                     <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.homeTeam?.message}
+                      {errors.team?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
@@ -667,7 +718,8 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "19%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -716,7 +768,8 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "19%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -773,7 +826,8 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  width: "100%",
+                  // width: "100%",
+                  width: "19%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "13px",
@@ -781,12 +835,12 @@ function AddArticleForm() {
               >
                 <CustomAddSportLabel
                   requiredInput="*"
-                  inputLabel="Select Round :"
+                  inputLabel="Select Game :"
                 />
 
-                <FormControl fullWidth {...register("gameId")}>
+                <FormControl fullWidth {...register("game")}>
                   <Controller
-                    name="gameId"
+                    name="game"
                     //   disabled={Boolean(initialData)}
                     control={control}
                     rules={{ required: "Select game is required" }}
@@ -801,7 +855,7 @@ function AddArticleForm() {
                           height: "34px",
                         }}
                         //   disabled={Boolean(initialData)}
-                        {...register("gameId")}
+                        {...register("game")}
                       >
                         {filteredGames.length > 0 ? (
                           filteredGames.map((game) => {
@@ -811,7 +865,7 @@ function AddArticleForm() {
                               <MenuItem
                                 key={game._id}
                                 value={game._id}
-                                {...register("gameId")}
+                                {...register("game")}
                               >
                                 {`${game?.homeTeam?.teamname} vs ${game?.awayTeam?.teamname}`}
                               </MenuItem>
@@ -826,12 +880,21 @@ function AddArticleForm() {
 
                   <Box className="errorMsgParent">
                     <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors?.gameId?.message}
+                      {errors?.game?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
               </Box>
             </FormInner>
+          </Box>
+          <Box sx={{ height: "300px" }}>
+            <TextEditor content={content} setContent={setContent} />
+          </Box>
+          <Box sx={{ display: "flex", gap: "20px" }}>
+            <Button variant="contained">Draft</Button>
+            <Button variant="contained" type="submit">
+              Save
+            </Button>
           </Box>
         </form>
       </ArticleFormWrapper>

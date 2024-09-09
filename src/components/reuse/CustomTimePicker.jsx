@@ -74,7 +74,7 @@ const CustomTimePicker = ({ control, errors, initialData }) => {
           return (
             <>
               <TimePicker
-                label="Time"
+                // label="Time"
                 minutesStep={1}
                 value={field.value ? moment(field.value) : null}
                 onChange={(newValue) => {
