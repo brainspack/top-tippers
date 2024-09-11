@@ -9,17 +9,23 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { adDataSelector } from "../../slices/AdSlice/AdSelector";
 import { useGetUserListAdApiApiByNameMutation } from "../../api/listAd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { updateAdData } from "../../slices/AdSlice/Ad";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MUIDataTable from "mui-datatables";
 import CustomPagination from "../reuse/CustomPagination";
+import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
+import { updateSportData } from "../../slices/manageSport/manageSport";
+import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
+import AddAdModal from "./AddAdModal";
 
 const AdsContent = () => {
   const dispatch = useDispatch();
   const { adData } = useSelector(adDataSelector);
+  const { sportData } = useSelector(manageSportDataSelector);
   console.log(adData, "sjka");
+  const [transformedAdData, setTransformedAdData] = useState([]);
 
   const [
     userAdApi,
@@ -31,9 +37,14 @@ const AdsContent = () => {
     },
   ] = useGetUserListAdApiApiByNameMutation();
 
-  useEffect(() => {
-    if (userAdData?.data?.length) dispatch(updateAdData(userAdData));
-  }, [userAdData]);
+  const [
+    userListSport,
+    {
+      data: listSportData,
+      isSuccess: listSportSuccess,
+      isLoading: sportDataFetching,
+    },
+  ] = useGetUserListSportApiByNameMutation();
 
   useEffect(() => {
     const reqParams = {
@@ -43,6 +54,41 @@ const AdsContent = () => {
     };
     userAdApi(reqParams);
   }, []);
+
+  useEffect(() => {
+    const reqParams = {
+      page: 0,
+      sortValue: "",
+      sortOrder: "",
+    };
+    userListSport(reqParams);
+  }, []);
+
+  useEffect(() => {
+    if (listSportData && listSportData.data && listSportSuccess) {
+      dispatch(updateSportData(listSportData));
+
+      const sportIdMap = listSportData.data.reduce((acc, sport) => {
+        acc[sport._id] = sport.sportname;
+        return acc;
+      }, {});
+
+      console.log(sportIdMap, "sportIdMap");
+
+      const transformedData = userAdData?.data?.map((ad) => {
+        console.log(ad, "ad");
+
+        return {
+          ...ad,
+          sport: sportIdMap[ad.sport],
+        };
+      });
+
+      console.log(transformedData, "transformedData");
+
+      dispatch(updateAdData(transformedData));
+    }
+  }, [listSportData, userAdData, listSportSuccess, userAdSuccess]);
 
   const columns = [
     {
@@ -201,20 +247,16 @@ const AdsContent = () => {
         <ManageUsersWrapper>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>AD</ManageUsersHeading>
-            {/* <AddFaqsModal
-              AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
-              AddFaqsData={AddFaqsData}
-              faqsListTopicData={faqsListTopicData}
-            /> */}
+            <AddAdModal
+            // AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
+            // AddFaqsData={AddFaqsData}
+            // faqsListTopicData={faqsListTopicData}
+            />
           </Box>
 
           <SearchContainer>
             <ManageUserTableWrapper>
-              <MUIDataTable
-                data={adData?.data}
-                columns={columns}
-                options={options}
-              />
+              <MUIDataTable data={adData} columns={columns} options={options} />
             </ManageUserTableWrapper>
             {/* <CustomModal
               modal={modal}
