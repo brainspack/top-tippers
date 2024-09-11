@@ -297,6 +297,7 @@ const ManageCompetition = () => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+              heading={"Delete Competition"}
             />
           </SearchContainer>
         </ManageUsersWrapper>

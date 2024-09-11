@@ -3,12 +3,12 @@ import JoditEditor from "jodit-react";
 
 const TextEditor = ({ placeholder, content, setContent }) => {
   const editor = useRef(null);
-  //   const [content, setContent] = useState("");
-  //   console.log(content, "CONTENT");
   const config = useMemo(
     () => ({
       readonly: false,
-      placeholder: placeholder || "Start typing...",
+      height: 400,
+      minHeight: 200,
+      placeholder: placeholder || "Start writing...",
     }),
     [placeholder]
   );
@@ -19,7 +19,8 @@ const TextEditor = ({ placeholder, content, setContent }) => {
       value={content}
       config={config}
       tabIndex={1}
-      onChange={(newContent) => setContent(newContent)}
+      onBlur={(newContent) => setContent(newContent)}
+      onChange={(newContent) => {}}
     />
   );
 };

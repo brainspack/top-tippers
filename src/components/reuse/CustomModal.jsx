@@ -1,24 +1,31 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { CustomCancelButton, CustomDeleteButton } from "./reuseStyled";
+import {
+  CustomCancelButton,
+  CustomDeleteButton,
+  DeleteContent,
+  DeleteHeading,
+} from "./reuseStyled";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import WarningIcon from "@mui/icons-material/Warning";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  height: 370,
+  width: 650,
+  height: 200,
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 4,
   outline: "none",
   borderRadius: "10px",
 };
 
 const CustomModal = (props) => {
-  const { modal, closeModal, content, action } = props;
+  const { modal, closeModal, content, action, heading } = props;
 
   return (
     <div>
@@ -31,17 +38,57 @@ const CustomModal = (props) => {
         <Box sx={style}>
           <Box
             sx={{
-              height: "100%",
-              width: "100%",
-              // border: "1px solid red",
+              height: 130,
+              width: 550,
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
               alignItems: "center",
+              // justifyContent: "space-between",
+              gap: "20px",
+
+              p: 2,
             }}
           >
+            <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+              <WarningIcon sx={{ color: "#f15e5e", fontSize: "70px" }} />
+            </Box>
             <Box>
-              <CancelIcon sx={{ color: "#f15e5e", fontSize: "90px" }} />
+              <DeleteHeading>{heading}</DeleteHeading>
+              <DeleteContent>{content}</DeleteContent>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: "10px",
+              width: "98%",
+              height: 70,
+            }}
+          >
+            <CustomCancelButton onClick={closeModal}>Cancel</CustomCancelButton>
+            <CustomDeleteButton
+              variant="contained"
+              color="error"
+              onClick={() => {
+                action();
+                closeModal();
+              }}
+            >
+              Delete
+            </CustomDeleteButton>
+          </Box>
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+export default CustomModal;
+
+/////////////////////////////////////////////////////////////////////
+{
+  /* <Box>
+              <DeleteForeverIcon sx={{ color: "#f15e5e", fontSize: "90px" }} />
             </Box>
             <Box>
               <Typography>Are You Sure ?</Typography>
@@ -69,11 +116,5 @@ const CustomModal = (props) => {
               >
                 Delete
               </CustomDeleteButton>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
-    </div>
-  );
-};
-export default CustomModal;
+            </Box> */
+}

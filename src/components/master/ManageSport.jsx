@@ -394,6 +394,7 @@ const ManageSport = (props) => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+              heading={"Delete Sport"}
             />
           </SearchContainer>
         </ManageUsersWrapper>

@@ -335,6 +335,7 @@ const ManageRound = () => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+              heading={"Delete Round"}
             />
           </SearchContainer>
         </ManageUsersWrapper>

@@ -356,3 +356,8 @@
     border-bottom: 1px solid #e5a842 !important;
   }
 } */
+
+/* 
+.jodit-container:not(.jodit_inline) .jodit-workplace{
+height: 300px !important;
+} */

@@ -74,9 +74,7 @@ const ManageGame = () => {
   const [action, setAction] = useState(() => () => {});
   const openModal = (id, type, rowData) => {
     if (type === "delete") {
-      setModalContent(
-        "Are you sure you want to delete this game. If these teams already played, then this may cause issues. If you need to make a change to this game, then edit it (don't delete it)"
-      );
+      setModalContent("Are you sure you want to delete this game.");
       setAction(() => async () => {
         try {
           const response = await userDeleteApi({
@@ -687,6 +685,7 @@ const ManageGame = () => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+              heading={"Delete Game"}
             />
             <GameDetailsModal
               onClose={() => dispatch(updateGameModalState(false))}

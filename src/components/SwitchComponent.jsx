@@ -9,50 +9,67 @@ const ControlledSwitches = ({
   rowData,
   deactivateUserData,
 }) => {
+  console.log(rowData, "VALUE");
   const [checked, setChecked] = useState(value);
   const dispatch = useDispatch();
   const handleChange = async (event) => {
+    const isChecked = event.target.checked;
     const userId = rowData.rowData[5];
     const teamId = rowData.rowData[4];
-    if (userId) {
-      const response = await statusChangeApi({ userId: userId }).unwrap();
-      if (response?.code === 200) {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: response?.message,
-            severity: response?.code,
-          })
-        );
-      } else {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: response?.message,
-            severity: response?.code,
-          })
-        );
-      }
-    } else if (teamId) {
-      const response = await statusChangeApi({ teamId: teamId }).unwrap();
-      if (response?.code === 200) {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: response?.message,
-            severity: response?.code,
-          })
-        );
-      } else {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: response?.message,
-            severity: response?.code,
-          })
-        );
-      }
+    const articleId = rowData.rowData[2];
+    if (articleId) {
+      const response = await statusChangeApi({
+        _id: articleId,
+        isActive: isChecked,
+      }).unwrap();
+      dispatch(
+        handleNotification({
+          state: true,
+          message: response?.message,
+          severity: response?.code,
+        })
+      );
     }
+    // if (userId) {
+    //
+    //   if (response?.code === 200) {
+    //     dispatch(
+    //       handleNotification({
+    //         state: true,
+    //         message: response?.message,
+    //         severity: response?.code,
+    //       })
+    //     );
+    //   } else {
+    //     dispatch(
+    //       handleNotification({
+    //         state: true,
+    //         message: response?.message,
+    //         severity: response?.code,
+    //       })
+    //     );
+    //   }
+    // }
+    // else if (teamId) {
+    //   const response = await statusChangeApi({ teamId: teamId }).unwrap();
+    //   if (response?.code === 200) {
+    //     dispatch(
+    //       handleNotification({
+    //         state: true,
+    //         message: response?.message,
+    //         severity: response?.code,
+    //       })
+    //     );
+    //   } else {
+    //     dispatch(
+    //       handleNotification({
+    //         state: true,
+    //         message: response?.message,
+    //         severity: response?.code,
+    //       })
+    //     );
+    //   }
+    // }
   };
   useEffect(() => {
     setChecked(value);
