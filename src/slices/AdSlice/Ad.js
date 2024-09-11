@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  adData: {},
+  adData: [],
+  isAdModalVisible: false,
 };
 
 export const adSlice = createSlice({
@@ -11,8 +12,11 @@ export const adSlice = createSlice({
     updateAdData: (state, { payload }) => {
       state.adData = payload;
     },
+    updateAdModalVisibility: (state, { payload }) => {
+      state.isAdModalVisible = payload;
+    },
   },
 });
 
-export const { updateAdData } = adSlice.actions;
+export const { updateAdData, updateAdModalVisibility } = adSlice.actions;
 export default adSlice.reducer;
