@@ -345,6 +345,7 @@ const ManageTeam = () => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+              heading={"Delete Team"}
             />
           </SearchContainer>
         </ManageUsersWrapper>

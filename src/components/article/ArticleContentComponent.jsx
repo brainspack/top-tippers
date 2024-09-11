@@ -27,6 +27,9 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import ControlledSwitches from "../SwitchComponent";
+import { useDeleteArticleByNameMutation } from "../../api/DeleteArticle";
+import { handleNotification } from "../../slices/Snackbar";
+import CustomModal from "../reuse/CustomModal";
 
 const ArticleContent = () => {
   const navigate = useNavigate();
@@ -34,8 +37,54 @@ const ArticleContent = () => {
   const { articleData } = useSelector(articleDataSelector);
   const [searchString, setSearchString] = useState("");
 
-  console.log(articleData, "data");
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalContent] = useState("");
+  const [action, setAction] = useState(() => () => {});
+  const openModal = (id, type) => {
+    if (type === "delete") {
+      setModalContent("Do you want to delete this record?");
+      setAction(() => async () => {
+        try {
+          const response = await articleDeleteApi({
+            isDeleted: true,
+            _id: id,
+          }).unwrap();
 
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
+        } catch (error) {}
+      });
+    }
+
+    setModal(true);
+  };
+  const closeModal = () => {
+    setModal(false);
+  };
+  const [
+    articleDeleteApi,
+    {
+      data: articleDeleteData,
+      isLoading,
+      error,
+      isSuccess: articleDeleteSuccess,
+    },
+  ] = useDeleteArticleByNameMutation();
   const [
     userListArticle,
     {
@@ -66,7 +115,7 @@ const ArticleContent = () => {
       sortOrder: "",
     };
     userListArticle(reqParams);
-  }, []);
+  }, [articleDeleteSuccess]);
 
   const columns = [
     {
@@ -102,11 +151,12 @@ const ArticleContent = () => {
           return (
             <>
               <ControlledSwitches
-              //   value={value}
-              //   rowData={rowData}
-              //   statusChangeApi={deactivateUser}
-              //   deactivateUserData={deactivateUserData}
-              //   userList={userList}
+                value={value}
+                rowData={rowData}
+                statusChangeApi={articleDeleteApi}
+                deactivateUserData={articleDeleteData}
+
+                //   userList={userList}
               />
             </>
           );
@@ -136,7 +186,7 @@ const ArticleContent = () => {
               ></EditIcon>
               <DeleteIcon
                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                // onClick={() => openModal(value, "delete")}
+                onClick={() => openModal(value, "delete")}
               />
             </Box>
           </>
@@ -212,12 +262,13 @@ const ArticleContent = () => {
                 options={options}
               />
             </ManageUserTableWrapper>
-            {/* <CustomModal
+            <CustomModal
               modal={modal}
               closeModal={closeModal}
               content={modalTitle}
               action={action}
-            /> */}
+              heading={"Delete Article"}
+            />
           </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>

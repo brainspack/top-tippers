@@ -47,6 +47,7 @@ import listTopicApi from "./api/listTopic";
 import updateGameApi from "./api/UpdateGame";
 import ArticleGetAndSearchApi from "./api/GetAndSearchArticle";
 import userListContentApi from "./api/listContent";
+import deleteArticleApi from "./api/DeleteArticle";
 import addUpdateContentApi from "./api/addUpdateContent";
 import userListAdApi from "./api/listAd";
 export const store = configureStore({
@@ -86,6 +87,7 @@ export const store = configureStore({
     [addUpdateSportApi.reducerPath]: addUpdateSportApi.reducer,
     [listRoundsApi.reducerPath]: listRoundsApi.reducer,
     [deleteRoundApi.reducerPath]: deleteRoundApi.reducer,
+    [deleteArticleApi.reducerPath]: deleteArticleApi.reducer,
     [updateRoundApi.reducerPath]: updateRoundApi.reducer,
     [addArticleApi.reducerPath]: addArticleApi.reducer,
     [listGamesApi.reducerPath]: listGamesApi.reducer,
@@ -130,6 +132,7 @@ export const store = configureStore({
       sendGameNotificationApi.middleware,
       listRoundsApi.middleware,
       deleteRoundApi.middleware,
+      deleteArticleApi.middleware,
       updateRoundApi.middleware,
       listGamesApi.middleware,
       deleteGameApi.middleware,

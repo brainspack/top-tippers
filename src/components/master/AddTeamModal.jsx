@@ -64,6 +64,7 @@ const AddTeamModal = (props) => {
     sportid: "",
   });
   const [image, setImage] = useState(null);
+  console.log(image, "INSIDE TEAM IMAGE");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

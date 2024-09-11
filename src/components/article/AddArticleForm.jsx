@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ArticleFormContainer,
   ArticleFormWrapper,
+  CustomBtn,
   FormInner,
 } from "./ArticleFormStyle";
 import { Controller, useForm } from "react-hook-form";
@@ -42,14 +43,14 @@ import JoditEditor from "jodit-react";
 import TextEditor from "./TextEditor";
 import { useAddArticleByNameMutation } from "../../api/AddArticle";
 import { handleNotification } from "../../slices/Snackbar";
+import { useNavigate } from "react-router-dom";
+import CustomTextEditor from "./TextEditor";
 
 function AddArticleForm() {
   const dispatch = useDispatch();
   const { roundData } = useSelector(manageRoundSelector);
   const { allTeamData, gameData } = useSelector(manageGameSelector);
-  const [content, setContent] = useState("");
-
-  console.log(gameData, "sjakj");
+  // const [content, setContent] = useState("");
 
   // ROUND API
   const [
@@ -91,8 +92,10 @@ function AddArticleForm() {
   ] = useListGamesByNameMutation();
 
   //  // ADD ARTICLE API
-  const [addArticleApi, { data: addArticleData }] =
-    useAddArticleByNameMutation();
+  const [
+    addArticleApi,
+    { data: addArticleData, isSuccess: addArticleSuccess },
+  ] = useAddArticleByNameMutation();
 
   // TEAM LIST
   useEffect(() => {
@@ -173,6 +176,7 @@ function AddArticleForm() {
       sportId: "",
       sportIdd: "",
       game: "",
+      articleType: "",
     },
     criteriaMode: "all",
     shouldFocusError: true,
@@ -180,6 +184,7 @@ function AddArticleForm() {
 
   const [filteredRounds, setFilteredRounds] = useState([]);
   const [filteredGames, setFilteredGames] = useState([]);
+  const [content, setContent] = useState("");
 
   console.log(filteredGames, "ff");
 
@@ -224,6 +229,33 @@ function AddArticleForm() {
     }
   }, [selectedRoundId, gameData]);
 
+  ///// Image Uploader
+  const [teamDetails, setTeamDetails] = useState({
+    file: null,
+  });
+
+  const [image, setImage] = useState(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        return;
+      }
+      setTeamDetails((prevDetails) => ({
+        ...prevDetails,
+        file: file,
+      }));
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const navigate = useNavigate();
   const onhandleSubmit = async (data) => {
     // e.preventDefault();
 
@@ -231,14 +263,14 @@ function AddArticleForm() {
     formData.append("title", data?.title);
     formData.append("content", content);
     formData.append("addedby", data?.addedby);
-    formData.append("files", data?.title);
-    formData.append("htmlFiles", data?.title);
+    formData.append("files", teamDetails?.file);
+    formData.append("htmlFiles", teamDetails?.htmlFiles);
     formData.append("game", data?.game);
     formData.append("url", data?.url);
     formData.append("isActive", true);
     formData.append("publishDateTime", data?.publishDateTime);
     formData.append("teamId", data?.team);
-    formData.append("articleType", data?.title);
+    formData.append("articleType", data?.articleType);
 
     try {
       const result = await addArticleApi(formData).unwrap();
@@ -250,6 +282,7 @@ function AddArticleForm() {
             severity: result?.code,
           })
         );
+        navigate("/admin/ladder");
       } else {
         dispatch(
           handleNotification({
@@ -266,22 +299,21 @@ function AddArticleForm() {
 
   return (
     <ArticleFormContainer>
-      <ArticleFormWrapper>
-        <form onSubmit={handleSubmit(onhandleSubmit)}>
+      <form onSubmit={handleSubmit(onhandleSubmit)}>
+        <ArticleFormWrapper>
           <Box
             sx={{
               width: "100%",
-              height: "250px",
+              height: "auto",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              gap: "30px",
             }}
           >
             <FormInner>
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -313,7 +345,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -333,7 +364,6 @@ function AddArticleForm() {
                   }}
                   {...register("addedby", {
                     required: "Writter Name is required",
-                    //   setValueAs: (value) => formatInput(value),
                   })}
                 />
                 <div className="errorMsgParent">
@@ -346,7 +376,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -372,7 +401,7 @@ function AddArticleForm() {
                   })}
                 />
                 <div className="errorMsgParent">
-                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                  <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
                     {errors.url?.message}
                   </FormHelperText>
                 </div>
@@ -381,7 +410,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -436,7 +464,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -460,7 +487,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -483,7 +509,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -494,45 +519,42 @@ function AddArticleForm() {
                   requiredInput="*"
                   inputLabel="Article Image/Video:"
                 />
-                <Controller
+                {/* <Controller
                   name="file"
                   control={control}
-                  // rules={{ required: "File is required" }}
-                  render={({ field }) => (
-                    <>
-                      <input
-                        type="file"
-                        id="file-upload"
-                        style={{ display: "none" }}
-                        {...field}
-                      />
-                      <label
-                        htmlFor="file-upload"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          width: "100%",
-                          height: "34px",
-                          cursor: "pointer",
-                          background: "white",
-                          borderRadius: "4px",
-                          textAlign: "center",
-                          border: "1px black !important",
-                          // "&:hover": {
-                          //   borderColor: "black",
-                          // },
-                        }}
-                      >
-                        <IconButton component="span">
-                          <UploadIcon />
-                        </IconButton>
-                        <span style={{ marginLeft: "8px" }}>
-                          Click to upload
-                        </span>
-                      </label>
-                    </>
-                  )}
-                />
+                  rules={{ required: "File is required" }}
+                  render={({ field }) => ( */}
+                <>
+                  <input
+                    accept="image/*"
+                    id="upload-image"
+                    type="file"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    // {...field}
+                  />
+                  <label
+                    htmlFor="upload-image"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                      height: "34px",
+                      cursor: "pointer",
+                      background: "white",
+                      borderRadius: "4px",
+                      textAlign: "center",
+                      border: "1px black !important",
+                    }}
+                  >
+                    <IconButton component="span">
+                      <UploadIcon />
+                    </IconButton>
+                    <span style={{ marginLeft: "8px" }}>Click to upload</span>
+                  </label>
+                </>
+                {/* )} */}
+                {/* /> */}
                 <div className="errorMsgParent">
                   <FormHelperText sx={{ color: "#d32f2f" }}>
                     {errors.file?.message}
@@ -543,7 +565,6 @@ function AddArticleForm() {
               <div
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "24%",
                   display: "flex",
                   flexDirection: "column",
@@ -555,45 +576,41 @@ function AddArticleForm() {
                   inputLabel="TopSport HTML Banner:"
                 />
 
-                <Controller
+                {/* <Controller
                   name="htmlFiles"
                   control={control}
-                  // rules={{ required: "File is required" }}
-                  render={({ field }) => (
-                    <>
-                      <input
-                        type="file"
-                        id="file-upload"
-                        style={{ display: "none" }}
-                        {...field}
-                      />
-                      <label
-                        htmlFor="file-upload"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          width: "100%",
-                          height: "34px",
-                          cursor: "pointer",
-                          background: "white",
-                          borderRadius: "4px",
-                          textAlign: "center",
-                          border: "1px black !important",
-                          // "&:hover": {
-                          //   borderColor: "black",
-                          // },
-                        }}
-                      >
-                        <IconButton component="span">
-                          <UploadIcon />
-                        </IconButton>
-                        <span style={{ marginLeft: "8px" }}>
-                          Click to upload
-                        </span>
-                      </label>
-                    </>
-                  )}
-                />
+                  rules={{ required: "File is required" }}
+                  render={({ field }) => ( */}
+                <>
+                  <input
+                    type="file"
+                    id="file-upload"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    // {...field}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                      height: "34px",
+                      cursor: "pointer",
+                      background: "white",
+                      borderRadius: "4px",
+                      textAlign: "center",
+                      border: "1px black !important",
+                    }}
+                  >
+                    <IconButton component="span">
+                      <UploadIcon />
+                    </IconButton>
+                    <span style={{ marginLeft: "8px" }}>Click to upload</span>
+                  </label>
+                </>
+                {/* )}
+                /> */}
                 <div className="errorMsgParent">
                   <FormHelperText sx={{ color: "#d32f2f" }}>
                     {errors.htmlFiles?.message}
@@ -605,7 +622,6 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "19%",
                   display: "flex",
                   flexDirection: "column",
@@ -662,7 +678,6 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "19%",
                   display: "flex",
                   flexDirection: "column",
@@ -718,7 +733,6 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "19%",
                   display: "flex",
                   flexDirection: "column",
@@ -768,7 +782,6 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "19%",
                   display: "flex",
                   flexDirection: "column",
@@ -783,7 +796,6 @@ function AddArticleForm() {
                 <FormControl fullWidth {...register("roundId")}>
                   <Controller
                     name="roundId"
-                    //   disabled={Boolean(initialData)}
                     control={control}
                     rules={{ required: "Select Round is required" }}
                     render={({ field }) => (
@@ -796,7 +808,6 @@ function AddArticleForm() {
                           fontSize: "14px",
                           height: "34px",
                         }}
-                        //   disabled={Boolean(initialData)}
                         {...register("roundId")}
                       >
                         {filteredRounds.length > 0 ? (
@@ -826,7 +837,6 @@ function AddArticleForm() {
               <Box
                 style={{
                   height: "auto",
-                  // width: "100%",
                   width: "19%",
                   display: "flex",
                   flexDirection: "column",
@@ -841,7 +851,6 @@ function AddArticleForm() {
                 <FormControl fullWidth {...register("game")}>
                   <Controller
                     name="game"
-                    //   disabled={Boolean(initialData)}
                     control={control}
                     rules={{ required: "Select game is required" }}
                     render={({ field }) => (
@@ -854,7 +863,6 @@ function AddArticleForm() {
                           fontSize: "14px",
                           height: "34px",
                         }}
-                        //   disabled={Boolean(initialData)}
                         {...register("game")}
                       >
                         {filteredGames.length > 0 ? (
@@ -887,17 +895,15 @@ function AddArticleForm() {
               </Box>
             </FormInner>
           </Box>
-          <Box sx={{ height: "300px" }}>
+          <Box sx={{ height: "auto" }}>
             <TextEditor content={content} setContent={setContent} />
           </Box>
           <Box sx={{ display: "flex", gap: "20px" }}>
-            <Button variant="contained">Draft</Button>
-            <Button variant="contained" type="submit">
-              Save
-            </Button>
+            <CustomBtn>Draft</CustomBtn>
+            <CustomBtn type="submit">Save</CustomBtn>
           </Box>
-        </form>
-      </ArticleFormWrapper>
+        </ArticleFormWrapper>
+      </form>
     </ArticleFormContainer>
   );
 }

@@ -378,6 +378,7 @@ const ManageUsers = () => {
               closeModal={closeModal}
               content={modalTitle}
               action={action}
+              heading={"Delete User"}
             />
           </SearchContainer>
         </ManageUsersWrapper>
