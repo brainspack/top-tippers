@@ -8,12 +8,15 @@ import {
   Divider,
   FormControl,
   FormHelperText,
+  IconButton,
   MenuItem,
   OutlinedInput,
   Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
+import UploadIcon from "@mui/icons-material/Upload";
+
 import {
   getUserDataForEdit,
   knowWhereHaveToOpenModal,
@@ -23,13 +26,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { handleNotification } from "../../slices/Snackbar";
 import { adDataSelector } from "../../slices/AdSlice/AdSelector";
-import { updateAdModalVisibility } from "../../slices/AdSlice/Ad";
+import {
+  getUserAdDataForEdit,
+  updateAdModalVisibility,
+} from "../../slices/AdSlice/Ad";
 import {
   AddSportBtn,
   AddSportSubmitBtn,
   BackModalBtn,
   SportModalHeading,
 } from "../master/masterStyled";
+import { updateSportList } from "../../slices/manageTeam/manageTeam";
+import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
+import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 
 const style = {
   position: "absolute",
@@ -41,31 +50,64 @@ const style = {
   boxShadow: 24,
   height: "584px",
   outline: "none",
+  overflow: "scroll",
   // p: 1,
 };
 
-export default function AddAdModal({ success, dataSupport, apiFunction }) {
+export default function AddAdModal({
+  success,
+  addUpdateAdData,
+  addUpdateAd,
+  listSportData,
+}) {
   const dispatch = useDispatch();
-  const { isAdModalVisible, setEditData, buttonClickedForModal } =
+  const { sportData } = useSelector(manageSportDataSelector);
+
+  const { isAdModalVisible, setEditDataForAd, buttonClickedForAdModal } =
     useSelector(adDataSelector);
+
+  const [selectedType, setSelectedType] = useState("");
+  const [showPageType, setShowPageType] = useState(false);
 
   const handleOpen = () => {
     reset({
-      sportname: "",
-      description: "",
-      startDate: "",
-      endDate: "",
+      name: "",
       type: "",
-      bonus: null,
-      stack: "",
+      mediaType: "",
+      userType: "",
+      sport: "",
+      page: "",
+      redirectUrl: "",
     });
-    // dispatch(knowWhereHaveToOpenModal("addSport"));
+    dispatch(knowWhereHaveToOpenModal("addAd"));
     dispatch(updateAdModalVisibility(true));
   };
   const handleClose = () => {
-    // dispatch(getUserDataForEdit(""));
+    dispatch(getUserAdDataForEdit(""));
     dispatch(updateAdModalVisibility(false));
+    reset();
+    setSelectedType("");
+    setShowPageType(false);
   };
+
+  //   // LIST SPORT API
+  //   const [
+  //     listSportApi,
+  //     {
+  //       data: listSportData,
+  //       isLoading,
+  //       error: listSportError,
+  //       success: listSportSuccess,
+  //     },
+  //   ] = useGetUserListSportApiByNameMutation();
+
+  //   // SPORT API
+  //   useEffect(() => {
+  //     if (listSportData && listSportData?.data)
+  //       dispatch(updateSportList(listSportData));
+  //   }, [listSportData]);
+
+  // //   console.log(listSportApi);
 
   const {
     register,
@@ -81,93 +123,154 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
     mode: "onChange",
 
     defaultValues: {
-      sportname: "",
-      description: "",
+      name: "",
       type: "",
-      bonus: "",
-      startDate: "",
-      endDate: "",
-      stack: "",
+      userType: "",
+      pages: "",
+      sport: "",
+      mediaType: "",
+      redirectUrl: "",
     },
     criteriaMode: "all",
     shouldFocusError: true,
   });
 
-  //   const onReset = async (userValue) => {
-  //     console.log(userValue, "sjka");
+  const onReset = async (userValue) => {
+    try {
+      console.log(userValue, "sjka");
 
-  //     let result = await Promise.resolve({
-  //       sportname: userValue?.sportname,
-  //       description: userValue?.description,
-  //       startDate: userValue?.startDate,
-  //       endDate: userValue?.endDate,
-  //       type: userValue?.type,
-  //       bonus: userValue?.bonus == true ? "True" : "False",
-  //       stack: userValue?.stack,
-  //     });
+      // Simulate a successful asynchronous operation
+      let result = await Promise.resolve({
+        name: userValue?.name,
+        type: userValue?.type,
+        mediaType: userValue?.mediaType,
+        userType: userValue?.userType,
+        sport: userValue?.sport,
+        pages: userValue?.page,
+        redirectUrl: userValue?.redirectUrl,
+      });
 
-  //     reset(result);
-  //   };
+      setSelectedType(userValue?.type);
+      setShowPageType(userValue?.type === "Topsport_banner");
 
-  //   const onSubmit = async (data) => {
-  //     let updated = getValues();
+      reset(result);
+    } catch (error) {
+      console.error("Error during reset:", error);
 
-  //     try {
-  //       const result = await apiFunction({
-  //         ...data,
-  //         bonus: data.bonus === "True",
-  //         sportId: setEditData?.length ? setEditData[0]?.id : "",
-  //       }).unwrap();
+      dispatch(
+        handleNotification({
+          state: true,
+          message:
+            "An error occurred while resetting the form. Please try again.",
+          severity: "error",
+        })
+      );
+    }
+  };
 
-  //       if (result?.code === 200) {
-  //         dispatch(
-  //           handleNotification({
-  //             state: true,
-  //             message: result?.message,
-  //             severity: result?.code,
-  //           })
-  //         );
-  //         reset({
-  //           sportname: "",
-  //           description: "",
-  //           startDate: "",
-  //           endDate: "",
-  //           type: "",
-  //           bonus: null,
-  //           stack: "",
-  //         });
-  //         handleClose();
-  //       } else {
-  //         dispatch(
-  //           handleNotification({
-  //             state: true,
-  //             message: result?.message,
-  //             severity: result?.code,
-  //           })
-  //         );
-  //       }
-  //     } catch (err) {
-  //       dispatch(
-  //         handleNotification({
-  //           state: true,
-  //           message: dataSupport?.message,
-  //           severity: dataSupport?.code,
-  //         })
-  //       );
-  //     }
-  //   };
+  ///// Image Uploader
+  const [teamDetails, setTeamDetails] = useState({
+    file: null,
+  });
 
-  //   useEffect(() => {
-  //     if (setEditData?.length && buttonClickedForModal === "edit") {
-  //       onReset(setEditData[0]);
-  //     }
-  //   }, [setEditData]);
+  const [image, setImage] = useState(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        return;
+      }
+      setTeamDetails((prevDetails) => ({
+        ...prevDetails,
+        file: file,
+      }));
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  useEffect(() => {
+    if (setEditDataForAd?.length && buttonClickedForAdModal === "edit") {
+      onReset(setEditDataForAd[0]);
+    }
+  }, [setEditDataForAd]);
+
+  const onSubmit = async (data) => {
+    console.log(data, "data");
+
+    const formData = new FormData();
+    formData.append("files", teamDetails?.file);
+    formData.append("name", data?.name);
+    formData.append("type", data?.type);
+    formData.append("redirectUrl", data?.redirectUrl);
+    formData.append("userType", data?.userType);
+    formData.append("mediaType", data?.mediaType);
+    formData.append("sport", data?.sport);
+    formData.append("pages", data?.pages);
+    formData.append(
+      "adId",
+      setEditDataForAd?.length ? setEditDataForAd[0].id : ""
+    );
+
+    try {
+      const result = await addUpdateAd(formData).unwrap();
+
+      if (result?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+        reset({
+          name: "",
+          type: "",
+          mediaType: "",
+          userType: "",
+          sport: "",
+          page: "",
+          redirectUrl: "",
+        });
+        handleClose();
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        handleNotification({
+          state: true,
+          message: addUpdateAdData?.message,
+          severity: addUpdateAdData?.code,
+        })
+      );
+    }
+  };
 
   const formatInput = (value) => {
     if (typeof value === "string") {
       if (!value) return value;
       return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
     }
+  };
+
+  const handleTypeChange = (event) => {
+    const value = event.target.value;
+
+    setSelectedType(value);
+    setShowPageType(value === "Topsport_banner");
   };
 
   return (
@@ -193,13 +296,13 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
               <CloseIcon className="close-icon" onClick={handleClose} />
             </SportModalHeading>
           </Box>
-          <form onSubmit={handleSubmit()}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Box
               id="modal-modal-description"
               sx={{
                 mt: 1,
                 padding: "0 15px 12px",
-                height: "475px",
+                height: "auto",
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -263,12 +366,19 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
                           height: "40px",
                         }}
                         {...field}
-                        {...register("type")}
+                        onChange={(event) => {
+                          console.log(event, "ev");
+
+                          handleTypeChange(event);
+                          field.onChange(event);
+                        }}
+                        // {...register("type")}
+                        value={field.value}
                       >
-                        <MenuItem value="TopSport Banner" {...register("type")}>
+                        <MenuItem value="topsport_banner" {...register("type")}>
                           TopSport Banner
                         </MenuItem>
-                        <MenuItem value="Tipping Success" {...register("type")}>
+                        <MenuItem value="tipping_success" {...register("type")}>
                           Tipping Success
                         </MenuItem>
                       </Select>
@@ -334,54 +444,58 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
                 </FormControl>
               </div>
 
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Select Page Type:"
-                />
-
-                <FormControl
-                  sx={{ m: 1, minWidth: 353 }}
-                  {...register("pages")}
+              {selectedType === "topsport_banner" ? (
+                <div
+                  style={{
+                    height: "auto",
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                  }}
                 >
-                  <Controller
-                    name="pages"
-                    control={control}
-                    rules={{ required: "Pages is required" }}
-                    render={({ field }) => (
-                      <Select
-                        displayEmpty
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...field}
-                        {...register("pages")}
-                      >
-                        <MenuItem value={"True"} {...register("pages")}>
-                          TIPPING PAGE
-                        </MenuItem>
-                        <MenuItem value={"False"} {...register("pages")}>
-                          SCORECARD PAGE
-                        </MenuItem>
-                      </Select>
-                    )}
+                  <CustomAddSportLabel
+                    requiredInput="*"
+                    inputLabel="Select Page Type:"
                   />
-                  <div className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.pages?.message}
-                    </FormHelperText>
-                  </div>
-                </FormControl>
-              </div>
+
+                  <FormControl
+                    sx={{ m: 1, minWidth: 353 }}
+                    {...register("pages")}
+                  >
+                    <Controller
+                      name="pages"
+                      control={control}
+                      rules={{ required: "Pages is required" }}
+                      render={({ field }) => (
+                        <Select
+                          displayEmpty
+                          sx={{
+                            fontSize: "14px",
+                            height: "40px",
+                          }}
+                          {...field}
+                          {...register("pages")}
+                        >
+                          <MenuItem value={"Tip"} {...register("pages")}>
+                            TIPPING PAGE
+                          </MenuItem>
+                          <MenuItem value={"Scorecard"} {...register("pages")}>
+                            SCORECARD PAGE
+                          </MenuItem>
+                        </Select>
+                      )}
+                    />
+                    <div className="errorMsgParent">
+                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                        {errors.pages?.message}
+                      </FormHelperText>
+                    </div>
+                  </FormControl>
+                </div>
+              ) : (
+                ""
+              )}
 
               <div
                 style={{
@@ -389,38 +503,43 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
                   width: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "10px",
+                  gap: "5px",
                 }}
               >
                 <CustomAddSportLabel
                   requiredInput="*"
-                  inputLabel="Select Sports Name:"
+                  inputLabel="Select Sports for team :"
                 />
-
                 <FormControl
-                  sx={{ m: 1, minWidth: 353 }}
+                  fullWidth
+                  error={!!errors.sport}
                   {...register("sport")}
                 >
                   <Controller
                     name="sport"
                     control={control}
-                    rules={{ required: "Sport Name is required" }}
+                    rules={{ required: "Select Sport is required" }}
                     render={({ field }) => (
                       <Select
+                        {...field}
                         displayEmpty
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
                         sx={{
                           fontSize: "14px",
-                          height: "40px",
+                          height: "34px",
                         }}
-                        {...field}
                         {...register("sport")}
                       >
-                        <MenuItem value={"True"} {...register("sport")}>
-                          True
-                        </MenuItem>
-                        <MenuItem value={"False"} {...register("sport")}>
-                          False
-                        </MenuItem>
+                        {listSportData?.data?.map((sport) => (
+                          <MenuItem
+                            key={sport?._id}
+                            value={sport?._id}
+                            {...register("sport")}
+                          >
+                            {sport?.sportname}
+                          </MenuItem>
+                        ))}
                       </Select>
                     )}
                   />
@@ -464,16 +583,16 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
                         {...field}
                         {...register("mediaType")}
                       >
-                        <MenuItem value={"True"} {...register("mediaType")}>
+                        <MenuItem value={"image"} {...register("mediaType")}>
                           image
                         </MenuItem>
-                        <MenuItem value={"False"} {...register("mediaType")}>
+                        <MenuItem value={"gif"} {...register("mediaType")}>
                           gif
                         </MenuItem>
-                        <MenuItem value={"False"} {...register("mediaType")}>
+                        <MenuItem value={"html"} {...register("mediaType")}>
                           html
                         </MenuItem>
-                        <MenuItem value={"False"} {...register("mediaType")}>
+                        <MenuItem value={"json"} {...register("mediaType")}>
                           json
                         </MenuItem>
                       </Select>
@@ -503,7 +622,6 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
 
                 <OutlinedInput
                   id="outlined-adornment-weight"
-                  placeholder={"Stack Value"}
                   sx={{
                     width: "100%",
                     height: "40px",
@@ -514,10 +632,7 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
                   }}
                   {...register("redirectUrl", {
                     required: "Redirect Url is required",
-                    pattern: {
-                      value: /^\d+$/,
-                    },
-                    message: "Stack Value must be a number",
+
                     // setValueAs: (value) => formatInput(value),
                   })}
                 />
@@ -526,6 +641,62 @@ export default function AddAdModal({ success, dataSupport, apiFunction }) {
                 <FormHelperText sx={{ color: "#d32f2f" }}>
                   {errors.redirectUrl?.message}
                 </FormHelperText>
+              </div>
+
+              <div
+                style={{
+                  height: "auto",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                {/* <CustomAddSportLabel
+                  requiredInput="*"
+                  inputLabel="Article Image/Video:"
+                /> */}
+                {/* <Controller
+                  name="file"
+                  control={control}
+                  rules={{ required: "File is required" }}
+                  render={({ field }) => ( */}
+                <>
+                  <input
+                    accept="image/*"
+                    id="upload-image"
+                    type="file"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    // {...field}
+                  />
+                  <label
+                    htmlFor="upload-image"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                      height: "34px",
+                      cursor: "pointer",
+                      background: "white",
+                      borderRadius: "4px",
+                      textAlign: "center",
+                      border: "1px black !important",
+                    }}
+                  >
+                    <IconButton component="span">
+                      <UploadIcon />
+                    </IconButton>
+                    <span style={{ marginLeft: "8px" }}>Click to upload</span>
+                  </label>
+                </>
+                {/* )} */}
+                {/* /> */}
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors.files?.message}
+                  </FormHelperText>
+                </div>
               </div>
             </Box>
 

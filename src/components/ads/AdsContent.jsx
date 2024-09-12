@@ -10,7 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { adDataSelector } from "../../slices/AdSlice/AdSelector";
 import { useGetUserListAdApiApiByNameMutation } from "../../api/listAd";
 import { useEffect, useState } from "react";
-import { updateAdData } from "../../slices/AdSlice/Ad";
+import {
+  getUserAdDataForEdit,
+  knowWhereHaveToOpenModalForAd,
+  updateAdData,
+  updateAdModalVisibility,
+} from "../../slices/AdSlice/Ad";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MUIDataTable from "mui-datatables";
@@ -19,13 +24,60 @@ import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { updateSportData } from "../../slices/manageSport/manageSport";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 import AddAdModal from "./AddAdModal";
+import { handleNotification } from "../../slices/Snackbar";
+import CustomModal from "../reuse/CustomModal";
+import { useDeleteAdByNameMutation } from "../../api/DeleteAd";
+import { useGetAddUpdateAdApiByNameMutation } from "../../api/AddUpdateAd";
+import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
 
 const AdsContent = () => {
   const dispatch = useDispatch();
   const { adData } = useSelector(adDataSelector);
   const { sportData } = useSelector(manageSportDataSelector);
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalContent] = useState("");
+  const [action, setAction] = useState(() => () => {});
   console.log(adData, "sjka");
-  const [transformedAdData, setTransformedAdData] = useState([]);
+
+  const openModal = (id, type) => {
+    if (type === "delete") {
+      setModalContent("Do you want to delete this record?");
+      setAction(() => async () => {
+        try {
+          const response = await AdDeleteApi({ adId: id }).unwrap();
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
+        } catch (error) {
+          dispatch(
+            handleNotification({
+              state: true,
+              message: adDeleteData?.message,
+              severity: adDeleteData?.code,
+            })
+          );
+        }
+      });
+    }
+    setModal(true);
+  };
+  const closeModal = () => {
+    setModal(false);
+  };
 
   const [
     userAdApi,
@@ -46,6 +98,51 @@ const AdsContent = () => {
     },
   ] = useGetUserListSportApiByNameMutation();
 
+  const [addUpdateAd, { data: addUpdateAdData, isSuccess: updataAdSuccess }] =
+    useGetAddUpdateAdApiByNameMutation();
+
+  const [
+    AdDeleteApi,
+    {
+      data: adDeleteData,
+      isLoading: adDeleteLoading,
+      error: adDeleteError,
+      isSuccess: adDeleteSuccess,
+    },
+  ] = useDeleteAdByNameMutation();
+
+  console.log(userAdData, "as");
+
+  const handleEditClick = (rowData) => {
+    console.log(adData, "data");
+
+    const sportValue = userAdData?.data?.filter((e) => {
+      console.log(e, "eee");
+
+      if (e._id === rowData?.rowData[6]) {
+        return e;
+      }
+    });
+    const payload = [
+      {
+        name: rowData?.rowData[0],
+        type: rowData?.rowData[1],
+        mediaType: rowData?.rowData[2],
+        userType: rowData?.rowData[3],
+        sport: sportValue?.length ? sportValue[0]?.sport : "",
+        page: rowData?.rowData[5],
+        redirectUrl: sportValue?.length ? sportValue[0]?.redirectUrl : "",
+
+        id: rowData?.rowData[6],
+      },
+    ];
+    console.log(payload, "payy");
+
+    dispatch(getUserAdDataForEdit(payload));
+    dispatch(knowWhereHaveToOpenModalForAd("edit"));
+    dispatch(updateAdModalVisibility(true));
+  };
+
   useEffect(() => {
     const reqParams = {
       page: 0,
@@ -53,7 +150,16 @@ const AdsContent = () => {
       sortOrder: "",
     };
     userAdApi(reqParams);
-  }, []);
+  }, [updataAdSuccess]);
+
+  useEffect(() => {
+    const reqParams = {
+      page: 0,
+      sortValue: "",
+      sortOrder: "",
+    };
+    userAdApi(reqParams);
+  }, [adDeleteSuccess]);
 
   useEffect(() => {
     const reqParams = {
@@ -201,11 +307,11 @@ const AdsContent = () => {
             <Box display="flex" gap="10px">
               <EditIcon
                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                // onClick={() => handleEditClick(rowData)}
+                onClick={() => handleEditClick(rowData)}
               ></EditIcon>
               <DeleteIcon
                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                // onClick={() => openModal(value, "delete")}
+                onClick={() => openModal(value, "delete")}
               />
             </Box>
           </>
@@ -227,19 +333,23 @@ const AdsContent = () => {
       return (
         <>
           <CustomPagination
-            total={adData?.totalCount}
+            total={userAdData?.totalCount}
             page={page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
             userList={userAdApi}
-            userData={adData?.data}
+            userData={userAdData?.data}
             isLoading={userAdLoading}
           />
         </>
       );
     },
   };
+
+  useEffect(() => {
+    dispatch(setCurrentModule("Ad"));
+  }, []);
 
   return (
     <>
@@ -248,9 +358,10 @@ const AdsContent = () => {
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>AD</ManageUsersHeading>
             <AddAdModal
-            // AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
-            // AddFaqsData={AddFaqsData}
-            // faqsListTopicData={faqsListTopicData}
+              addUpdateAd={addUpdateAd}
+              addUpdateAdData={addUpdateAdData}
+              listSportData={listSportData}
+              // updataAdSuccess={updataAdSuccess}
             />
           </Box>
 
@@ -258,12 +369,12 @@ const AdsContent = () => {
             <ManageUserTableWrapper>
               <MUIDataTable data={adData} columns={columns} options={options} />
             </ManageUserTableWrapper>
-            {/* <CustomModal
+            <CustomModal
               modal={modal}
               closeModal={closeModal}
               content={modalTitle}
               action={action}
-            /> */}
+            />
           </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>

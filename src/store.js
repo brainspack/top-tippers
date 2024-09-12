@@ -50,6 +50,8 @@ import userListContentApi from "./api/listContent";
 import deleteArticleApi from "./api/DeleteArticle";
 import addUpdateContentApi from "./api/addUpdateContent";
 import userListAdApi from "./api/listAd";
+import deleteAdApi from "./api/DeleteAd";
+import addUpdateAdApi from "./api/AddUpdateAd";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -104,6 +106,8 @@ export const store = configureStore({
     [userListContentApi.reducerPath]: userListContentApi.reducer,
     [addUpdateContentApi.reducerPath]: addUpdateContentApi.reducer,
     [userListAdApi.reducerPath]: userListAdApi.reducer,
+    [deleteAdApi.reducerPath]: deleteAdApi.reducer,
+    [addUpdateAdApi.reducerPath]: addUpdateAdApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -148,7 +152,9 @@ export const store = configureStore({
       ArticleGetAndSearchApi.middleware,
       userListContentApi.middleware,
       addUpdateContentApi.middleware,
-      userListAdApi.middleware
+      userListAdApi.middleware,
+      deleteAdApi.middleware,
+      addUpdateAdApi.middleware
     ),
 });
 setupListeners(store.dispatch);
