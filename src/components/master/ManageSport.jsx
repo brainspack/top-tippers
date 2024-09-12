@@ -121,6 +121,8 @@ const ManageSport = (props) => {
   ] = useDeleteSportByNameMutation();
 
   const handleEditClick = (rowData) => {
+    console.log(sportData, "data");
+
     const stackValue = sportData?.data?.filter((e) => {
       if (e._id === rowData?.rowData[6]) {
         return e;
@@ -141,6 +143,8 @@ const ManageSport = (props) => {
         stack: stackValue?.length ? stackValue[0].stack : "",
       },
     ];
+
+    console.log(payload, "payy");
 
     dispatch(getUserDataForEdit(payload));
     dispatch(knowWhereHaveToOpenModal("edit"));
