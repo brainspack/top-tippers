@@ -35,6 +35,7 @@ import listGamesApi from "./api/ListGames";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
 import articleReducer from "./slices/Article/article";
+import getArticleDetailsApi from "./api/getArticleDetails";
 import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
@@ -44,6 +45,7 @@ import deleteQuestionApi from "./api/DeleteQuestion";
 import addArticleApi from "./api/AddArticle";
 import sendGameNotificationApi from "./api/SendGameStartNotification";
 import listTopicApi from "./api/listTopic";
+import editArticleApi from "./api/EditArticle";
 import updateGameApi from "./api/UpdateGame";
 import ArticleGetAndSearchApi from "./api/GetAndSearchArticle";
 import userListContentApi from "./api/listContent";
@@ -89,6 +91,7 @@ export const store = configureStore({
     [addUpdateSportApi.reducerPath]: addUpdateSportApi.reducer,
     [listRoundsApi.reducerPath]: listRoundsApi.reducer,
     [deleteRoundApi.reducerPath]: deleteRoundApi.reducer,
+    [editArticleApi.reducerPath]: editArticleApi.reducer,
     [deleteArticleApi.reducerPath]: deleteArticleApi.reducer,
     [updateRoundApi.reducerPath]: updateRoundApi.reducer,
     [addArticleApi.reducerPath]: addArticleApi.reducer,
@@ -102,6 +105,7 @@ export const store = configureStore({
     [deleteQuestionApi.reducerPath]: deleteQuestionApi.reducer,
     [listTopicApi.reducerPath]: listTopicApi.reducer,
     [updateGameApi.reducerPath]: updateGameApi.reducer,
+    [getArticleDetailsApi.reducerPath]: getArticleDetailsApi.reducer,
     [ArticleGetAndSearchApi.reducerPath]: ArticleGetAndSearchApi.reducer,
     [userListContentApi.reducerPath]: userListContentApi.reducer,
     [addUpdateContentApi.reducerPath]: addUpdateContentApi.reducer,
@@ -127,6 +131,7 @@ export const store = configureStore({
       deleteTeamApi.middleware,
       teamDetailApi.middleware,
       deleteSportApi.middleware,
+      editArticleApi.middleware,
       addTeamApi.middleware,
       addRoundApi.middleware,
       addGameApi.middleware,
@@ -135,6 +140,7 @@ export const store = configureStore({
       addUpdateSportApi.middleware,
       sendGameNotificationApi.middleware,
       listRoundsApi.middleware,
+      getArticleDetailsApi.middleware,
       deleteRoundApi.middleware,
       deleteArticleApi.middleware,
       updateRoundApi.middleware,

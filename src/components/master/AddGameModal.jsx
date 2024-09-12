@@ -580,6 +580,7 @@ const AddGameModal = (props) => {
                         setValue={setValue}
                         errors={errors}
                         initialData={initialData}
+                        name={"time"}
                       />
                     </Box>
                   </Box>
