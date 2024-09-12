@@ -46,6 +46,10 @@ const Routers = () => {
             />
             <Route path="ladder" element={<ArticlePage />} />
             <Route path="addearticle" element={<AddArticleComponent />} />
+            <Route
+              path="/admin/editarticle/:articleid"
+              element={<AddArticleComponent />}
+            />
 
             <Route path="banter" element={<BanterPage />} />
             <Route path="questions" element={<FaqsPage />} />

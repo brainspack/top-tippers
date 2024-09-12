@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ArticleFormContainer,
   ArticleFormWrapper,
@@ -17,40 +18,42 @@ import {
   Select,
 } from "@mui/material";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-// import { DateRangePicker } from "@mui/x-date-pickers-pro";
 import DateRangePicker from "../../components/master/DatePickerComponent";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { useTeamListByNameMutation } from "../../api/GetTeamList";
 import { useListGamesByNameMutation } from "../../api/ListGames";
-import { useAddGameByNameMutation } from "../../api/AddNewGame";
 import { useListRoundsByNameMutation } from "../../api/ListRounds";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
-import { useDispatch, useSelector } from "react-redux";
 import {
   updateAllTeamData,
   updateGameList,
 } from "../../slices/manageGame/manageGame";
 import { updateRoundList } from "../../slices/manageRound/manageRound";
-import { updateSportList } from "../../slices/manageTeam/manageTeam";
+import {
+  updateSportList,
+  updateTeamList,
+} from "../../slices/manageTeam/manageTeam";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
 import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
 import UploadIcon from "@mui/icons-material/Upload";
 import CustomTimePicker from "../reuse/CustomTimePicker";
-import JoditEditor from "jodit-react";
 import TextEditor from "./TextEditor";
 import { useAddArticleByNameMutation } from "../../api/AddArticle";
 import { handleNotification } from "../../slices/Snackbar";
-import { useNavigate } from "react-router-dom";
-import CustomTextEditor from "./TextEditor";
+import { useNavigate, useParams } from "react-router-dom";
+import { articleDataSelector } from "../../slices/Article/articleSelector";
+import moment from "moment";
+import { useLazyGetArticleDetailsApiByNameQuery } from "../../api/getArticleDetails";
+import { updateFilteredArticleData } from "../../slices/Article/article";
+import { useEditArticleByNameMutation } from "../../api/EditArticle";
 
 function AddArticleForm() {
   const dispatch = useDispatch();
+  const { articleid } = useParams();
   const { roundData } = useSelector(manageRoundSelector);
   const { allTeamData, gameData } = useSelector(manageGameSelector);
-  // const [content, setContent] = useState("");
+  const { filteredArticleData, selectArticleType } =
+    useSelector(articleDataSelector);
+  console.log(filteredArticleData, "filteredArticleData");
 
   // ROUND API
   const [
@@ -73,6 +76,9 @@ function AddArticleForm() {
       success: listSportSuccess,
     },
   ] = useGetUserListSportApiByNameMutation();
+  useEffect(() => {
+    listSportApi({ count: 1000, isActive: true });
+  }, []);
 
   // TEAM LIST API
   const [
@@ -104,7 +110,6 @@ function AddArticleForm() {
         const response = await teamListApi({
           count: 1000,
         }).unwrap();
-        console.log(response, "FETCH TEAM LIST");
         // dispatch(updateTeamList(response));
         dispatch(updateAllTeamData(response));
       } catch (err) {
@@ -133,30 +138,26 @@ function AddArticleForm() {
   }, []);
 
   // SPORT API
-  useEffect(() => {
-    if (listSportData && listSportData?.data)
-      dispatch(updateSportList(listSportData));
-  }, [listSportData]);
+  // useEffect(() => {
+  //   if (listSportData && listSportData?.data)
+  //     dispatch(updateSportList(listSportData));
+  // }, [listSportData]);
 
   // LIST GAME API
   useEffect(() => {
-    if (listGamesData && listGamesData?.data)
-      dispatch(updateGameList(listGamesData));
-  }, []);
+    const fetchGameList = async () => {
+      try {
+        const response = await listGameApi({
+          count: 1000,
+          season: "current",
+        }).unwrap();
+        dispatch(updateGameList(response));
+      } catch (err) {
+        console.error("Error fetching sports data:", err);
+      }
+    };
 
-  useEffect(() => {
-    const reqParams = {
-      count: 1000,
-      season: "current",
-    };
-    listGameApi(reqParams);
-  }, []);
-  useEffect(() => {
-    const reqParams = {
-      count: 1000,
-      season: "current",
-    };
-    listSportApi(reqParams);
+    fetchGameList();
   }, []);
 
   const {
@@ -173,10 +174,17 @@ function AddArticleForm() {
     mode: "onChange",
 
     defaultValues: {
+      title: "",
+      addedby: "",
+      url: "",
+      articleType: "",
       sportId: "",
       sportIdd: "",
-      game: "",
+      gameId: "",
       articleType: "",
+      teamId: "",
+      text: "",
+      roundId: "",
     },
     criteriaMode: "all",
     shouldFocusError: true,
@@ -184,9 +192,7 @@ function AddArticleForm() {
 
   const [filteredRounds, setFilteredRounds] = useState([]);
   const [filteredGames, setFilteredGames] = useState([]);
-  const [content, setContent] = useState("");
-
-  console.log(filteredGames, "ff");
+  const [selectTeam, setSelectTeam] = useState([]);
 
   const selectedSportId = watch("sportId");
   const selectedSportIdd = watch("sportIdd");
@@ -194,33 +200,28 @@ function AddArticleForm() {
 
   useEffect(() => {
     if (selectedSportId) {
-      const filtered = roundData?.data.filter(
+      const filtered = roundData?.data?.filter(
         (round) => round?.sport?._id === selectedSportId
       );
       setFilteredRounds(filtered);
-      setValue("roundId", "");
     } else {
       setFilteredRounds([]);
     }
   }, [selectedSportId, roundData, setValue]);
-
-  const [selectTeam, setSelectTeam] = useState([]);
 
   useEffect(() => {
     if (selectedSportIdd) {
       const filteredTeams = allTeamData?.data.filter(
         (team) => team?.sport?._id === selectedSportIdd
       );
-      setSelectTeam(filteredTeams);
-
-      setValue("team", "");
+      setSelectTeam(filteredTeams || []);
     }
   }, [selectedSportIdd, allTeamData, setValue]);
 
   // Filter games based on selected round
   useEffect(() => {
     if (selectedRoundId) {
-      const games = listGamesData?.data.filter(
+      const games = gameData?.data.filter(
         (game) => game?.round?._id === selectedRoundId
       );
       setFilteredGames(games || []);
@@ -232,9 +233,12 @@ function AddArticleForm() {
   ///// Image Uploader
   const [teamDetails, setTeamDetails] = useState({
     file: null,
+    htmlFile: null,
   });
 
   const [image, setImage] = useState(null);
+  const [htmlFileName, setHtmlFileName] = useState(null);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -255,21 +259,41 @@ function AddArticleForm() {
       reader.readAsDataURL(file);
     }
   };
+  const onHandleHtmlImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        return;
+      }
+      setTeamDetails((prevDetails) => ({
+        ...prevDetails,
+        htmlFile: file,
+      }));
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHtmlFileName(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const navigate = useNavigate();
   const onhandleSubmit = async (data) => {
     // e.preventDefault();
 
     const formData = new FormData();
     formData.append("title", data?.title);
-    formData.append("content", content);
+    formData.append("content", data?.text);
     formData.append("addedby", data?.addedby);
     formData.append("files", teamDetails?.file);
-    formData.append("htmlFiles", teamDetails?.htmlFiles);
-    formData.append("game", data?.game);
+    formData.append("htmlFiles", teamDetails?.htmlFile);
+    formData.append("game", data?.gameId);
     formData.append("url", data?.url);
     formData.append("isActive", true);
     formData.append("publishDateTime", data?.publishDateTime);
-    formData.append("teamId", data?.team);
+    formData.append("teamId", data?.teamId);
     formData.append("articleType", data?.articleType);
 
     try {
@@ -297,9 +321,104 @@ function AddArticleForm() {
     }
   };
 
+  const [
+    editArticleApi,
+    { data: editArticleData, isSuccess: editArticleSuccess },
+  ] = useEditArticleByNameMutation();
+
+  const onhandleUpdate = async (data) => {
+    // e.preventDefault();
+    const formattedDate = moment(data?.publishDateTime).format(
+      "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(India Standard Time)]"
+    );
+    const formData = new FormData();
+    formData.append("title", data?.title);
+    formData.append("content", data?.text);
+    formData.append("addedby", data?.addedby);
+    formData.append("files", teamDetails?.file);
+    formData.append("htmlFiles", teamDetails?.htmlFile);
+    formData.append("game", data?.gameId);
+    formData.append("url", data?.url);
+    formData.append("_id", filteredArticleData?.data?._id);
+    formData.append("publishDateTime", formattedDate);
+    formData.append("teamId", data?.teamId);
+    formData.append("articleType", data?.articleType);
+
+    try {
+      const result = await editArticleApi(formData).unwrap();
+      if (result?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+        navigate("/admin/ladder");
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Failed to add Article:", error);
+    }
+  };
+  //// ArticleDetails
+
+  const [articleDetailsApi, { data: articleDetailsData }] =
+    useLazyGetArticleDetailsApiByNameQuery();
+  useEffect(() => {
+    const fetchRound = async () => {
+      try {
+        if (selectArticleType === "edit") {
+          const response = await articleDetailsApi({
+            _id: articleid,
+          }).unwrap();
+          dispatch(updateFilteredArticleData(response));
+        }
+      } catch (err) {
+        console.error("Error fetching sports data:", err);
+      }
+    };
+
+    fetchRound();
+  }, []);
+
+  const formattedDate = moment(filteredArticleData?.data?.createdAt).format(
+    "L"
+  );
+
+  useEffect(() => {
+    if (selectArticleType === "edit") {
+      setValue("title", filteredArticleData?.data?.title);
+      setValue("addedby", filteredArticleData?.data?.addedby);
+      setValue("url", filteredArticleData?.data?.redirectUrl);
+      setValue("articleType", filteredArticleData?.data?.articleType);
+      setValue("publishDateTime", formattedDate);
+      setValue("sportIdd", filteredArticleData?.data?.gameId?.sport);
+      setValue("sportId", filteredArticleData?.data?.gameId?.sport);
+      setValue("teamId", filteredArticleData?.data?.teamId);
+      setValue("time", filteredArticleData?.data?.publishDateTime);
+      setValue("text", filteredArticleData?.data?.content);
+      setValue("roundId", filteredArticleData?.data?.gameId?.round);
+      setValue("gameId", filteredArticleData?.data?.gameId?._id);
+    } else {
+      reset();
+    }
+  }, [filteredArticleData, setValue, reset]);
+
   return (
     <ArticleFormContainer>
-      <form onSubmit={handleSubmit(onhandleSubmit)}>
+      <form
+        onSubmit={handleSubmit(
+          selectArticleType === "edit" ? onhandleUpdate : onhandleSubmit
+        )}
+      >
         <ArticleFormWrapper>
           <Box
             sx={{
@@ -502,6 +621,7 @@ function AddArticleForm() {
                     control={control}
                     setValue={setValue}
                     errors={errors}
+                    name={"time"}
                   />
                 </Box>
               </div>
@@ -585,7 +705,7 @@ function AddArticleForm() {
                   <input
                     type="file"
                     id="file-upload"
-                    onChange={handleImageChange}
+                    onChange={onHandleHtmlImageChange}
                     style={{ display: "none" }}
                     // {...field}
                   />
@@ -634,7 +754,7 @@ function AddArticleForm() {
                 />
                 <FormControl
                   fullWidth
-                  error={!!errors.sportId}
+                  // error={!!errors.sportId}
                   {...register("sportIdd")}
                 >
                   <Controller
@@ -669,12 +789,13 @@ function AddArticleForm() {
                     )}
                   />
                   <Box className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#D32F2F" }}>
-                      {errors.sportIdd?.message}
+                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                      {errors?.sportIdd?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
               </Box>
+
               <Box
                 style={{
                   height: "auto",
@@ -689,9 +810,9 @@ function AddArticleForm() {
                   inputLabel="Select Team :"
                 />
 
-                <FormControl fullWidth {...register("team")}>
+                <FormControl fullWidth {...register("teamId")}>
                   <Controller
-                    name="team"
+                    name="teamId"
                     control={control}
                     rules={{ required: "Select team is required" }}
                     render={({ field }) => (
@@ -704,14 +825,14 @@ function AddArticleForm() {
                           fontSize: "14px",
                           height: "34px",
                         }}
-                        {...register("team")}
+                        {...register("teamId")}
                       >
                         {selectTeam.length > 0 ? (
                           selectTeam.map((team) => (
                             <MenuItem
-                              key={team._id}
-                              value={team._id}
-                              {...register("team")}
+                              key={team?._id}
+                              value={team?._id}
+                              {...register("teamId")}
                             >
                               {team?.teamname}
                             </MenuItem>
@@ -725,7 +846,7 @@ function AddArticleForm() {
 
                   <Box className="errorMsgParent">
                     <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.team?.message}
+                      {errors.teamId?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
@@ -773,8 +894,8 @@ function AddArticleForm() {
                     )}
                   />
                   <Box className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#D32F2F" }}>
-                      {errors.sportId?.message}
+                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                      {errors?.sportId?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
@@ -848,9 +969,9 @@ function AddArticleForm() {
                   inputLabel="Select Game :"
                 />
 
-                <FormControl fullWidth {...register("game")}>
+                <FormControl fullWidth {...register("gameId")}>
                   <Controller
-                    name="game"
+                    name="gameId"
                     control={control}
                     rules={{ required: "Select game is required" }}
                     render={({ field }) => (
@@ -863,17 +984,15 @@ function AddArticleForm() {
                           fontSize: "14px",
                           height: "34px",
                         }}
-                        {...register("game")}
+                        {...register("gameId")}
                       >
                         {filteredGames.length > 0 ? (
                           filteredGames.map((game) => {
-                            console.log(game, "game");
-
                             return (
                               <MenuItem
-                                key={game._id}
-                                value={game._id}
-                                {...register("game")}
+                                key={game?._id}
+                                value={game?._id}
+                                {...register("gameId")}
                               >
                                 {`${game?.homeTeam?.teamname} vs ${game?.awayTeam?.teamname}`}
                               </MenuItem>
@@ -888,7 +1007,7 @@ function AddArticleForm() {
 
                   <Box className="errorMsgParent">
                     <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors?.game?.message}
+                      {errors?.gameId?.message}
                     </FormHelperText>
                   </Box>
                 </FormControl>
@@ -896,11 +1015,22 @@ function AddArticleForm() {
             </FormInner>
           </Box>
           <Box sx={{ height: "auto" }}>
-            <TextEditor content={content} setContent={setContent} />
+            <TextEditor
+              control={control}
+              name={"text"}
+              selectArticleType={selectArticleType}
+            />
           </Box>
+
           <Box sx={{ display: "flex", gap: "20px" }}>
-            <CustomBtn>Draft</CustomBtn>
-            <CustomBtn type="submit">Save</CustomBtn>
+            {selectArticleType === "edit" ? (
+              <CustomBtn type="submit">Save Edit</CustomBtn>
+            ) : (
+              <>
+                <CustomBtn>Draft</CustomBtn>
+                <CustomBtn type="submit">Save</CustomBtn>
+              </>
+            )}
           </Box>
         </ArticleFormWrapper>
       </form>

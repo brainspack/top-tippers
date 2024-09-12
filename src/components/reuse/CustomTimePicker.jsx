@@ -62,11 +62,11 @@ import { TextField, Box, FormHelperText } from "@mui/material";
 import { Controller } from "react-hook-form";
 import moment from "moment";
 
-const CustomTimePicker = ({ control, errors, initialData }) => {
+const CustomTimePicker = ({ control, errors, initialData, name }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <Controller
-        name="time"
+        name={name}
         control={control}
         defaultValue={null}
         rules={{ required: "Please enter time" }}

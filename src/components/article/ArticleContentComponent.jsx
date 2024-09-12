@@ -18,23 +18,35 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
 import { useLazyGetArticleGetAndSearchApiByNameQuery } from "../../api/GetAndSearchArticle";
 import { useEffect, useState } from "react";
-import { updateArticleData } from "../../slices/Article/article";
+import {
+  updateArticleData,
+  updateFilteredArticleData,
+  updateSelectedArticleType,
+} from "../../slices/Article/article";
 import MUIDataTable from "mui-datatables";
 import CustomPagination from "../reuse/CustomPagination";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
 import { AddSportBtn } from "../master/masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ControlledSwitches from "../SwitchComponent";
 import { useDeleteArticleByNameMutation } from "../../api/DeleteArticle";
 import { handleNotification } from "../../slices/Snackbar";
 import CustomModal from "../reuse/CustomModal";
+import { useForm } from "react-hook-form";
 
 const ArticleContent = () => {
+  const { reset } = useForm();
+  const { filteredArticleData, selectArticleType } =
+    useSelector(articleDataSelector);
+  console.log(filteredArticleData, "filteredArticleData");
+  console.log(selectArticleType, "selectArticleType");
   const navigate = useNavigate();
+  const { articleid } = useParams();
   const dispatch = useDispatch();
   const { articleData } = useSelector(articleDataSelector);
+  console.log(articleData, "articleData");
   const [searchString, setSearchString] = useState("");
 
   const [modal, setModal] = useState(false);
@@ -75,6 +87,29 @@ const ArticleContent = () => {
   };
   const closeModal = () => {
     setModal(false);
+  };
+
+  const handleEditClick = (value, rowData) => {
+    dispatch(updateSelectedArticleType("edit"));
+    navigate(`/admin/editarticle/${value}`);
+  };
+
+  const handleAddClick = () => {
+    reset({
+      title: "",
+      addedby: "",
+      url: "",
+      articleType: "",
+      sportId: "",
+      sportIdd: "",
+      gameId: "",
+      articleType: "",
+      teamId: "",
+      text: "",
+      roundId: "",
+    });
+    dispatch(updateSelectedArticleType("add"));
+    navigate("/admin/addearticle");
   };
   const [
     articleDeleteApi,
@@ -182,7 +217,7 @@ const ArticleContent = () => {
             <Box display="flex" gap="10px">
               <EditIcon
                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                // onClick={() => handleEditClick(rowData)}
+                onClick={() => handleEditClick(value, rowData)}
               ></EditIcon>
               <DeleteIcon
                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
@@ -245,10 +280,7 @@ const ArticleContent = () => {
                 />
               </Search>
             </Box>
-            <AddSportBtn
-              disableRipple
-              onClick={() => navigate("/admin/addearticle")}
-            >
+            <AddSportBtn disableRipple onClick={handleAddClick}>
               <AddIcon sx={{ mr: 1 }} />
               Add Article
             </AddSportBtn>
