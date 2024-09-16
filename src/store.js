@@ -21,6 +21,7 @@ import userReducer from "../src/slices/userSlice/user";
 import manageReducer from "./slices/manageTeam/manageTeam";
 import manageRoundReducer from "./slices/manageRound/manageRound";
 import manageGameReducer from "./slices/manageGame/manageGame";
+import messagingReducer from "./slices/messaging/messaging";
 import faqsReducer from "./slices/FAQsSlice/faqs";
 import userListCompetitionApi from "./api/listCompetition";
 import userListSportApi from "./api/listSport";
@@ -54,7 +55,10 @@ import deleteArticleApi from "./api/DeleteArticle";
 import addUpdateContentApi from "./api/addUpdateContent";
 import userListAdApi from "./api/listAd";
 import deleteAdApi from "./api/DeleteAd";
+import sendMessageApi from "./api/SendMessage";
 import addUpdateAdApi from "./api/AddUpdateAd";
+import listAllUserApi from "./api/ListAllUser";
+import adReportApi from "./api/AdReports";
 import versionListApi from "./api/versionList";
 import deleteVersionApi from "./api/DeleteVersion";
 import addVersionApi from "./api/AddVersion";
@@ -70,6 +74,7 @@ export const store = configureStore({
     articleSlice: articleReducer,
     adSlice: adReducer,
     listContentSlice: listContentReducer,
+    messagingSlice: messagingReducer,
     versionDataSlice: versionDataSliceReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
@@ -117,6 +122,9 @@ export const store = configureStore({
     [userListAdApi.reducerPath]: userListAdApi.reducer,
     [deleteAdApi.reducerPath]: deleteAdApi.reducer,
     [addUpdateAdApi.reducerPath]: addUpdateAdApi.reducer,
+    [adReportApi.reducerPath]: adReportApi.reducer,
+    [listAllUserApi.reducerPath]: listAllUserApi.reducer,
+    [sendMessageApi.reducerPath]: sendMessageApi.reducer,
     [versionListApi.reducerPath]: versionListApi.reducer,
     [deleteVersionApi.reducerPath]: deleteVersionApi.reducer,
     [addVersionApi.reducerPath]: addVersionApi.reducer,
@@ -169,6 +177,9 @@ export const store = configureStore({
       userListAdApi.middleware,
       deleteAdApi.middleware,
       addUpdateAdApi.middleware,
+      adReportApi.middleware,
+      listAllUserApi.middleware,
+      sendMessageApi.middleware,
       versionListApi.middleware,
       deleteVersionApi.middleware,
       addVersionApi.middleware

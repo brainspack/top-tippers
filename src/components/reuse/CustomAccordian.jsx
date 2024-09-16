@@ -19,8 +19,6 @@ const CustomAccordion = ({ data, accordianHeading }) => {
   };
 
   useEffect(() => {
-    console.log("Current Path:", location.pathname, expanded);
-    console.log("Is Expanded:", expanded);
     if (data.some((ele) => ele.route === location.pathname)) {
       setExpanded("masterPanel");
     } else {

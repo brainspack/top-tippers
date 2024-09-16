@@ -62,15 +62,7 @@ const AdsContent = () => {
               })
             );
           }
-        } catch (error) {
-          dispatch(
-            handleNotification({
-              state: true,
-              message: adDeleteData?.message,
-              severity: adDeleteData?.code,
-            })
-          );
-        }
+        } catch (error) {}
       });
     }
     setModal(true);
@@ -111,14 +103,8 @@ const AdsContent = () => {
     },
   ] = useDeleteAdByNameMutation();
 
-  console.log(userAdData, "as");
-
   const handleEditClick = (rowData) => {
-    console.log(adData, "data");
-
     const sportValue = userAdData?.data?.filter((e) => {
-      console.log(e, "eee");
-
       if (e._id === rowData?.rowData[6]) {
         return e;
       }
@@ -179,18 +165,12 @@ const AdsContent = () => {
         return acc;
       }, {});
 
-      console.log(sportIdMap, "sportIdMap");
-
       const transformedData = userAdData?.data?.map((ad) => {
-        console.log(ad, "ad");
-
         return {
           ...ad,
           sport: sportIdMap[ad.sport],
         };
       });
-
-      console.log(transformedData, "transformedData");
 
       dispatch(updateAdData(transformedData));
     }
