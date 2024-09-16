@@ -100,15 +100,14 @@ const ManageUsers = () => {
     userList(reqParams);
   };
 
-  const [userList, { data, isLoading, error, isSuccess: userListSuccess }] =
+  const [userList, { data, isLoading, isSuccess: userListSuccess }] =
     useGetUserListByNameMutation();
 
   const [
     deactivateUser,
     {
       data: deactivateUserData,
-      isLoading: deactivateUserLoading,
-      error: deactivateUserError,
+
       isSuccess: deactivateUserSuccess,
     },
   ] = useDeactivateUserByNameMutation();
@@ -118,7 +117,7 @@ const ManageUsers = () => {
     {
       data: userDeleteData,
       isLoading: userDeleteLoading,
-      error: userDeleteError,
+
       isSuccess: userDeleteSuccess,
     },
   ] = useDeleteUserByNameMutation();
@@ -252,7 +251,6 @@ const ManageUsers = () => {
           },
         }),
         customBodyRender: (value, rowData) => {
-          console.log(value, rowData, "INSIDE MANAGE USER");
           return (
             <>
               <ControlledSwitches
@@ -280,7 +278,6 @@ const ManageUsers = () => {
           },
         }),
         customBodyRender: (value, rowData) => {
-          console.log(rowData, value, "thisIsRowData");
           return (
             <>
               <Box display="flex" gap="10px">
@@ -332,7 +329,6 @@ const ManageUsers = () => {
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
             userList={userList}
-            // userData={userData}
             isLoading={isLoading}
           />
         </>

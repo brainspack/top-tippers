@@ -48,6 +48,8 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   const { isModalVisible, setEditData, buttonClickedForModal } =
     useSelector(userDataSelector);
 
+  console.log(setEditData, "set");
+
   const handleOpen = () => {
     reset({
       sportname: "",

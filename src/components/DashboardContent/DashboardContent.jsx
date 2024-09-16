@@ -63,59 +63,48 @@ function DashboardContent(props) {
   const TotalUserCount = async (data) => {
     try {
       const result = await userList({ body: data }).unwrap();
-      console.log(result, "RESULT");
       let tempData = [...dataCount];
       if (result) {
         tempData[0].countNumber = result.totalCount;
         setDataCount([...tempData]);
       }
-      console.log(userList(), "log");
-    } catch (err) {
-      console.log(err, "the err");
-    }
+    } catch (err) {}
     await responseData;
   };
-  console.log(dataCount, "jsakjk");
 
   //   sport
 
   const TotalUserSport = async (data) => {
     try {
       const result = await userListSport({ body: data }).unwrap();
-      console.log(result, "RESULT");
       let tempData = [...dataCount];
 
       if (result) {
         tempData[1].countNumber = result.totalCount;
         setDataCount([...tempData]);
       }
-      console.log(userListSport(), "log");
     } catch (err) {
       console.log(err, "the err");
     }
     await listSportData;
   };
-  console.log(dataCount, "sports");
 
   //   competition
 
   const TotalUserCompetition = async (data) => {
     try {
       const result = await userListCompetition({ body: data }).unwrap();
-      console.log(result, "RESULT");
       let tempData = [...dataCount];
 
       if (result) {
         tempData[2].countNumber = result.totalCount;
         setDataCount([...tempData]);
       }
-      console.log(userListCompetition(), "log");
     } catch (err) {
       console.log(err, "the err");
     }
     await listCompetitionData;
   };
-  console.log(dataCount, "compp");
 
   useEffect(() => {
     const reqParams = {
