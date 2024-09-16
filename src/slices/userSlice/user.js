@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: [],
+  userData: {},
   isModalVisible: false,
   isSendModalVisible: false,
   modalSportName: "",
@@ -14,15 +14,24 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserData: (state, { payload }) => {
-      const changedData = payload.map((user) => {
-        return {
+      if (payload?.data) {
+        const changedData = payload?.data?.map((user) => ({
           ...user,
           isTopSportUser: user.isTopSportUser ? "Yes" : "No",
           isVerified: user.isVerified ? "Yes" : "No",
+        }));
+
+        state.userData = {
+          code: payload.code,
+          message: payload.message,
+          data: changedData,
+          totalCount: payload.totalCount,
         };
-      });
-      state.data = changedData;
+      } else {
+        state.userData = payload;
+      }
     },
+
     updateModalVisibility: (state, { payload }) => {
       state.isModalVisible = payload;
     },

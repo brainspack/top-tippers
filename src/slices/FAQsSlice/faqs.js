@@ -4,8 +4,8 @@ const initialState = {
   faqsData: [],
   faqsListTopicData: {},
   setEditFaqsData: null,
-  isAddFaqsModalVisible: false,
   setModeForFaqsEdit: "",
+  isAddFaqsModalVisible: false,
 };
 
 export const faqsSlice = createSlice({
@@ -13,21 +13,15 @@ export const faqsSlice = createSlice({
   initialState,
   reducers: {
     updatefaqsData: (state, { payload }) => {
-      //   console.log(payload, "payy");
-
       state.faqsData = payload;
     },
     updateFaqsListTopicData: (state, { payload }) => {
-      //   console.log(payload, "payy");
-
       state.faqsListTopicData = payload;
     },
     getFaqsDataForEdit: (state, { payload }) => {
-      //   console.log(payload, "DATA");
       state.setEditFaqsData = payload;
     },
     updateModeForEdit: (state, { payload }) => {
-      // console.log(payload.rowData, payload, "DATA");
       state.setModeForFaqsEdit = payload;
     },
     updateAddFaqsModalVisibility: (state, { payload }) => {

@@ -28,8 +28,12 @@ import { useGetAddUpdateQuestionApiByNameMutation } from "../../api/AddUpdateQue
 import CustomPagination from "../reuse/CustomPagination";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
 import { useGetListTopicApiByNameMutation } from "../../api/listTopic";
+import { AddSportBtn } from "../master/masterStyled";
+import AddIcon from "@mui/icons-material/Add";
+import { useForm } from "react-hook-form";
 
 const FaqsContent = () => {
+  const { reset } = useForm();
   const dispatch = useDispatch();
   const { faqsData } = useSelector(faqsDataSelector);
   const { faqsListTopicData } = useSelector(faqsDataSelector);
@@ -169,22 +173,6 @@ const FaqsContent = () => {
     faqsListTopicApi(reqParams);
   }, []);
 
-  const handleEditClick = (rowData) => {
-    const payload = [
-      {
-        question: rowData?.rowData[0],
-
-        answer: rowData?.rowData[1],
-        id: rowData?.rowData[2],
-      },
-    ];
-    console.log(payload, "payy");
-
-    dispatch(getFaqsDataForEdit(payload));
-    dispatch(updateModeForEdit("edit"));
-    dispatch(updateAddFaqsModalVisibility(true));
-  };
-
   const columns = [
     {
       name: "question",
@@ -279,6 +267,82 @@ const FaqsContent = () => {
   useEffect(() => {
     dispatch(setCurrentModule("Faqs"));
   }, []);
+
+  /////////////////////// INNOVATION
+  const { isAddFaqsModalVisible, setEditFaqsData, setModeForFaqsEdit } =
+    useSelector(faqsDataSelector);
+
+  const questionIdFaqs = faqsListTopicData?.data?.filter((e) => {
+    if (e.topicname === "FAQs") {
+      return e._id;
+    }
+  });
+
+  const handleFaqsClose = () => {
+    dispatch(getFaqsDataForEdit(""));
+    dispatch(updateAddFaqsModalVisibility(false));
+  };
+  const onSubmit = async (data) => {
+    try {
+      const result = await AddUpdateQuestionFaqs({
+        ...data,
+        questionId: setEditFaqsData?.length ? setEditFaqsData[0]?.id : "",
+        topicId: questionIdFaqs[0]._id,
+      }).unwrap();
+      if (result?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+        dispatch(updateModeForEdit("addFaqs"));
+        reset({
+          question: "",
+          answer: "",
+        });
+        handleFaqsClose();
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: result?.message,
+            severity: result?.code,
+          })
+        );
+      }
+
+      reset();
+    } catch (err) {
+      dispatch(
+        handleNotification({
+          state: true,
+          message: AddFaqsData?.message,
+          severity: AddFaqsData?.code,
+        })
+      );
+    }
+  };
+
+  const handleEditClick = (rowData) => {
+    const payload = [
+      {
+        question: rowData?.rowData[0],
+
+        answer: rowData?.rowData[1],
+        id: rowData?.rowData[2],
+      },
+    ];
+    dispatch(getFaqsDataForEdit(payload));
+    dispatch(updateModeForEdit("edit"));
+    dispatch(updateAddFaqsModalVisibility(true));
+  };
+
+  const formatInput = (value) => {
+    if (!value) return value;
+    return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
+  };
   return (
     <>
       <ManageUsersContainer>
@@ -289,6 +353,24 @@ const FaqsContent = () => {
               AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
               AddFaqsData={AddFaqsData}
               faqsListTopicData={faqsListTopicData}
+              CustomBtnOne={"Back"}
+              CustomBtnTwo={"Sumbit"}
+              heading={"FAQs"}
+              labelOneTitle={"FAQs:"}
+              labelTwoTitle={"Answer:"}
+              placeHolderOne={"FAQs"}
+              placeHolderTwo={"Answer"}
+              onSubmit={onSubmit}
+              formatInput={formatInput}
+              handleFaqsClose={handleFaqsClose}
+              requiredTitleOne={"Please enter Question"}
+              requiredTitleTwo={"Please enter Answer"}
+              RequiredFirst={"Question"}
+              RequiredSecond={"Answer"}
+              registerFirst={"question"}
+              registerSecond={"answer"}
+              buttonTitle={"Add FAQs"}
+              modeName={"addfaqs"}
             />
           </Box>
 
@@ -306,6 +388,27 @@ const FaqsContent = () => {
               content={modalTitle}
               action={action}
             />
+            {/* <AddFaqsModal
+              AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
+              AddFaqsData={AddFaqsData}
+              faqsListTopicData={faqsListTopicData}
+              CustomBtnOne={"Back"}
+              CustomBtnTwo={"Sumbit"}
+              heading={"FAQs"}
+              labelOneTitle={"FAQs:"}
+              labelTwoTitle={"Answer:"}
+              placeHolderOne={"FAQs"}
+              placeHolderTwo={"Answer"}
+              onSubmit={onSubmit}
+              formatInput={formatInput}
+              handleFaqsClose={handleFaqsClose}
+              requiredTitleOne={"Please enter Question"}
+              requiredTitleTwo={"Please enter Answer"}
+              RequiredFirst={"Question"}
+              RequiredSecond={"Answer"}
+              registerFirst={"question"}
+              registerSecond={"answer"}
+            /> */}
           </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>

@@ -5,6 +5,7 @@ const initialState = {
   isAdModalVisible: false,
   setEditDataForAd: null,
   buttonClickedForAdModal: "",
+  adReportData: {},
 };
 
 export const adSlice = createSlice({
@@ -25,6 +26,9 @@ export const adSlice = createSlice({
       console.log(payload);
       state.buttonClickedForAdModal = payload;
     },
+    updateAdReportData: (state, { payload }) => {
+      state.adReportData = payload;
+    },
   },
 });
 
@@ -33,5 +37,6 @@ export const {
   updateAdModalVisibility,
   getUserAdDataForEdit,
   knowWhereHaveToOpenModalForAd,
+  updateAdReportData,
 } = adSlice.actions;
 export default adSlice.reducer;

@@ -21,6 +21,7 @@ import {
   updateModeForEdit,
 } from "../../slices/FAQsSlice/faqs";
 import { faqsDataSelector } from "../../slices/FAQsSlice/faqsSelectore";
+import { messagingSelector } from "../../slices/messaging/messagingSelector";
 
 const style = {
   position: "absolute",
@@ -35,122 +36,65 @@ const style = {
   p: 1,
 };
 
-export default function AddFaqsModal({
-  AddUpdateQuestionFaqs,
-  AddFaqsData,
-  faqsListTopicData,
-}) {
+export default function AddFaqsModal(props) {
+  const {
+    CustomBtnOne,
+    CustomBtnTwo,
+    heading,
+    labelOneTitle,
+    labelTwoTitle,
+    placeHolderOne,
+    placeHolderTwo,
+    onSubmit,
+    formatInput,
+    handleFaqsClose,
+    RequiredFirst,
+    RequiredSecond,
+    registerFirst,
+    registerSecond,
+    buttonTitle,
+    modeName,
+    mode,
+  } = props;
   const dispatch = useDispatch();
   const { isAddFaqsModalVisible, setEditFaqsData, setModeForFaqsEdit } =
     useSelector(faqsDataSelector);
-  console.log(setEditFaqsData, "set");
-  const questionIdFaqs = faqsListTopicData?.data?.filter((e) => {
-    // console.log(e, "ee");
-    if (e.topicname === "FAQs") {
-      return e._id;
-    }
-  });
-  console.log(questionIdFaqs, "sett");
-
-  const handleOpen = () => {
-    reset({
-      question: "",
-      answer: "",
-    });
-    dispatch(updateModeForEdit("addFaqs"));
-
-    dispatch(updateAddFaqsModalVisibility(true));
-  };
-
-  const handleFaqsClose = () => {
-    dispatch(getFaqsDataForEdit(""));
-    dispatch(updateAddFaqsModalVisibility(false));
-  };
+  const { multipleRowId } = useSelector(messagingSelector);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
-
-  const onReset = async (userValue) => {
-    console.log(userValue, "sjkaj");
-
-    let result = await Promise.resolve({
-      question: userValue?.question,
-      answer: userValue?.answer,
+  const handleOpen = () => {
+    reset({
+      [registerFirst]: "",
+      [registerSecond]: "",
     });
+    dispatch(updateModeForEdit(`${modeName}`));
 
-    reset(result);
+    dispatch(updateAddFaqsModalVisibility(true));
   };
-
-  const onSubmit = async (data) => {
-    console.log(data);
-    try {
-      console.log(data, "dataaaa");
-
-      const result = await AddUpdateQuestionFaqs({
-        ...data,
-        questionId: setEditFaqsData?.length ? setEditFaqsData[0]?.id : "",
-        topicId: questionIdFaqs[0]._id,
-      }).unwrap();
-      console.log(result, "RESULT_sport");
-      if (result?.code === 200) {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: result?.message,
-            severity: result?.code,
-          })
-        );
-        dispatch(updateModeForEdit("addFaqs"));
-        // setEditFaqsData([]);
-        reset({
-          question: "",
-          answer: "",
-        });
-        handleFaqsClose();
-      } else {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: result?.message,
-            severity: result?.code,
-          })
-        );
-      }
-
-      reset();
-    } catch (err) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: AddFaqsData?.message,
-          severity: AddFaqsData?.code,
-        })
-      );
-    }
-  };
-
   useEffect(() => {
-    if (setEditFaqsData?.length && setModeForFaqsEdit === "edit") {
-      onReset(setEditFaqsData[0]);
+    if (setModeForFaqsEdit === "edit") {
+      setValue(registerFirst, setEditFaqsData[0]?.question);
+      setValue(registerSecond, setEditFaqsData[0]?.answer);
     }
-  }, [setEditFaqsData]);
-
-  const formatInput = (value) => {
-    if (!value) return value;
-    return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
-  };
+  }, [setModeForFaqsEdit, setValue]);
 
   return (
     <>
-      <AddSportBtn disableRipple onClick={handleOpen}>
+      <AddSportBtn
+        disableRipple
+        onClick={handleOpen}
+        disabled={mode === "messaging" && multipleRowId?.length === 0}
+      >
         <AddIcon sx={{ mr: 1 }} />
-        Add FAQs
+        {buttonTitle}
       </AddSportBtn>{" "}
       <Modal
         open={isAddFaqsModalVisible}
@@ -165,7 +109,7 @@ export default function AddFaqsModal({
               variant="h6"
               component="h3"
             >
-              FAQs
+              {heading}
               <CloseIcon className="close-icon" onClick={handleFaqsClose} />
             </SportModalHeading>
           </Box>
@@ -189,10 +133,13 @@ export default function AddFaqsModal({
                   gap: "5px",
                 }}
               >
-                <CustomAddSportLabel requiredInput="*" inputLabel="FAQs" />
+                <CustomAddSportLabel
+                  requiredInput="*"
+                  inputLabel={labelOneTitle}
+                />
                 <OutlinedInput
                   id="outlined-adornment-weight"
-                  placeholder="FAQs"
+                  placeholder={placeHolderOne}
                   sx={{
                     width: "100%",
                     height: "34px",
@@ -201,16 +148,16 @@ export default function AddFaqsModal({
                   inputProps={{
                     "aria-label": "weight",
                   }}
-                  {...register("question", {
-                    required: "Question is required",
+                  {...register(`${registerFirst}`, {
+                    required: `${RequiredFirst} is required`,
                     setValueAs: (value) => formatInput(value),
                   })}
                 />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.question?.message}
-                </FormHelperText>
+                <div className="errorMsgParent">
+                  <FormHelperText sx={{ color: "#d32f2f" }}>
+                    {errors?.[registerFirst]?.message}
+                  </FormHelperText>
+                </div>
               </div>
 
               <div
@@ -222,11 +169,13 @@ export default function AddFaqsModal({
                   gap: "5px",
                 }}
               >
-                <CustomAddSportLabel requiredInput="*" inputLabel="Answer" />
+                <CustomAddSportLabel
+                  requiredInput="*"
+                  inputLabel={labelTwoTitle}
+                />
                 <textarea
                   style={{
                     width: "100%",
-                    // maxHeight: "300px",
                     resize: "vertical",
                     padding: "5px 0px 0px 13px",
                     outline: "none",
@@ -234,19 +183,19 @@ export default function AddFaqsModal({
                     fontSize: "14px",
                     borderRadius: "4px",
                   }}
-                  placeholder="Answer"
+                  placeholder={placeHolderTwo}
                   sx={{
                     "--Textarea-focused": 1,
                   }}
-                  {...register("answer", {
-                    required: "Answer is required",
+                  {...register(`${registerSecond}`, {
+                    required: `${RequiredSecond} is required`,
                     setValueAs: (value) => formatInput(value),
                   })}
                 />
               </div>
               <div className="errorMsgParent">
                 <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.answer?.message}
+                  {errors?.[registerSecond]?.message}
                 </FormHelperText>
               </div>
             </Box>
@@ -258,10 +207,12 @@ export default function AddFaqsModal({
                 height: "35px",
               }}
             >
-              <BackModalBtn onClick={handleFaqsClose}>Back</BackModalBtn>
+              <BackModalBtn onClick={handleFaqsClose}>
+                {CustomBtnOne}
+              </BackModalBtn>
               <AddSportSubmitBtn type="submit">
                 <SendIcon sx={{ mr: 1 }} />
-                Submit
+                {CustomBtnTwo}
               </AddSportSubmitBtn>
             </Box>
           </form>

@@ -75,7 +75,6 @@ function DashboardContent(props) {
     }
     await responseData;
   };
-  console.log(dataCount, "jsakjk");
 
   //   sport
 
@@ -95,7 +94,6 @@ function DashboardContent(props) {
     }
     await listSportData;
   };
-  console.log(dataCount, "sports");
 
   //   competition
 
@@ -115,7 +113,6 @@ function DashboardContent(props) {
     }
     await listCompetitionData;
   };
-  console.log(dataCount, "compp");
 
   useEffect(() => {
     const reqParams = {

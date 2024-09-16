@@ -34,7 +34,7 @@ import UserMenu from "./UserMenu";
 const ManageUsers = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: userData } = useSelector(userDataSelector);
+  const { userData } = useSelector(userDataSelector);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -43,45 +43,29 @@ const ManageUsers = () => {
       setModalContent("Do you want to delete this record?");
       setAction(() => async () => {
         try {
-          await userDeleteApi({ userId: id }).unwrap();
+          const response = await userDeleteApi({ userId: id }).unwrap();
           dispatch(
             handleNotification({
               state: true,
-              message: userDeleteData?.message,
-              severity: userDeleteData?.code,
+              message: response?.message,
+              severity: response?.code,
             })
           );
-        } catch (error) {
-          dispatch(
-            handleNotification({
-              state: true,
-              message: userDeleteData?.message,
-              severity: userDeleteData?.code,
-            })
-          );
-        }
+        } catch (error) {}
       });
     } else if (type === "verify") {
       setModalContent("Do you want to verify this account?");
       setAction(() => async () => {
         try {
-          await verifyUserApi({ userId: id }).unwrap();
+          const response = await verifyUserApi({ userId: id }).unwrap();
           dispatch(
             handleNotification({
               state: true,
-              message: verifyUserData?.message,
-              severity: verifyUserData?.code,
+              message: response?.message,
+              severity: response?.code,
             })
           );
-        } catch (error) {
-          dispatch(
-            handleNotification({
-              state: true,
-              message: verifyUserData?.message,
-              severity: verifyUserData?.code,
-            })
-          );
-        }
+        } catch (error) {}
       });
     }
     setModal(true);
@@ -130,56 +114,8 @@ const ManageUsers = () => {
       isSuccess: verifyUserSuccess,
     },
   ] = useVerifyUserByNameMutation();
-
   useEffect(() => {
-    if (userDeleteLoading) return;
-    if (userDeleteData?.code === 200) {
-      if (userDeleteData) {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: userDeleteData?.message,
-            severity: userDeleteData?.code,
-          })
-        );
-        closeModal();
-      } else {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: userDeleteData?.message,
-            severity: userDeleteData?.status,
-          })
-        );
-      }
-    }
-  }, [userDeleteData, userDeleteLoading]);
-  useEffect(() => {
-    if (verifyUserLoading) return;
-    if (verifyUserData?.code === 200) {
-      if (verifyUserData) {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: verifyUserData?.message,
-            severity: verifyUserData?.code,
-          })
-        );
-        closeModal();
-      } else {
-        dispatch(
-          handleNotification({
-            state: true,
-            message: verifyUserData?.message,
-            severity: verifyUserData?.status,
-          })
-        );
-      }
-    }
-  }, [verifyUserData, verifyUserLoading]);
-
-  useEffect(() => {
-    if (data && data?.data) dispatch(updateUserData(data?.data));
+    if (data && data?.data) dispatch(updateUserData(data));
   }, [data, userListSuccess]);
 
   useEffect(() => {
@@ -293,7 +229,7 @@ const ManageUsers = () => {
                   onClick={() => openModal(value, "delete")}
                 />
 
-                {userData?.map((e) => {
+                {userData?.data?.map((e) => {
                   if (e._id === value) {
                     return e.isVerified === "No" ? (
                       <MailIcon
@@ -326,13 +262,12 @@ const ManageUsers = () => {
       return (
         <>
           <CustomPagination
-            total={data?.totalCount}
+            total={userData?.totalCount}
             page={page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
             userList={userList}
-            // userData={userData}
             isLoading={isLoading}
           />
         </>
@@ -368,7 +303,7 @@ const ManageUsers = () => {
             </SearchWrapper>
             <ManageUserTableWrapper>
               <MUIDataTable
-                data={userData}
+                data={userData?.data}
                 columns={columns}
                 options={options}
               />
