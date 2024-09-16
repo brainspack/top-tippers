@@ -30,7 +30,9 @@ const CustomAccordion = ({ data, accordianHeading }) => {
 
   return (
     <Accordion
-      className="accordion-master"
+      className={`accordion-master ${
+        expanded === "masterPanel" ? "expanded" : "collapsed"
+      }`}
       elevation={0}
       expanded={expanded === "masterPanel"}
       onChange={handleAccordionToggle("masterPanel")}

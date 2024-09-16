@@ -59,11 +59,9 @@ const Login = (props) => {
   const HandleSubmit = async (data) => {
     try {
       const result = await logIn({ body: data }).unwrap();
-      console.log(result, "RESULT_LOGIN");
       if (result) {
         if (result.data) {
           let token = result.data.token;
-          console.log(token, "token");
 
           localStorage.setItem("token", token);
           navigate("dashboard");
@@ -187,7 +185,6 @@ const Login = (props) => {
                                 fullWidth
                                 id={ele.NAME}
                                 label={ele.LABEL}
-                                //   variant="standard"
                                 error={Boolean(errors?.[ele.NAME])}
                                 name={ele.NAME}
                                 {...register(`${ele.NAME}`, {
