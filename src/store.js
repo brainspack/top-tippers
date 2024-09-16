@@ -36,6 +36,7 @@ import listGamesApi from "./api/ListGames";
 import setInviteAndCompButtonApi from "./api/setInviteAndCompButton";
 import manageSportReducer from "./slices/manageSport/manageSport";
 import articleReducer from "./slices/Article/article";
+import versionDataSliceReducer from "./slices/VersionListSlice/versionListSlice";
 import getArticleDetailsApi from "./api/getArticleDetails";
 import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
@@ -58,6 +59,9 @@ import sendMessageApi from "./api/SendMessage";
 import addUpdateAdApi from "./api/AddUpdateAd";
 import listAllUserApi from "./api/ListAllUser";
 import adReportApi from "./api/AdReports";
+import versionListApi from "./api/versionList";
+import deleteVersionApi from "./api/DeleteVersion";
+import addVersionApi from "./api/AddVersion";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -71,6 +75,7 @@ export const store = configureStore({
     adSlice: adReducer,
     listContentSlice: listContentReducer,
     messagingSlice: messagingReducer,
+    versionDataSlice: versionDataSliceReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
@@ -120,6 +125,9 @@ export const store = configureStore({
     [adReportApi.reducerPath]: adReportApi.reducer,
     [listAllUserApi.reducerPath]: listAllUserApi.reducer,
     [sendMessageApi.reducerPath]: sendMessageApi.reducer,
+    [versionListApi.reducerPath]: versionListApi.reducer,
+    [deleteVersionApi.reducerPath]: deleteVersionApi.reducer,
+    [addVersionApi.reducerPath]: addVersionApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -171,7 +179,10 @@ export const store = configureStore({
       addUpdateAdApi.middleware,
       adReportApi.middleware,
       listAllUserApi.middleware,
-      sendMessageApi.middleware
+      sendMessageApi.middleware,
+      versionListApi.middleware,
+      deleteVersionApi.middleware,
+      addVersionApi.middleware
     ),
 });
 setupListeners(store.dispatch);

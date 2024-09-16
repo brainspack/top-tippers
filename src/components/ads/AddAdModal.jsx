@@ -483,6 +483,9 @@ export default function AddAdModal({
                           <MenuItem value={"Scorecard"} {...register("pages")}>
                             SCORECARD PAGE
                           </MenuItem>
+                          <MenuItem value={"every_page"} {...register("pages")}>
+                            EVERY PAGE
+                          </MenuItem>
                         </Select>
                       )}
                     />

@@ -299,13 +299,12 @@
 .date-picker-disabled {
   cursor: not-allowed !important;
 }
-.gameTimePicker .css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root{
+.gameTimePicker .css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root {
   height: 35px !important;
   font-size: 14px !important;
 }
-.gameTimePicker .css-i4bv87-MuiSvgIcon-root{
-  height:20px !important
-
+.gameTimePicker .css-i4bv87-MuiSvgIcon-root {
+  height: 20px !important;
 }
 
 /* .gameTimePicker .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
@@ -316,11 +315,10 @@
   height: 35px !important;
   font-size: 14px !important;
 }
-.articleTimePicker .css-i4bv87-MuiSvgIcon-root{
-  height:20px !important
-
+.articleTimePicker .css-i4bv87-MuiSvgIcon-root {
+  height: 20px !important;
 }
-.articleTimePicker .css-z3c6am-MuiFormControl-root-MuiTextField-root{
+.articleTimePicker .css-z3c6am-MuiFormControl-root-MuiTextField-root {
   width: 100% !important;
 }
 
@@ -361,3 +359,15 @@
 .jodit-container:not(.jodit_inline) .jodit-workplace{
 height: 300px !important;
 } */
+
+.accordion-master {
+  border-top: none; /* Default border-top */
+}
+
+.accordion-master.expanded {
+  border-top: none; /* No border-top when expanded */
+}
+
+.accordion-master.collapsed {
+  border-top: none; /* Border-top for collapsed state */
+}

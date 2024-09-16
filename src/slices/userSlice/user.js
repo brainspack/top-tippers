@@ -43,7 +43,7 @@ export const userSlice = createSlice({
       state.modalSportName = action.payload;
     },
     getUserDataForEdit: (state, { payload }) => {
-      // console.log(payload, "DATA");
+      console.log(payload, "DATA");
       state.setEditData = payload;
     },
     knowWhereHaveToOpenModal: (state, { payload }) => {
