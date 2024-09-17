@@ -40,6 +40,7 @@ import versionDataSliceReducer from "./slices/VersionListSlice/versionListSlice"
 import getArticleDetailsApi from "./api/getArticleDetails";
 import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
+import banterSliceReducer from "./slices/BanterSlice/banterSlice";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
 import listQuestionApi from "./api/ListQuestion";
@@ -62,6 +63,8 @@ import adReportApi from "./api/AdReports";
 import versionListApi from "./api/versionList";
 import deleteVersionApi from "./api/DeleteVersion";
 import addVersionApi from "./api/AddVersion";
+import userCompetitionListBySportIdApi from "./api/getCompetitionListBySportId";
+import getDownloadApi from "./api/getDownload";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -76,6 +79,7 @@ export const store = configureStore({
     listContentSlice: listContentReducer,
     messagingSlice: messagingReducer,
     versionDataSlice: versionDataSliceReducer,
+    banterSlice: banterSliceReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
@@ -128,6 +132,9 @@ export const store = configureStore({
     [versionListApi.reducerPath]: versionListApi.reducer,
     [deleteVersionApi.reducerPath]: deleteVersionApi.reducer,
     [addVersionApi.reducerPath]: addVersionApi.reducer,
+    [userCompetitionListBySportIdApi.reducerPath]:
+      userCompetitionListBySportIdApi.reducer,
+    [getDownloadApi.reducerPath]: getDownloadApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -182,7 +189,9 @@ export const store = configureStore({
       sendMessageApi.middleware,
       versionListApi.middleware,
       deleteVersionApi.middleware,
-      addVersionApi.middleware
+      addVersionApi.middleware,
+      userCompetitionListBySportIdApi.middleware,
+      getDownloadApi.middleware
     ),
 });
 setupListeners(store.dispatch);

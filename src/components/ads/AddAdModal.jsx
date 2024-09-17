@@ -113,12 +113,9 @@ export default function AddAdModal({
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
-    getValues,
-    setValue,
+    formState: { errors },
+
     reset,
-    clearErrors,
-    watch,
   } = useForm({
     mode: "onChange",
 
