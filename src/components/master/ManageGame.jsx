@@ -64,10 +64,6 @@ const ManageGame = () => {
   const { roundData } = useSelector(manageRoundSelector);
   const { gameData, allTeamData, editGameData, selectedGameMode } =
     useSelector(manageGameSelector);
-  // console.log(gameData, "GAME DATA");
-
-  console.log(gameData, "sjajas");
-
   const { sportData } = useSelector(manageSportSelector);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
@@ -137,15 +133,7 @@ const ManageGame = () => {
               })
             );
           }
-        } catch (error) {
-          dispatch(
-            handleNotification({
-              state: true,
-              message: userDeleteData?.message,
-              severity: userDeleteData?.code,
-            })
-          );
-        }
+        } catch (error) {}
       });
     }
 
@@ -291,7 +279,6 @@ const ManageGame = () => {
     const filterData = gameData?.data?.filter((ele) => {
       return ele?._id === value;
     });
-    console.log(filterData, "filterData");
     dispatch(getGameDataForEdit(filterData));
     dispatch(setSelectedGameMode("editGame"));
     dispatch(updateModalVisibility(true));
