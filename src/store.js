@@ -40,6 +40,7 @@ import versionDataSliceReducer from "./slices/VersionListSlice/versionListSlice"
 import getArticleDetailsApi from "./api/getArticleDetails";
 import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
+import banterSliceReducer from "./slices/BanterSlice/banterSlice";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
 import listQuestionApi from "./api/ListQuestion";
@@ -63,6 +64,8 @@ import versionListApi from "./api/versionList";
 import deleteVersionApi from "./api/DeleteVersion";
 import addVersionApi from "./api/AddVersion";
 import filterGameRevelListApi from "./api/filterGameRevelList";
+import userCompetitionListBySportIdApi from "./api/getCompetitionListBySportId";
+import getDownloadApi from "./api/getDownload";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -77,6 +80,7 @@ export const store = configureStore({
     listContentSlice: listContentReducer,
     messagingSlice: messagingReducer,
     versionDataSlice: versionDataSliceReducer,
+    banterSlice: banterSliceReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
@@ -130,6 +134,9 @@ export const store = configureStore({
     [deleteVersionApi.reducerPath]: deleteVersionApi.reducer,
     [addVersionApi.reducerPath]: addVersionApi.reducer,
     [filterGameRevelListApi.reducerPath]: filterGameRevelListApi.reducer,
+    [userCompetitionListBySportIdApi.reducerPath]:
+      userCompetitionListBySportIdApi.reducer,
+    [getDownloadApi.reducerPath]: getDownloadApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -185,7 +192,9 @@ export const store = configureStore({
       versionListApi.middleware,
       deleteVersionApi.middleware,
       addVersionApi.middleware,
-      filterGameRevelListApi.middleware
+      filterGameRevelListApi.middleware,
+      userCompetitionListBySportIdApi.middleware,
+      getDownloadApi.middleware
     ),
 });
 setupListeners(store.dispatch);
