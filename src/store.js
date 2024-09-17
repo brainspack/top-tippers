@@ -62,6 +62,7 @@ import adReportApi from "./api/AdReports";
 import versionListApi from "./api/versionList";
 import deleteVersionApi from "./api/DeleteVersion";
 import addVersionApi from "./api/AddVersion";
+import filterGameRevelListApi from "./api/filterGameRevelList";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -128,6 +129,7 @@ export const store = configureStore({
     [versionListApi.reducerPath]: versionListApi.reducer,
     [deleteVersionApi.reducerPath]: deleteVersionApi.reducer,
     [addVersionApi.reducerPath]: addVersionApi.reducer,
+    [filterGameRevelListApi.reducerPath]: filterGameRevelListApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -182,7 +184,8 @@ export const store = configureStore({
       sendMessageApi.middleware,
       versionListApi.middleware,
       deleteVersionApi.middleware,
-      addVersionApi.middleware
+      addVersionApi.middleware,
+      filterGameRevelListApi.middleware
     ),
 });
 setupListeners(store.dispatch);
