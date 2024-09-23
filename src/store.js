@@ -41,6 +41,7 @@ import getArticleDetailsApi from "./api/getArticleDetails";
 import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
 import banterSliceReducer from "./slices/BanterSlice/banterSlice";
+import secretCompetitionReducer from "./slices/secretCompetition/secretCompetition";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
 import listQuestionApi from "./api/ListQuestion";
@@ -66,6 +67,7 @@ import addVersionApi from "./api/AddVersion";
 import filterGameRevelListApi from "./api/filterGameRevelList";
 import userCompetitionListBySportIdApi from "./api/getCompetitionListBySportId";
 import getDownloadApi from "./api/getDownload";
+import gameTippingCountApi from "./api/gametippingcount";
 export const store = configureStore({
   reducer: {
     snackbar: snackbarReducer,
@@ -81,6 +83,7 @@ export const store = configureStore({
     messagingSlice: messagingReducer,
     versionDataSlice: versionDataSliceReducer,
     banterSlice: banterSliceReducer,
+    secretCompetitionSlice: secretCompetitionReducer,
     [adminLoginApi.reducerPath]: adminLoginApi.reducer,
     [userListApi.reducerPath]: userListApi.reducer,
     [deactivateUserApi.reducerPath]: deactivateUserApi.reducer,
@@ -137,6 +140,7 @@ export const store = configureStore({
     [userCompetitionListBySportIdApi.reducerPath]:
       userCompetitionListBySportIdApi.reducer,
     [getDownloadApi.reducerPath]: getDownloadApi.reducer,
+    [gameTippingCountApi.reducerPath]: gameTippingCountApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -194,7 +198,8 @@ export const store = configureStore({
       addVersionApi.middleware,
       filterGameRevelListApi.middleware,
       userCompetitionListBySportIdApi.middleware,
-      getDownloadApi.middleware
+      getDownloadApi.middleware,
+      gameTippingCountApi.middleware
     ),
 });
 setupListeners(store.dispatch);

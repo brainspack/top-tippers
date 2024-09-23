@@ -22,13 +22,11 @@ export const manageSlice = createSlice({
         },
         ...payload.data,
       ];
-      console.log(newData, "newData");
-      console.log(payload, "PAYLOAD");
+
       const newObj = {
         ...payload,
         data: newData,
       };
-      console.log(newObj, "NEWOBJ");
       state.sportData = newObj;
     },
     updateSelectedSport: (state, { payload }) => {
