@@ -27,7 +27,7 @@ import {
   updateUserData,
 } from "../../slices/userSlice/user";
 import { useListAllUserApiByNameMutation } from "../../api/ListAllUser";
-import EmailIcon from "@mui/icons-material/Email";
+
 import AddFaqsModal from "../cms/AddFaqsModal";
 import {
   getFaqsDataForEdit,
@@ -44,6 +44,7 @@ import {
 import { handleNotification } from "../../slices/Snackbar";
 import { useForm } from "react-hook-form";
 import { faqsDataSelector } from "../../slices/FAQsSlice/faqsSelectore";
+import { MESSAGE_OPTIONS, MESSAGE_TABLE_COLUMNS } from "./messageTableColumns";
 
 const MessagingContent = () => {
   const dispatch = useDispatch();
@@ -85,90 +86,6 @@ const MessagingContent = () => {
       dispatch(updateUserAllData(data));
     }
   }, [data]);
-
-  const columns = [
-    {
-      name: "name",
-      label: "Name",
-      options: {
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "email",
-      label: "Email",
-      options: {
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "black",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <Box display="flex" gap="10px">
-                <EmailIcon
-                  onClick={() => onHandleMessageOpen(value)}
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                ></EmailIcon>
-              </Box>
-            </>
-          );
-        },
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    pagination: true,
-    rowsPerPage: 10,
-    onRowsSelect: (currentRowsSelected, allRowsSelected) => {
-      const selectedData = allRowsSelected.map(
-        (row) => userAllData?.data[row.dataIndex]
-      );
-
-      const filteredId = selectedData.map((data) => {
-        console.log(data?._id, "data?._id");
-        return data?._id;
-      });
-      dispatch(updateMultipleRowId(filteredId));
-    },
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={userAllData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={listAllUserApi}
-            userAllData={userAllData?.data}
-            isLoading={isLoading}
-          />
-        </>
-      );
-    },
-  };
 
   useEffect(() => {
     dispatch(setCurrentModule("messaging"));
@@ -265,8 +182,12 @@ const MessagingContent = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={userAllData?.data}
-                columns={columns}
-                options={options}
+                columns={MESSAGE_TABLE_COLUMNS(onHandleMessageOpen)}
+                options={MESSAGE_OPTIONS(
+                  userAllData,
+                  listAllUserApi,
+                  isLoading
+                )}
               />
             </ManageUserTableWrapper>
           </SearchContainer>

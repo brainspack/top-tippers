@@ -29,6 +29,8 @@ import { userDataSelector } from "../../slices/userSlice/userSelector";
 import DateRangePicker from "./DatePickerComponent";
 import { Controller, useForm } from "react-hook-form";
 import { handleNotification } from "../../slices/Snackbar";
+import { DEFAULT_SPORT_VALUE, RESET_SPORT_VALUE } from "../../utils/constant";
+import TextInputBox from "../reuse/TextInputBox";
 
 const style = {
   position: "absolute",
@@ -38,9 +40,9 @@ const style = {
   width: 470,
   bgcolor: "background.paper",
   boxShadow: 24,
-  height: "584px",
+  height: "590px",
   outline: "none",
-  // p: 1,
+  p: 1,
 };
 
 export default function AddSportModal({ success, dataSupport, apiFunction }) {
@@ -48,18 +50,8 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   const { isModalVisible, setEditData, buttonClickedForModal } =
     useSelector(userDataSelector);
 
-  console.log(setEditData, "set");
-
   const handleOpen = () => {
-    reset({
-      sportname: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-      type: "",
-      bonus: null,
-      stack: "",
-    });
+    reset(RESET_SPORT_VALUE);
     dispatch(knowWhereHaveToOpenModal("addSport"));
     dispatch(updateModalVisibility(true));
   };
@@ -72,7 +64,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     getValues,
     setValue,
     reset,
@@ -80,23 +72,14 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
     watch,
   } = useForm({
     mode: "onChange",
-
     defaultValues: {
-      sportname: "",
-      description: "",
-      type: "",
-      bonus: "",
-      startDate: "",
-      endDate: "",
-      stack: "",
+      DEFAULT_SPORT_VALUE,
     },
     criteriaMode: "all",
     shouldFocusError: true,
   });
 
   const onReset = async (userValue) => {
-    console.log(userValue, "sjka");
-
     let result = await Promise.resolve({
       sportname: userValue?.sportname,
       description: userValue?.description,
@@ -111,8 +94,6 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
   };
 
   const onSubmit = async (data) => {
-    let updated = getValues();
-
     try {
       const result = await apiFunction({
         ...data,
@@ -128,15 +109,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
             severity: result?.code,
           })
         );
-        reset({
-          sportname: "",
-          description: "",
-          startDate: "",
-          endDate: "",
-          type: "",
-          bonus: null,
-          stack: "",
-        });
+        reset(RESET_SPORT_VALUE);
         handleClose();
       } else {
         dispatch(
@@ -200,81 +173,26 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
               sx={{
                 mt: 1,
                 padding: "0 15px 12px",
-                height: "475px",
+                height: "482px",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Sport Name:"
-                />
-                <OutlinedInput
-                  id="outlined-adornment-weight"
-                  sx={{
-                    width: "100%",
-                    height: "34px",
-                  }}
-                  aria-describedby="outlined-weight-helper-text"
-                  inputProps={{
-                    "aria-label": "weight",
-                  }}
-                  {...register("sportname", {
-                    required: "Sport Name is required",
-                    setValueAs: (value) => formatInput(value),
-                  })}
-                />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.sportname?.message}
-                </FormHelperText>
-              </div>
+              <TextInputBox
+                inputLabel={"Sport Name:"}
+                register={register}
+                name={"sportname"}
+                errors={errors}
+                required={"Sport is required"}
+              />
 
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Description:"
-                />
-
-                <OutlinedInput
-                  id="outlined-adornment-weight"
-                  sx={{
-                    width: "100%",
-                    height: "34px",
-                  }}
-                  aria-describedby="outlined-weight-helper-text"
-                  inputProps={{
-                    "aria-label": "weight",
-                  }}
-                  {...register("description", {
-                    required: "Description is required",
-                    setValueAs: (value) => formatInput(value),
-                  })}
-                />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.description?.message}
-                </FormHelperText>
-              </div>
+              <TextInputBox
+                inputLabel={"Description:"}
+                register={register}
+                name={"description"}
+                errors={errors}
+                required={"Description is required"}
+              />
 
               <div
                 style={{
@@ -383,9 +301,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                         {...field}
                         {...register("bonus")}
                       >
-                        <MenuItem disabled value="">
-                          Bonus
-                        </MenuItem>
+                        <MenuItem disabled>Bonus</MenuItem>
                         <MenuItem value={"True"} {...register("bonus")}>
                           True
                         </MenuItem>
@@ -403,46 +319,16 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                 </FormControl>
               </div>
 
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="MULTI CALCULATOR STAKE VALUE:"
-                />
-
-                <OutlinedInput
-                  id="outlined-adornment-weight"
-                  placeholder={"Stack Value"}
-                  sx={{
-                    width: "100%",
-                    height: "40px",
-                  }}
-                  aria-describedby="outlined-weight-helper-text"
-                  inputProps={{
-                    "aria-label": "weight",
-                  }}
-                  {...register("stack", {
-                    required: "Stack Value is required",
-                    pattern: {
-                      value: /^\d+$/,
-                    },
-                    message: "Stack Value must be a number",
-                    // setValueAs: (value) => formatInput(value),
-                  })}
-                />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.stack?.message}
-                </FormHelperText>
-              </div>
+              <TextInputBox
+                inputLabel={"MULTI CALCULATOR STAKE VALUE:"}
+                register={register}
+                name={"stack"}
+                errors={errors}
+                required={"Stack Value is required"}
+                placeholder={"Stack Value"}
+                mode={"stack"}
+                patternValue={"/^d+$/"}
+              />
             </Box>
 
             <Box

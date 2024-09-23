@@ -37,6 +37,7 @@ import {
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import TextInputBox from "../reuse/TextInputBox";
 
 const style = {
   position: "absolute",
@@ -193,36 +194,13 @@ export default function AddVersionModal({ addVersionData, addVersionApi }) {
                 flexDirection: "column",
               }}
             >
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                }}
-              >
-                <CustomAddSportLabel requiredInput="*" inputLabel="Title:" />
-                <OutlinedInput
-                  id="outlined-adornment-weight"
-                  sx={{
-                    width: "100%",
-                    height: "34px",
-                  }}
-                  aria-describedby="outlined-weight-helper-text"
-                  inputProps={{
-                    "aria-label": "weight",
-                  }}
-                  {...register("title", {
-                    required: "Title is required",
-                  })}
-                />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.title?.message}
-                </FormHelperText>
-              </div>
+              <TextInputBox
+                inputLabel={"Title:"}
+                register={register}
+                name={"title"}
+                errors={errors}
+                required={"Title is required"}
+              />
 
               <div
                 style={{

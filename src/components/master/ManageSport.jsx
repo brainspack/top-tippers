@@ -9,9 +9,7 @@ import {
 } from "../ManageUsers/ManangeUsersStyled";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import MUIDataTable from "mui-datatables";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from "@mui/icons-material/Send";
-import EditIcon from "@mui/icons-material/Edit";
+
 import AddSportModal from "./AddSportModal";
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "../reuse/CustomModal";
@@ -28,12 +26,12 @@ import { updateSportData } from "../../slices/manageSport/manageSport";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 import { useGetAddUpdateSportApiByNameMutation } from "../../api/AddUpdateSport";
 import SendSportModal from "./SendSportModal";
-import SportControlledSwitches from "./SportSwitchComponent";
 import CustomPagination from "../reuse/CustomPagination";
 import { useGetSendSportNotificaticationApiByNameMutation } from "../../api/SendSportNotificatication";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
 import moment from "moment";
-import { ClassNames } from "@emotion/react";
+import { SPORT_OPTIONS, SPORT_TABLE_COLUMNS } from "./masterTableColumns";
+
 const ManageSport = (props) => {
   const dispatch = useDispatch();
 
@@ -90,14 +88,8 @@ const ManageSport = (props) => {
     { data: addUpdateSportData, isSuccess: updataSportSuccess },
   ] = useGetAddUpdateSportApiByNameMutation();
 
-  const [
-    userListSport,
-    {
-      data: listSportData,
-      isSuccess: userSportSuccess,
-      isLoading: sportDataFetching,
-    },
-  ] = useGetUserListSportApiByNameMutation();
+  const [userListSport, { data: listSportData, isLoading: sportDataFetching }] =
+    useGetUserListSportApiByNameMutation();
 
   const [
     sendSportNotify,
@@ -112,12 +104,7 @@ const ManageSport = (props) => {
   console.log(setInviteButtonData, "ASD");
   const [
     SportDeleteApi,
-    {
-      data: sportDeleteData,
-      isLoading: sportDeleteLoading,
-      error: sportDeleteError,
-      isSuccess: sportDeleteSuccess,
-    },
+    { data: sportDeleteData, isSuccess: sportDeleteSuccess },
   ] = useDeleteSportByNameMutation();
 
   const handleEditClick = (rowData) => {
@@ -178,192 +165,6 @@ const ManageSport = (props) => {
     sendSportSuccess,
   ]);
 
-  const columns = [
-    {
-      name: "sportname",
-      label: "Sport Name",
-
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "startDate",
-      label: "Start Date",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "endDate",
-      label: "End Date",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "type",
-      label: "Type",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "description",
-      label: "Description",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "bonus",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value) => (
-          <Typography>{value ? "Open" : "Close"}</Typography>
-        ),
-      },
-    },
-
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value, rowData) => (
-          <>
-            <Box display="flex" gap="10px">
-              <EditIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => handleEditClick(rowData)}
-              ></EditIcon>
-              <DeleteIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => openModal(value, "delete")}
-              />
-              <SendIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => handleSendOpen(rowData)}
-              />
-            </Box>
-          </>
-        ),
-      },
-    },
-
-    {
-      name: "isInviteCompButton",
-      label: "Invite&Comp Button",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-            display: "flex",
-            justifyContent: "center",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <SportControlledSwitches
-              value={value}
-              rowData={rowData}
-              statusChangeApi={userSetInvite}
-              deactivateUserData={setInviteButtonData}
-            />
-          );
-        },
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={sportData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={userListSport}
-            userData={sportData?.data}
-            isLoading={sportDataFetching}
-          />
-        </>
-      );
-    },
-  };
-
   useEffect(() => {
     dispatch(setCurrentModule("sport"));
   }, []);
@@ -389,8 +190,18 @@ const ManageSport = (props) => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={sportData?.data}
-                columns={columns}
-                options={options}
+                columns={SPORT_TABLE_COLUMNS(
+                  handleEditClick,
+                  openModal,
+                  handleSendOpen,
+                  userSetInvite,
+                  setInviteButtonData
+                )}
+                options={SPORT_OPTIONS(
+                  sportData,
+                  userListSport,
+                  sportDataFetching
+                )}
               />
             </ManageUserTableWrapper>
             <CustomModal

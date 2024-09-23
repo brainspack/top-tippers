@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
@@ -15,14 +15,12 @@ import {
   updateModeForRulesEdit,
   updateUserListContentData,
 } from "../../slices/ListContentSlice/listContent";
-import EditIcon from "@mui/icons-material/Edit";
 
 import { useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import CustomPagination from "../reuse/CustomPagination";
 import { useGetAddUpdateContentApiByNameMutation } from "../../api/addUpdateContent";
 import EditRulesModal from "./EditRulesModal";
-import { updateModeForEdit } from "../../slices/FAQsSlice/faqs";
+import { RULES_OPTIONS, RULES_TABLE_COLUMNS } from "./tableColumns";
 
 const RulesContent = () => {
   const dispatch = useDispatch();
@@ -31,18 +29,12 @@ const RulesContent = () => {
 
   const [
     listContentApi,
-    {
-      data: listContentData,
-      isLoading: userListContentDataFetching,
-      error: listContentError,
-      isSuccess: listContentSuccess,
-    },
+    { data: listContentData, isLoading: userListContentDataFetching },
   ] = useGetUserListContentApiByNameMutation();
   const [
     AddUpdateContentRules,
     {
       data: AddContentRulesData,
-      isLoading: AddContentRulesDataFetching,
       error: AddContentRulesError,
       isSuccess: AddContentRulesSuccess,
     },
@@ -53,15 +45,7 @@ const RulesContent = () => {
       dispatch(updateUserListContentData(listContentData));
   }, [listContentData]);
 
-  console.log(
-    AddContentRulesSuccess,
-    AddContentRulesData,
-    AddContentRulesError,
-    "IMP"
-  );
   useEffect(() => {
-    console.log("assiff");
-
     if (AddContentRulesSuccess) {
       const reqParams = {
         search_string: "",
@@ -92,102 +76,10 @@ const RulesContent = () => {
         id: rowData?.rowData[2],
       },
     ];
-    console.log(payload, "payy");
 
     dispatch(getEditRulesData(payload));
     dispatch(updateModeForRulesEdit("edit"));
     dispatch(updateEditRulesModalVisible(true));
-  };
-
-  const columns = [
-    {
-      name: "title",
-      label: "Titles",
-
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "content",
-      label: "Rules",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value, rowData) => (
-          <>
-            <Box display="flex" gap="10px">
-              <EditIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => handleEditClick(rowData)}
-              ></EditIcon>
-              {/* <DeleteIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => openModal(value, "delete")}
-              /> */}
-            </Box>
-          </>
-        ),
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 5,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={userListContentData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={listContentApi}
-            userData={userListContentData?.data}
-            isLoading={userListContentDataFetching}
-          />
-        </>
-      );
-    },
   };
 
   return (
@@ -199,7 +91,6 @@ const RulesContent = () => {
             <EditRulesModal
               AddUpdateContentRules={AddUpdateContentRules}
               AddContentRulesData={AddContentRulesData}
-              // faqsListTopicData={faqsListTopicData}
             />
           </Box>
 
@@ -207,16 +98,14 @@ const RulesContent = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={userListContentData?.data}
-                columns={columns}
-                options={options}
+                columns={RULES_TABLE_COLUMNS(handleEditClick)}
+                options={RULES_OPTIONS(
+                  userListContentData,
+                  listContentApi,
+                  userListContentDataFetching
+                )}
               />
             </ManageUserTableWrapper>
-            {/* <CustomModal
-              modal={modal}
-              closeModal={closeModal}
-              content={modalTitle}
-              action={action}
-            /> */}
           </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>
