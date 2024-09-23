@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
 import {
   setModalSportName,
@@ -38,6 +36,7 @@ import AddTeamModal from "./AddTeamModal";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { AddSportBtn } from "./masterStyled";
 import { useAddTeamByNameMutation } from "../../api/AddNewTeam";
+import { TEAM_OPTIONS, TEAM_TABLE_COLUMNS } from "./masterTableColumns";
 
 const ManageTeam = () => {
   const navigate = useNavigate();
@@ -144,154 +143,6 @@ const ManageTeam = () => {
     teamList(reqParams);
   }, [deactivateUserSuccess, userDeleteSuccess, addTeamSuccess]);
 
-  const columns = [
-    {
-      name: "teamname",
-      label: "Team Name",
-      options: {
-        filter: true,
-        sort: true,
-
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "sport",
-      label: "Sport",
-      options: {
-        customBodyRender: (data) => {
-          return (
-            <>
-              <Box>{data?.sportname}</Box>
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "teamLogo",
-      label: "Logo",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-        customBodyRender: (data, value) => {
-          {
-            // console.log(value, "VALUE");
-          }
-          return (
-            <>
-              {teamData?.data.map((e) => {
-                if (e._id === value.rowData[4]) {
-                  return (
-                    <Box
-                      className="logoBox"
-                      sx={{ height: "50px", width: "50px" }}
-                    >
-                      <img src={e.teamLogo} />
-                    </Box>
-                  );
-                }
-              })}
-            </>
-          );
-        },
-      },
-    },
-
-    {
-      name: "isActive",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "black",
-            display: "flex",
-            justifyContent: "center",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <ControlledSwitches
-                value={value}
-                rowData={rowData}
-                statusChangeApi={deactivateUser}
-                deactivateUserData={deactivateUserData}
-              />
-            </>
-          );
-        },
-      },
-    },
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "black",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <Box display="flex" gap="10px">
-                <VisibilityIcon
-                  onClick={() => navigate(`/admin/teamdetail/${value}`)}
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                ></VisibilityIcon>
-                <DeleteIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => openModal(value, "delete")}
-                />
-              </Box>
-            </>
-          );
-        },
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={teamData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={teamList}
-            userData={teamData?.data}
-            isLoading={teamDataFetching}
-          />
-        </>
-      );
-    },
-  };
   const { isModalVisible, modalSportName } = useSelector(userDataSelector);
   useEffect(() => {
     dispatch(setCurrentModule("team"));
@@ -336,8 +187,14 @@ const ManageTeam = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={teamData?.data}
-                columns={columns}
-                options={options}
+                columns={TEAM_TABLE_COLUMNS(
+                  teamData,
+                  deactivateUser,
+                  deactivateUserData,
+                  navigate,
+                  openModal
+                )}
+                options={TEAM_OPTIONS(teamData, teamList, teamDataFetching)}
               />
             </ManageUserTableWrapper>
             <CustomModal

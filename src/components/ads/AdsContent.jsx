@@ -29,6 +29,7 @@ import CustomModal from "../reuse/CustomModal";
 import { useDeleteAdByNameMutation } from "../../api/DeleteAd";
 import { useGetAddUpdateAdApiByNameMutation } from "../../api/AddUpdateAd";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
+import { AD_OPTIONS, AD_TABLE_COLUMNS } from "./adTableColumns";
 
 const AdsContent = () => {
   const dispatch = useDispatch();
@@ -116,7 +117,7 @@ const AdsContent = () => {
         mediaType: rowData?.rowData[2],
         userType: rowData?.rowData[3],
         sport: sportValue?.length ? sportValue[0]?.sport : "",
-        page: rowData?.rowData[5],
+        pages: rowData?.rowData[5],
         redirectUrl: sportValue?.length ? sportValue[0]?.redirectUrl : "",
 
         id: rowData?.rowData[6],
@@ -176,157 +177,6 @@ const AdsContent = () => {
     }
   }, [listSportData, userAdData, listSportSuccess, userAdSuccess]);
 
-  const columns = [
-    {
-      name: "name",
-      label: "Name",
-
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "type",
-      label: "Type",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "mediaType",
-      label: "Media Type",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "userType",
-      label: "User Type",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "sport",
-      label: "Sports",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "pages",
-      label: "Pages",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value, rowData) => (
-          <>
-            <Box display="flex" gap="10px">
-              <EditIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => handleEditClick(rowData)}
-              ></EditIcon>
-              <DeleteIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => openModal(value, "delete")}
-              />
-            </Box>
-          </>
-        ),
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={userAdData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={userAdApi}
-            userData={userAdData?.data}
-            isLoading={userAdLoading}
-          />
-        </>
-      );
-    },
-  };
-
   useEffect(() => {
     dispatch(setCurrentModule("Ad"));
   }, []);
@@ -347,7 +197,11 @@ const AdsContent = () => {
 
           <SearchContainer>
             <ManageUserTableWrapper>
-              <MUIDataTable data={adData} columns={columns} options={options} />
+              <MUIDataTable
+                data={adData}
+                columns={AD_TABLE_COLUMNS(handleEditClick, openModal)}
+                options={AD_OPTIONS(userAdData, userAdApi, userAdLoading)}
+              />
             </ManageUserTableWrapper>
             <CustomModal
               modal={modal}

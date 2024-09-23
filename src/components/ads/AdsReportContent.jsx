@@ -22,6 +22,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useAdReportApiByNameMutation } from "../../api/AdReports";
 import moment from "moment/moment";
 import { CSVLink } from "react-csv";
+import { REPORT_OPTIONS, REPORT_TABLE_COLUMNS } from "./reportTableColumns";
 // import { Parser } from "json2csv";
 
 const AdsReportContent = () => {
@@ -70,112 +71,6 @@ const AdsReportContent = () => {
     if (data && data?.data) dispatch(updateAdReportData(data));
   }, [data]);
 
-  const columns = [
-    {
-      name: "ad",
-      label: "Ad Name",
-      options: {
-        customBodyRender: (data) => {
-          return (
-            <>
-              <Box>{data?.name}</Box>
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "ad",
-      label: "Ad Type",
-      options: {
-        customBodyRender: (data) => {
-          return (
-            <>
-              <Box>{data?.type}</Box>
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "user",
-      label: "User Name",
-      options: {
-        customBodyRender: (data) => {
-          return (
-            <>
-              <Box>{data?.name}</Box>
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "user",
-      label: "User Email",
-      options: {
-        customBodyRender: (data) => {
-          return (
-            <>
-              <Box>{data?.email}</Box>
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "createdAt",
-      label: "Created Date",
-      options: {
-        customBodyRender: (value) => {
-          return moment(value).format("M/D/YYYY, h:mm:ss A");
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={adReportData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={adReportsApi}
-            userData={adReportData?.data}
-            isLoading={isLoading}
-          />
-        </>
-      );
-    },
-  };
-
   useEffect(() => {
     dispatch(setCurrentModule("adReport"));
   }, []);
@@ -216,8 +111,8 @@ const AdsReportContent = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={adReportData?.data}
-                columns={columns}
-                options={options}
+                columns={REPORT_TABLE_COLUMNS()}
+                options={REPORT_OPTIONS(adReportData, adReportsApi, isLoading)}
               />
             </ManageUserTableWrapper>
           </SearchContainer>

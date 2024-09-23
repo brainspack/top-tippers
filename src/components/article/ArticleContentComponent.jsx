@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
@@ -9,32 +9,26 @@ import {
   StyledInputBase,
   Search,
 } from "../ManageUsers/ManangeUsersStyled";
-import {
-  articleDataSelector,
-  articleSelector,
-} from "../../slices/Article/articleSelector";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { articleDataSelector } from "../../slices/Article/articleSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { useLazyGetArticleGetAndSearchApiByNameQuery } from "../../api/GetAndSearchArticle";
 import { useEffect, useState } from "react";
 import {
   updateArticleData,
-  updateFilteredArticleData,
   updateSelectedArticleType,
 } from "../../slices/Article/article";
 import MUIDataTable from "mui-datatables";
-import CustomPagination from "../reuse/CustomPagination";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
 import { AddSportBtn } from "../master/masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate, useParams } from "react-router-dom";
-import ControlledSwitches from "../SwitchComponent";
 import { useDeleteArticleByNameMutation } from "../../api/DeleteArticle";
 import { handleNotification } from "../../slices/Snackbar";
 import CustomModal from "../reuse/CustomModal";
 import { useForm } from "react-hook-form";
+import { ARTICLE_OPTIONS, ARTICLE_TABLE_COLUMNS } from "./articleTableColumns";
+import { RESET_ARTICLE_VALUE } from "../../utils/constant";
 
 const ArticleContent = () => {
   const { reset } = useForm();
@@ -43,11 +37,9 @@ const ArticleContent = () => {
   console.log(filteredArticleData, "filteredArticleData");
   console.log(selectArticleType, "selectArticleType");
   const navigate = useNavigate();
-  const { articleid } = useParams();
   const dispatch = useDispatch();
   const { articleData } = useSelector(articleDataSelector);
   console.log(articleData, "articleData");
-  const [searchString, setSearchString] = useState("");
 
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
@@ -95,38 +87,17 @@ const ArticleContent = () => {
   };
 
   const handleAddClick = () => {
-    reset({
-      title: "",
-      addedby: "",
-      url: "",
-      articleType: "",
-      sportId: "",
-      sportIdd: "",
-      gameId: "",
-      articleType: "",
-      teamId: "",
-      text: "",
-      roundId: "",
-    });
+    reset(RESET_ARTICLE_VALUE);
     dispatch(updateSelectedArticleType("add"));
     navigate("/admin/addearticle");
   };
   const [
     articleDeleteApi,
-    {
-      data: articleDeleteData,
-      isLoading,
-      error,
-      isSuccess: articleDeleteSuccess,
-    },
+    { data: articleDeleteData, isSuccess: articleDeleteSuccess },
   ] = useDeleteArticleByNameMutation();
   const [
     userListArticle,
-    {
-      data: listArticleData,
-      isSuccess: userArticleSuccess,
-      isLoading: articleDataFetching,
-    },
+    { data: listArticleData, isLoading: articleDataFetching },
   ] = useLazyGetArticleGetAndSearchApiByNameQuery();
 
   useEffect(() => {
@@ -135,8 +106,6 @@ const ArticleContent = () => {
   }, [listArticleData]);
 
   const onHandleSearch = (e) => {
-    // const value = ;
-
     const reqParams = {
       search: e.target.value,
     };
@@ -144,119 +113,12 @@ const ArticleContent = () => {
   };
   useEffect(() => {
     const reqParams = {
-      // search_string: "",
       page: 0,
       sortValue: "",
       sortOrder: "",
     };
     userListArticle(reqParams);
   }, [articleDeleteSuccess]);
-
-  const columns = [
-    {
-      name: "title",
-      label: "Title",
-
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "isActive",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <ControlledSwitches
-                value={value}
-                rowData={rowData}
-                statusChangeApi={articleDeleteApi}
-                deactivateUserData={articleDeleteData}
-
-                //   userList={userList}
-              />
-            </>
-          );
-        },
-      },
-    },
-
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value, rowData) => (
-          <>
-            <Box display="flex" gap="10px">
-              <EditIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => handleEditClick(value, rowData)}
-              ></EditIcon>
-              <DeleteIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => openModal(value, "delete")}
-              />
-            </Box>
-          </>
-        ),
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 5,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={listArticleData?.data?.totalDocs}
-            mode="articlePage"
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={userListArticle}
-            // userData={articleData?.data?.docs}
-            isLoading={articleDataFetching}
-          />
-        </>
-      );
-    },
-  };
 
   useEffect(() => {
     dispatch(setCurrentModule("Article"));
@@ -290,8 +152,17 @@ const ArticleContent = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={articleData?.data?.docs}
-                columns={columns}
-                options={options}
+                columns={ARTICLE_TABLE_COLUMNS(
+                  handleEditClick,
+                  openModal,
+                  articleDeleteApi,
+                  articleDeleteData
+                )}
+                options={ARTICLE_OPTIONS(
+                  listArticleData,
+                  userListArticle,
+                  articleDataFetching
+                )}
               />
             </ManageUserTableWrapper>
             <CustomModal

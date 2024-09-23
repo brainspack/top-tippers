@@ -14,13 +14,13 @@ import {
   ManageUserTableWrapper,
   SearchContainer,
 } from "../ManageUsers/ManangeUsersStyled";
-import { BanterFormWrapper } from "./banterStyled";
+import { BanterFormWrapper, FilterBtn } from "./banterStyled";
 import { Controller, useForm } from "react-hook-form";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
 import { MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { updateSportData } from "../../slices/manageSport/manageSport";
 import { banterDataSelector } from "../../slices/BanterSlice/banterSelector";
@@ -29,16 +29,25 @@ import { useUserCompetitionListBySportIdApiByNameMutation } from "../../api/getC
 import DateRangePicker from "../master/DatePickerComponent";
 import { AddSportSubmitBtn } from "../master/masterStyled";
 import { useLazyGetUserGetDownloadByNameQuery } from "../../api/getDownload";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import moment from "moment";
 import { CSVLink } from "react-csv";
+import { LoadingButton } from "@mui/lab";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const BanterContent = () => {
   const dispatch = useDispatch();
   const { sportData } = useSelector(manageSportDataSelector);
   const { banterCompetitionListData } = useSelector(banterDataSelector);
   const [competitions, setCompetitions] = useState([]);
-  const [csvData, setCsvData] = useState([]);
-  const [csvHeaders, setCsvHeaders] = useState([]);
+  const [state, setState] = useState({});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isCsvAvailable, setIsCsvAvailable] = useState(false);
 
   const [
     userListSport,
@@ -118,15 +127,6 @@ const BanterContent = () => {
   } = useForm({
     mode: "onChange",
 
-    defaultValues: {
-      name: "",
-      type: "",
-      userType: "",
-      pages: "",
-      sport: "",
-      mediaType: "",
-      redirectUrl: "",
-    },
     criteriaMode: "all",
     shouldFocusError: true,
   });
@@ -148,35 +148,38 @@ const BanterContent = () => {
       endDate: isoEndDate,
     };
     const response = await getDownloadApi(payload).unwrap();
-    console.log(response, "sd");
 
-    if (response && response?.message?.data) {
-      console.log(response?.message?.data, "ddddd");
-      // Define CSV headers
-      setCsvHeaders([
-        { label: "Email", key: "email" },
-        { label: "Name", key: "name" },
-        { label: "Message", key: "message" },
-        { label: "Media", key: "media" },
-        { label: "Date/Time", key: "dateTime" },
-      ]);
+    setState(response);
 
-      const dataCsv =
-        response?.message?.data.map((item) => {
-          console.log(item, "item");
-
-          return {
-            Email: item?.email,
-            Name: item?.name,
-            Message: item.message,
-            Media: item?.medial,
-            createdAt: moment(item.createdAt).format("M/D/YYYY, h:mm:ss A"),
-          };
-        }) || [];
-      console.log(dataCsv, "dataCSV");
-      setCsvData(dataCsv);
+    if (!response?.message?.data || response.message.data.length === 0) {
+      setSnackbarMessage("There have no any messages in this banter");
+      setSnackbarOpen(true);
+      setIsCsvAvailable(false);
+    } else {
+      setIsCsvAvailable(true);
     }
   };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  const csvData =
+    state?.message?.data?.map((item) => ({
+      email: item?.email,
+      name: item?.name,
+      message: item?.message,
+      media: item?.media,
+      createdAt: moment(item.createdAt).format("M/D/YYYY, h:mm:ss A"),
+    })) || [];
+
+  const csvHeader = [
+    { label: "Email", key: "email" },
+    { label: "Name", key: "name" },
+    { label: "message", key: "message" },
+    { label: "media", key: "media" },
+    { label: "date/time", key: "createdAt" },
+  ];
 
   return (
     <>
@@ -194,7 +197,6 @@ const BanterContent = () => {
                     sx={{
                       width: "100%",
                       height: "50px",
-                      border: "1px solid red",
                       display: "flex",
                       justifyContent: "space-between",
                       // alignItems: "center",
@@ -235,6 +237,7 @@ const BanterContent = () => {
                               }}
                               // {...register("sport")}
                             >
+                              <MenuItem disabled>Select Sport</MenuItem>
                               {listSportData?.data?.map((sport) => (
                                 <MenuItem
                                   key={sport?._id}
@@ -301,7 +304,6 @@ const BanterContent = () => {
                     sx={{
                       width: "100%",
                       height: "50px",
-                      border: "1px solid red",
                     }}
                   >
                     <Box sx={{ display: "flex" }}>
@@ -320,15 +322,20 @@ const BanterContent = () => {
                   <Box
                     sx={{ display: "flex", alignItems: "center", gap: "10px" }}
                   >
-                    <AddSportSubmitBtn type="submit">Filter</AddSportSubmitBtn>
-                    {csvData && (
+                    <FilterBtn type="submit" disabled={getDownloadFetching}>
+                      {" "}
+                      {getDownloadFetching ? (
+                        <LoadingButton loading />
+                      ) : (
+                        "Filter"
+                      )}
+                    </FilterBtn>
+                    {isCsvAvailable && (
                       <Box>
                         <CSVLink
                           data={csvData}
-                          headers={csvHeaders}
-                          filename={`download-${moment().format(
-                            "YYYYMMDD-HHmmss"
-                          )}.csv`}
+                          headers={csvHeader}
+                          filename="banter_data"
                         >
                           <Button variant="contained">Download CSV</Button>
                         </CSVLink>
@@ -351,6 +358,15 @@ const BanterContent = () => {
             /> */}
           </SearchContainer>
         </ManageUsersWrapper>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity="info">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </ManageUsersContainer>
     </>
   );

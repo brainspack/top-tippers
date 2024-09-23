@@ -221,3 +221,93 @@ export const ADD_SPORT_DATA = [
     category: "inputDown",
   },
 ];
+
+export const DEFAULT_SPORT_VALUE = {
+  sportname: "",
+  description: "",
+  type: "",
+  bonus: "",
+  startDate: "",
+  endDate: "",
+  stack: "",
+};
+
+export const RESET_SPORT_VALUE = {
+  sportname: "",
+  description: "",
+  startDate: "",
+  endDate: "",
+  type: "",
+  bonus: null,
+  stack: "",
+};
+
+export const RESET_ARTICLE_VALUE = {
+  title: "",
+  addedby: "",
+  url: "",
+  articleType: "",
+  sportId: "",
+  sportIdd: "",
+  gameId: "",
+  articleType: "",
+  teamId: "",
+  text: "",
+  roundId: "",
+};
+
+export const SELECT_TYPE_ITEM = [
+  {
+    itemName: "TopSport Banner",
+    value: "topsport_banner",
+  },
+  {
+    itemName: "Tipping Success",
+    value: "tipping_success",
+  },
+];
+
+export const SELECT_USER_TYPE = [
+  {
+    itemName: "TopSport",
+    value: "TopSport",
+  },
+  {
+    itemName: "TopTippers",
+    value: "TopTippers",
+  },
+];
+
+export const SELECT_PAGE_TYPE = [
+  {
+    itemName: "TIPPING PAGE",
+    value: "Tip",
+  },
+  {
+    itemName: "SCORECARD PAGE",
+    value: "Scorecard",
+  },
+  {
+    itemName: "EVERY PAGE",
+    value: "every_page",
+  },
+];
+
+export const SELECT_MEDIA_TYPE = [
+  {
+    itemName: "image",
+    value: "image",
+  },
+  {
+    itemName: "gif",
+    value: "gif",
+  },
+  {
+    itemName: "html",
+    value: "html",
+  },
+  {
+    itemName: "json",
+    value: "json",
+  },
+];

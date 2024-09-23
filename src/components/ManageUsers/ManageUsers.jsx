@@ -30,6 +30,10 @@ import ControlledSwitches from "../SwitchComponent";
 import CustomModal from "../reuse/CustomModal";
 import CustomPagination from "../reuse/CustomPagination";
 import UserMenu from "./UserMenu";
+import {
+  MANAGE_USER_OPTIONS,
+  MANAGE_USER_TABLE_COLUMNS,
+} from "./manageUserTableColumns";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
@@ -127,151 +131,6 @@ const ManageUsers = () => {
     userList(reqParams);
   }, [deactivateUserSuccess, userDeleteSuccess, verifyUserSuccess]);
 
-  const columns = [
-    {
-      name: "name",
-      label: "Name",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "email",
-      label: "Email",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "country",
-      label: "Country",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "isTopSportUser",
-      label: "TopSport",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "isActive",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "black",
-            display: "flex",
-            justifyContent: "center",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <ControlledSwitches
-                value={value}
-                rowData={rowData}
-                statusChangeApi={deactivateUser}
-                deactivateUserData={deactivateUserData}
-                userList={userList}
-              />
-            </>
-          );
-        },
-      },
-    },
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "black",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <Box display="flex" gap="10px">
-                <VisibilityIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => navigate(`/admin/userprofile/${value}`)}
-                ></VisibilityIcon>
-                <DeleteIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => openModal(value, "delete")}
-                />
-
-                {userData?.data?.map((e) => {
-                  if (e._id === value) {
-                    return e.isVerified === "No" ? (
-                      <MailIcon
-                        sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                        onClick={() => openModal(value, "verify")}
-                      />
-                    ) : (
-                      ""
-                    );
-                  }
-                })}
-              </Box>
-            </>
-          );
-        },
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={userData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={userList}
-            isLoading={isLoading}
-          />
-        </>
-      );
-    },
-  };
-
   return (
     <>
       <ManageUsersContainer>
@@ -301,8 +160,14 @@ const ManageUsers = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={userData?.data}
-                columns={columns}
-                options={options}
+                columns={MANAGE_USER_TABLE_COLUMNS(
+                  deactivateUser,
+                  deactivateUserData,
+                  userList,
+                  openModal,
+                  userData
+                )}
+                options={MANAGE_USER_OPTIONS(userData, userList, isLoading)}
               />
             </ManageUserTableWrapper>
             <CustomModal
