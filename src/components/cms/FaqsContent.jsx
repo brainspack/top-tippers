@@ -10,8 +10,6 @@ import {
 import MUIDataTable from "mui-datatables";
 import { faqsDataSelector } from "../../slices/FAQsSlice/faqsSelectore";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import {
   getFaqsDataForEdit,
   updateAddFaqsModalVisibility,
@@ -31,6 +29,7 @@ import { useGetListTopicApiByNameMutation } from "../../api/listTopic";
 import { AddSportBtn } from "../master/masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import { useForm } from "react-hook-form";
+import { FAQS_TABLE_COLUMNS } from "./tableColumns";
 
 const FaqsContent = () => {
   const { reset } = useForm();
@@ -39,10 +38,7 @@ const FaqsContent = () => {
   const { faqsListTopicData } = useSelector(faqsDataSelector);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState(null);
   const [action, setAction] = useState(() => () => {});
-
-  console.log(faqsListTopicData, "asas");
 
   const openModal = (id, type) => {
     if (type === "delete") {
@@ -84,34 +80,20 @@ const FaqsContent = () => {
     setModal(false);
   };
 
-  const [
-    userListFaqs,
-    {
-      data: listFaqsData,
-      isSuccess: userfaqsSuccess,
-      isLoading: faqsDataFetching,
-    },
-  ] = useGetListQuestionApiByNameMutation();
+  const [userListFaqs, { data: listFaqsData, isLoading: faqsDataFetching }] =
+    useGetListQuestionApiByNameMutation();
 
   const [
     faqsDeleteApi,
     {
       data: faqsDeleteData,
-      isLoading: faqsDeleteLoading,
-      error: faqsDeleteError,
+
       isSuccess: faqsDeleteSuccess,
     },
   ] = useDeleteQuestionApiByNameMutation();
 
-  const [
-    faqsListTopicApi,
-    {
-      data: ListTopicData,
-      isLoading: ListTopicLoading,
-      error: ListTopicError,
-      isSuccess: ListTopicSuccess,
-    },
-  ] = useGetListTopicApiByNameMutation();
+  const [faqsListTopicApi, { data: ListTopicData }] =
+    useGetListTopicApiByNameMutation();
 
   const [
     AddUpdateQuestionFaqs,
@@ -162,8 +144,6 @@ const FaqsContent = () => {
   }, [AddFaqsSuccess]);
 
   useEffect(() => {
-    // console.log("hsjahj");
-
     const reqParams = {
       search_string: "",
       page: 0,
@@ -172,70 +152,6 @@ const FaqsContent = () => {
     };
     faqsListTopicApi(reqParams);
   }, []);
-
-  const columns = [
-    {
-      name: "question",
-      label: "FAQs",
-
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "answer",
-      label: "Answer",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "white",
-            fontWeight: "600",
-          },
-        }),
-        customBodyRender: (value, rowData) => (
-          <>
-            <Box display="flex" gap="10px">
-              <EditIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => handleEditClick(rowData)}
-              ></EditIcon>
-              <DeleteIcon
-                sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => openModal(value, "delete")}
-              />
-            </Box>
-          </>
-        ),
-      },
-    },
-  ];
 
   const options = {
     filter: false,
@@ -378,7 +294,7 @@ const FaqsContent = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={faqsData?.data}
-                columns={columns}
+                columns={FAQS_TABLE_COLUMNS(handleEditClick, openModal)}
                 options={options}
               />
             </ManageUserTableWrapper>
@@ -388,27 +304,6 @@ const FaqsContent = () => {
               content={modalTitle}
               action={action}
             />
-            {/* <AddFaqsModal
-              AddUpdateQuestionFaqs={AddUpdateQuestionFaqs}
-              AddFaqsData={AddFaqsData}
-              faqsListTopicData={faqsListTopicData}
-              CustomBtnOne={"Back"}
-              CustomBtnTwo={"Sumbit"}
-              heading={"FAQs"}
-              labelOneTitle={"FAQs:"}
-              labelTwoTitle={"Answer:"}
-              placeHolderOne={"FAQs"}
-              placeHolderTwo={"Answer"}
-              onSubmit={onSubmit}
-              formatInput={formatInput}
-              handleFaqsClose={handleFaqsClose}
-              requiredTitleOne={"Please enter Question"}
-              requiredTitleTwo={"Please enter Answer"}
-              RequiredFirst={"Question"}
-              RequiredSecond={"Answer"}
-              registerFirst={"question"}
-              registerSecond={"answer"}
-            /> */}
           </SearchContainer>
         </ManageUsersWrapper>
       </ManageUsersContainer>

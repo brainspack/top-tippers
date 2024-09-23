@@ -13,6 +13,7 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     handleNotification: (state, { payload }) => {
+      console.log(payload, "payload");
       const { state: open, message, severity } = payload;
       state.value = {
         state: open,

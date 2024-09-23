@@ -39,6 +39,14 @@ import {
 import { updateSportList } from "../../slices/manageTeam/manageTeam";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
+import TextInputBox from "../reuse/TextInputBox";
+import CustomSelectInputBox from "../reuse/CustomSelectInputBox";
+import {
+  SELECT_MEDIA_TYPE,
+  SELECT_PAGE_TYPE,
+  SELECT_TYPE_ITEM,
+  SELECT_USER_TYPE,
+} from "../../utils/constant";
 
 const style = {
   position: "absolute",
@@ -76,7 +84,7 @@ export default function AddAdModal({
       mediaType: "",
       userType: "",
       sport: "",
-      page: "",
+      pages: "",
       redirectUrl: "",
     });
     dispatch(knowWhereHaveToOpenModal("addAd"));
@@ -143,7 +151,7 @@ export default function AddAdModal({
         mediaType: userValue?.mediaType,
         userType: userValue?.userType,
         sport: userValue?.sport,
-        pages: userValue?.page,
+        pages: userValue?.pages,
         redirectUrl: userValue?.redirectUrl,
       });
 
@@ -209,7 +217,7 @@ export default function AddAdModal({
     formData.append("userType", data?.userType);
     formData.append("mediaType", data?.mediaType);
     formData.append("sport", data?.sport);
-    formData.append("pages", data?.pages);
+    formData.append("page", data?.page);
     formData.append(
       "adId",
       setEditDataForAd?.length ? setEditDataForAd[0].id : ""
@@ -232,7 +240,7 @@ export default function AddAdModal({
           mediaType: "",
           userType: "",
           sport: "",
-          page: "",
+          pages: "",
           redirectUrl: "",
         });
         handleClose();
@@ -304,196 +312,98 @@ export default function AddAdModal({
                 flexDirection: "column",
               }}
             >
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                }}
-              >
-                <CustomAddSportLabel requiredInput="*" inputLabel="Name:" />
-                <OutlinedInput
-                  id="outlined-adornment-weight"
-                  sx={{
-                    width: "100%",
-                    height: "34px",
-                  }}
-                  aria-describedby="outlined-weight-helper-text"
-                  inputProps={{
-                    "aria-label": "weight",
-                  }}
-                  {...register("name", {
-                    required: "Name is required",
-                    setValueAs: (value) => formatInput(value),
-                  })}
-                />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.name?.message}
-                </FormHelperText>
-              </div>
+              <TextInputBox
+                inputLabel={"Name:"}
+                register={register}
+                name={"name"}
+                errors={errors}
+                required={"Name is required"}
+              />
 
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Select Type:"
-                />
+              <CustomSelectInputBox
+                inputLabel={"Select Type:"}
+                register={register}
+                name={"type"}
+                required={"Type is required"}
+                errors={errors}
+                control={control}
+                handleTypeChange={handleTypeChange}
+                menuItems={SELECT_TYPE_ITEM}
+                mode={"selectType"}
+              />
 
-                <FormControl sx={{ m: 1 }} fullWidth {...register("type")}>
-                  <Controller
-                    name="type"
-                    control={control}
-                    rules={{ required: "Type is required" }}
-                    render={({ field }) => (
-                      <Select
-                        displayEmpty
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...field}
-                        onChange={(event) => {
-                          console.log(event, "ev");
-
-                          handleTypeChange(event);
-                          field.onChange(event);
-                        }}
-                        // {...register("type")}
-                        value={field.value}
-                      >
-                        <MenuItem value="topsport_banner" {...register("type")}>
-                          TopSport Banner
-                        </MenuItem>
-                        <MenuItem value="tipping_success" {...register("type")}>
-                          Tipping Success
-                        </MenuItem>
-                      </Select>
-                    )}
-                  />
-                  <div className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.type?.message}
-                    </FormHelperText>
-                  </div>
-                </FormControl>
-              </div>
-
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Select User Type"
-                />
-
-                <FormControl
-                  sx={{ m: 1, minWidth: 353 }}
-                  {...register("userType")}
-                >
-                  <Controller
-                    name="userType"
-                    control={control}
-                    rules={{ required: "User Type is required" }}
-                    render={({ field }) => (
-                      <Select
-                        displayEmpty
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...field}
-                        {...register("userType")}
-                      >
-                        <MenuItem value={"TopSport"} {...register("userType")}>
-                          TopSport
-                        </MenuItem>
-                        <MenuItem
-                          value={"TopTippers"}
-                          {...register("userType")}
-                        >
-                          TopTippers
-                        </MenuItem>
-                      </Select>
-                    )}
-                  />
-                  <div className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.userType?.message}
-                    </FormHelperText>
-                  </div>
-                </FormControl>
-              </div>
+              <CustomSelectInputBox
+                inputLabel={"Select User Type:"}
+                register={register}
+                name={"userType"}
+                required={"User Type is required"}
+                errors={errors}
+                control={control}
+                menuItems={SELECT_USER_TYPE}
+              />
 
               {selectedType === "topsport_banner" ? (
-                <div
-                  style={{
-                    height: "auto",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                  }}
-                >
-                  <CustomAddSportLabel
-                    requiredInput="*"
-                    inputLabel="Select Page Type:"
-                  />
-
-                  <FormControl
-                    sx={{ m: 1, minWidth: 353 }}
-                    {...register("pages")}
-                  >
-                    <Controller
-                      name="pages"
-                      control={control}
-                      rules={{ required: "Pages is required" }}
-                      render={({ field }) => (
-                        <Select
-                          displayEmpty
-                          sx={{
-                            fontSize: "14px",
-                            height: "40px",
-                          }}
-                          {...field}
-                          {...register("pages")}
-                        >
-                          <MenuItem value={"Tip"} {...register("pages")}>
-                            TIPPING PAGE
-                          </MenuItem>
-                          <MenuItem value={"Scorecard"} {...register("pages")}>
-                            SCORECARD PAGE
-                          </MenuItem>
-                          <MenuItem value={"every_page"} {...register("pages")}>
-                            EVERY PAGE
-                          </MenuItem>
-                        </Select>
-                      )}
-                    />
-                    <div className="errorMsgParent">
-                      <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                        {errors.pages?.message}
-                      </FormHelperText>
-                    </div>
-                  </FormControl>
-                </div>
+                <CustomSelectInputBox
+                  inputLabel={"Select Page Type:"}
+                  register={register}
+                  name={"page"}
+                  required={"Pages is required"}
+                  errors={errors}
+                  control={control}
+                  menuItems={SELECT_PAGE_TYPE}
+                />
               ) : (
+                // <div
+                //   style={{
+                //     height: "auto",
+                //     width: "100%",
+                //     display: "flex",
+                //     flexDirection: "column",
+                //     gap: "10px",
+                //   }}
+                // >
+                //   <CustomAddSportLabel
+                //     requiredInput="*"
+                //     inputLabel="Select Page Type:"
+                //   />
+
+                //   <FormControl
+                //     sx={{ m: 1, minWidth: 353 }}
+                //     {...register("page")}
+                //   >
+                //     <Controller
+                //       name="page"
+                //       control={control}
+                //       rules={{ required: "Pages is required" }}
+                //       render={({ field }) => (
+                //         <Select
+                //           displayEmpty
+                //           sx={{
+                //             fontSize: "14px",
+                //             height: "40px",
+                //           }}
+                //           {...field}
+                //           {...register("page")}
+                //         >
+                //           <MenuItem value="Tip" {...register("page")}>
+                //             TIPPING PAGE
+                //           </MenuItem>
+                //           <MenuItem value="Scorecard" {...register("page")}>
+                //             SCORECARD PAGE
+                //           </MenuItem>
+                //           <MenuItem value="every_page" {...register("page")}>
+                //             EVERY PAGE
+                //           </MenuItem>
+                //         </Select>
+                //       )}
+                //     />
+                //     <div className="errorMsgParent">
+                //       <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
+                //         {errors.page?.message}
+                //       </FormHelperText>
+                //     </div>
+                //   </FormControl>
+                // </div>
                 ""
               )}
 
@@ -503,7 +413,7 @@ export default function AddAdModal({
                   width: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "5px",
+                  gap: "10px",
                 }}
               >
                 <CustomAddSportLabel
@@ -551,7 +461,17 @@ export default function AddAdModal({
                 </FormControl>
               </div>
 
-              <div
+              <CustomSelectInputBox
+                inputLabel={"Select Media Type:"}
+                register={register}
+                name={"mediaType"}
+                required={"Media is required"}
+                errors={errors}
+                control={control}
+                menuItems={SELECT_MEDIA_TYPE}
+              />
+
+              {/* <div
                 style={{
                   height: "auto",
                   width: "100%",
@@ -583,16 +503,16 @@ export default function AddAdModal({
                         {...field}
                         {...register("mediaType")}
                       >
-                        <MenuItem value={"image"} {...register("mediaType")}>
+                        <MenuItem value="image" {...register("mediaType")}>
                           image
                         </MenuItem>
-                        <MenuItem value={"gif"} {...register("mediaType")}>
+                        <MenuItem value="gif" {...register("mediaType")}>
                           gif
                         </MenuItem>
-                        <MenuItem value={"html"} {...register("mediaType")}>
+                        <MenuItem value="html" {...register("mediaType")}>
                           html
                         </MenuItem>
-                        <MenuItem value={"json"} {...register("mediaType")}>
+                        <MenuItem value="json" {...register("mediaType")}>
                           json
                         </MenuItem>
                       </Select>
@@ -604,7 +524,15 @@ export default function AddAdModal({
                     </FormHelperText>
                   </div>
                 </FormControl>
-              </div>
+              </div> */}
+
+              <TextInputBox
+                inputLabel={"Redirect Url:"}
+                register={register}
+                name={"redirectUrl"}
+                errors={errors}
+                required={"Redirect Url is required"}
+              />
 
               <div
                 style={{
@@ -615,52 +543,6 @@ export default function AddAdModal({
                   gap: "10px",
                 }}
               >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Redirect Url:"
-                />
-
-                <OutlinedInput
-                  id="outlined-adornment-weight"
-                  sx={{
-                    width: "100%",
-                    height: "40px",
-                  }}
-                  aria-describedby="outlined-weight-helper-text"
-                  inputProps={{
-                    "aria-label": "weight",
-                  }}
-                  {...register("redirectUrl", {
-                    required: "Redirect Url is required",
-
-                    // setValueAs: (value) => formatInput(value),
-                  })}
-                />
-              </div>
-              <div className="errorMsgParent">
-                <FormHelperText sx={{ color: "#d32f2f" }}>
-                  {errors.redirectUrl?.message}
-                </FormHelperText>
-              </div>
-
-              <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                {/* <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Article Image/Video:"
-                /> */}
-                {/* <Controller
-                  name="file"
-                  control={control}
-                  rules={{ required: "File is required" }}
-                  render={({ field }) => ( */}
                 <>
                   <input
                     accept="image/*"
@@ -668,7 +550,6 @@ export default function AddAdModal({
                     type="file"
                     onChange={handleImageChange}
                     style={{ display: "none" }}
-                    // {...field}
                   />
                   <label
                     htmlFor="upload-image"
@@ -690,8 +571,7 @@ export default function AddAdModal({
                     <span style={{ marginLeft: "8px" }}>Click to upload</span>
                   </label>
                 </>
-                {/* )} */}
-                {/* /> */}
+
                 <div className="errorMsgParent">
                   <FormHelperText sx={{ color: "#d32f2f" }}>
                     {errors.files?.message}

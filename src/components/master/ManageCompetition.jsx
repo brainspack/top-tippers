@@ -45,6 +45,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
 import { updateRoundList } from "../../slices/manageRound/manageRound";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import {
+  COMPETITION_OPTIONS,
+  COMPETITION_TABLE_COLUMNS,
+} from "./masterTableColumns";
 const ManageCompetition = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -148,104 +152,6 @@ const ManageCompetition = () => {
     listCompetitionApi(reqParams);
   }, [userDeleteSuccess, addTeamSuccess]);
 
-  const columns = [
-    {
-      name: "competitionname",
-      label: "Competition Name ",
-      options: {
-        filter: true,
-        sort: true,
-
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "sport",
-      label: "Sports",
-      options: {
-        customBodyRender: (data) => {
-          return (
-            <>
-              <Box>{data?.sportname}</Box>
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "joinedUserCount",
-      label: "Total Joined User",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-
-    {
-      name: "_id",
-      label: "Actions",
-      options: {
-        filter: true,
-        sort: true,
-        setCellHeaderProps: () => ({
-          style: {
-            backgroundColor: "#e5a842",
-            color: "black",
-          },
-        }),
-        customBodyRender: (value, rowData) => {
-          return (
-            <>
-              <Box display="flex" gap="10px">
-                <RestartAltIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                />
-                <DeleteIcon
-                  sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                  onClick={() => openModal(value, "delete")}
-                />
-              </Box>
-            </>
-          );
-        },
-      },
-    },
-  ];
-
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={roundData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={listCompetitionApi}
-            userData={roundData?.data}
-            isLoading={teamDataFetching}
-          />
-        </>
-      );
-    },
-  };
   const { isModalVisible, modalSportName } = useSelector(userDataSelector);
   useEffect(() => {
     dispatch(setCurrentModule("round"));
@@ -288,8 +194,12 @@ const ManageCompetition = () => {
             <ManageUserTableWrapper>
               <MUIDataTable
                 data={roundData?.data}
-                columns={columns}
-                options={options}
+                columns={COMPETITION_TABLE_COLUMNS(openModal)}
+                options={COMPETITION_OPTIONS(
+                  roundData,
+                  listCompetitionApi,
+                  teamDataFetching
+                )}
               />
             </ManageUserTableWrapper>
             <CustomModal
