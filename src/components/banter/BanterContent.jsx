@@ -40,8 +40,6 @@ const BanterContent = () => {
   const [csvData, setCsvData] = useState([]);
   const [csvHeaders, setCsvHeaders] = useState([]);
 
-  console.log(csvData, "cc");
-
   const [
     userListSport,
     {

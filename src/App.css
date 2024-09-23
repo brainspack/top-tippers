@@ -371,3 +371,20 @@ height: 300px !important;
 .accordion-master.collapsed {
   border-top: none; /* Border-top for collapsed state */
 }
+.selectWrappper .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  height: 40px !important;
+}
+.secretCompLogoBox{
+  height: 50px !important;
+  width: 50px !important;
+  position: relative;
+}
+.secretCompLogoBox .logoImg{
+  height: 100% !important;
+  width: 100% !important;
+}
+.verifiedImg{
+  position: absolute;
+  bottom: -20px;
+  left: 20px;
+}

@@ -599,6 +599,7 @@ const ManageGame = () => {
     selectableRows: false,
     pagination: true,
     rowsPerPage: 10,
+    // responsive: "stacked",
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <>

@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, FormControl, MenuItem, Select } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
@@ -35,44 +43,56 @@ import { useListRoundsByNameMutation } from "../../api/ListRounds";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 import { updateSportData } from "../../slices/manageSport/manageSport";
 import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
+import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
+import moment from "moment";
+import { useLazyGetFilterGameRevelListApiByNameQuery } from "../../api/filterGameRevelList";
+import { useLazyGetGameTippingCountApiByNameQuery } from "../../api/gametippingcount";
+import { secretCompetitionSelector } from "../../slices/secretCompetition/secretCompetitionSelector";
+import {
+  updateActiveUsersData,
+  updateFilterSecretAllData,
+  updateSecretAllTeamData,
+  updateTipDistributionData,
+} from "../../slices/secretCompetition/secretCompetition";
+import TipDistribution from "./TipDistributiion";
+import adminTip from "../../images/tips_blank.png";
+import question from "../../images/ant-design_question.svg";
+import circle from "../../images/cil_check-circle.svg";
+import close from "../../images/close-circle-outline.svg";
 
 const SecretCompetitionContent = () => {
-  const { register, control, watch, setValue } = useForm();
-  const selectedSportId = watch("sportId");
-  console.log(selectedSportId, "selectedSportId");
   const dispatch = useDispatch();
   const { sportData } = useSelector(manageSportDataSelector);
-  const { allTeamData } = useSelector(manageGameSelector);
-  console.log(allTeamData, "allTeamData");
-
-  const { userAllData, currentRowId, multipleRowId } =
-    useSelector(messagingSelector);
-  const { setModeForFaqsEdit } = useSelector(faqsDataSelector);
-  const [listAllUserApi, { data, isLoading, error }] =
-    useListAllUserApiByNameMutation();
+  // const { secretAllTeamData } = useSelector(manageGameSelector);
+  const { roundData } = useSelector(manageRoundSelector);
+  const { tipDistributionData, activeUsersData, secretAllTeamData } =
+    useSelector(secretCompetitionSelector);
+  console.log(secretAllTeamData, "secretAllTeamData");
 
   /// LIST SPORT API
   const [
     listSportApi,
     { data: listSportData, error: listSportError, success: listSportSuccess },
   ] = useGetUserListSportApiByNameMutation();
-
   useEffect(() => {
-    const fetchSport = async () => {
-      try {
-        const response = await listSportApi({
-          count: 1000,
-          isActive: true,
-        }).unwrap();
-        dispatch(updateSportData(response));
-      } catch (err) {
-        console.error("Error fetching sports data:", err);
-      }
-    };
-
-    fetchSport();
+    listSportApi({ count: 1000, isActive: true });
   }, []);
+  useEffect(() => {
+    if (listSportData?.data?.length > 0) {
+      dispatch(updateSportData(listSportData));
+    }
+  }, [listSportData]);
 
+  const [selectedSportId, setSelectedSportId] = useState("");
+
+  const onHandleChange = (e) => {
+    setSelectedSportId(e.target.value);
+  };
+  useEffect(() => {
+    if (sportData?.data?.length > 0) {
+      setSelectedSportId(sportData?.data[0]?._id);
+    }
+  }, [sportData]);
   /// TEAM LIST
   const [
     teamListApi,
@@ -84,31 +104,39 @@ const SecretCompetitionContent = () => {
   ] = useTeamListByNameMutation();
 
   useEffect(() => {
-    const fetchTeamList = async () => {
-      try {
-        const response = await teamListApi({
-          count: 1000,
-          // sport: "65b37051366cff4fdb795ff9",
-          sport: selectedSportId,
-        }).unwrap();
-        dispatch(updateAllTeamData(response));
-      } catch (err) {
-        console.error("Error fetching sports data:", err);
-      }
-    };
-    fetchTeamList();
-  }, []);
+    if (selectedSportId) {
+      const fetchTeamList = async () => {
+        try {
+          const response = await teamListApi({
+            count: 1000,
+            sport: selectedSportId,
+          }).unwrap();
+          dispatch(updateSecretAllTeamData(response));
+        } catch (err) {
+          console.error("Error fetching sports data:", err);
+        }
+      };
+      fetchTeamList();
+    }
+  }, [selectedSportId]);
 
+  const [selectedTeamId, setSelectedTeamId] = useState("");
+  console.log(selectedTeamId, "selectedTeamId");
   const [selectTeam, setSelectTeam] = useState([]);
-  console.log(selectTeam, "selectTeam");
+
+  // const [teamState, setTeamState] = useState({
+  //   filteredRounds: [],
+  //   selectedRound: "",
+  // });
+
   useEffect(() => {
     if (selectedSportId) {
-      const filteredTeams = allTeamData?.data.filter(
+      const filteredTeams = secretAllTeamData?.data?.filter(
         (team) => team?.sport?._id === selectedSportId
       );
       setSelectTeam(filteredTeams);
     }
-  }, [selectedSportId, allTeamData, setValue]);
+  }, [selectedSportId, secretAllTeamData]);
 
   /// ROUND LIST
 
@@ -121,30 +149,164 @@ const SecretCompetitionContent = () => {
       isSuccess: listRoundsSuccess,
     },
   ] = useListRoundsByNameMutation();
+  useEffect(() => {
+    if (selectedSportId) {
+      const fetchRound = async () => {
+        try {
+          const response = await listRoundsApi({
+            count: 50,
+            sortOrder: 1,
+            sortValue: "createdAt",
+            sportId: selectedSportId,
+          }).unwrap();
+          dispatch(updateRoundList(response));
+        } catch (err) {
+          console.error("Error fetching sports data:", err);
+        }
+      };
+
+      fetchRound();
+    }
+  }, [selectedSportId]);
+
+  ///// Round data
+  const [roundsState, setRoundsState] = useState({
+    filteredRounds: [],
+    selectedRound: "",
+  });
 
   useEffect(() => {
-    const fetchRound = async () => {
-      try {
-        const response = await listRoundsApi({
-          count: 50,
-          sortOrder: 1,
-          sortValue: "createdAt",
-          // sportId: "65b37051366cff4fdb795ff9",
-          sportId: selectedSportId,
-        }).unwrap();
-        // dispatch(updateRoundList(response));
-      } catch (err) {
-        console.error("Error fetching sports data:", err);
-      }
-    };
+    if (listRoundsSuccess && selectedSportId && roundData?.data?.length > 0) {
+      const currentDate = moment().format("YYYY-MM-DD");
 
-    fetchRound();
-  }, []);
+      const currentRound = roundData?.data?.find((round) => {
+        const startDate = moment.utc(round?.startDate).format("YYYY-MM-DD");
+        const endDate = moment.utc(round?.endDate).format("YYYY-MM-DD");
+
+        return (
+          round?.sport?._id === selectedSportId &&
+          startDate <= currentDate &&
+          currentDate <= endDate
+        );
+      });
+
+      const allRounds = roundData?.data?.filter(
+        (round) => round?.sport?._id === selectedSportId
+      );
+
+      let selectedRound = currentRound;
+      if (!selectedRound && allRounds.length > 0) {
+        selectedRound = allRounds.reduce((closest, round) => {
+          const endDate = moment.utc(round?.endDate).format("YYYY-MM-DD");
+          const daysDiff = Math.abs(moment(endDate).diff(currentDate, "days"));
+
+          if (!closest || daysDiff < closest.daysDiff) {
+            return { ...round, daysDiff };
+          }
+
+          return closest;
+        }, null);
+      }
+
+      setRoundsState({
+        filteredRounds: allRounds,
+        selectedRound: selectedRound ? selectedRound?._id : "",
+      });
+    } else {
+      setRoundsState({
+        filteredRounds: [],
+        selectedRound: "",
+      });
+    }
+  }, [selectedSportId, roundData, listRoundsSuccess]);
+
+  ///// useLazyGetFilterGameRevelListApiByNameQuery
+  const [
+    filterGameRevelListApi,
+    { data: filterGameRevelListData, isLoading: isLoading },
+  ] = useLazyGetFilterGameRevelListApiByNameQuery();
+
+  useEffect(() => {
+    if (filterGameRevelListData?.data?.docs?.length > 0) {
+      dispatch(updateFilterSecretAllData(filterGameRevelListData));
+    }
+  }, [filterGameRevelListData]);
+
+  useEffect(() => {
+    if (listRoundsSuccess) {
+      if (selectedSportId && roundsState?.selectedRound) {
+        filterGameRevelListApi({
+          round: roundsState?.selectedRound,
+          sport: selectedSportId,
+          teamId: selectedTeamId,
+          limit: 30,
+        });
+      }
+    }
+  }, [
+    selectedSportId,
+    roundsState?.selectedRound,
+    listRoundsSuccess,
+    selectedTeamId,
+  ]);
+
+  ////////////////////////// gameTippingCountApi
+
+  const [gameTippingCountApi, { data: gameTippingCountData }] =
+    useLazyGetGameTippingCountApiByNameQuery();
+  console.log(gameTippingCountData, "gameTippingCountData");
+  useEffect(() => {
+    if (gameTippingCountData?.data?.gameDetailAndTipping.length > 0) {
+      dispatch(updateTipDistributionData(gameTippingCountData));
+    }
+  }, [gameTippingCountData]);
+
+  useEffect(() => {
+    if (listRoundsSuccess) {
+      if (selectedSportId && roundsState?.selectedRound) {
+        gameTippingCountApi({
+          round: roundsState?.selectedRound,
+          sport: selectedSportId,
+        });
+      }
+    }
+  }, [selectedSportId, roundsState?.selectedRound, listRoundsSuccess]);
+  // const [userCountNumber, setUserCount] = useState(0);
+
+  useEffect(() => {
+    if (
+      selectedSportId &&
+      roundsState?.selectedRound &&
+      tipDistributionData?.data?.usercount
+    ) {
+      dispatch(updateActiveUsersData(tipDistributionData?.data?.usercount));
+    }
+  }, [selectedSportId, tipDistributionData, roundsState?.selectedRound]);
 
   const columns = [
     {
+      name: "profilePhoto",
+      label: "Photo",
+      options: {
+        display: false,
+        customBodyRender: (value, rowData) => {
+          {
+            console.log(rowData, "rowData");
+          }
+          return (
+            <>
+              <Avatar src={value} />
+            </>
+          );
+        },
+        setCellHeaderProps: () => ({
+          style: { backgroundColor: "#e5a842", color: "black" },
+        }),
+      },
+    },
+    {
       name: "name",
-      label: "Name",
+      label: "User",
       options: {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
@@ -152,17 +314,33 @@ const SecretCompetitionContent = () => {
       },
     },
     {
-      name: "email",
-      label: "Email",
+      name: "index",
+      label: "Rank",
       options: {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
         }),
+        customBodyRender: (value, tableMeta) => {
+          return tableMeta.rowIndex + 1;
+        },
+      },
+    },
+
+    {
+      name: "roundpoint",
+      label: "Round Point",
+      options: {
+        setCellHeaderProps: () => ({
+          style: { backgroundColor: "#e5a842", color: "black" },
+        }),
+        customBodyRender: (value) => {
+          return value?.toFixed(2);
+        },
       },
     },
     {
-      name: "_id",
-      label: "Actions",
+      name: "seasonPoints",
+      label: "Session Point",
       options: {
         filter: true,
         sort: true,
@@ -172,11 +350,62 @@ const SecretCompetitionContent = () => {
             color: "black",
           },
         }),
-        customBodyRender: (value, rowData) => {
+      },
+    },
+
+    {
+      name: "games",
+      label: "Team Logos",
+      options: {
+        setCellHeaderProps: () => ({
+          style: { backgroundColor: "#e5a842", color: "black" },
+        }),
+        customBodyRender: (ele) => {
           return (
-            <>
-              <Box display="flex" gap="10px"></Box>
-            </>
+            <Box sx={{ display: "flex" }}>
+              {ele.map((game, index) => {
+                const imgLogo = (game) => {
+                  if (
+                    game?.gameState === "started" ||
+                    game?.gameState === "finished" ||
+                    game?.gameState === "open"
+                  ) {
+                    let obj1 = {
+                      home: game?.homeTeam?.teamLogo,
+                      away: game?.awayTeam?.teamLogo,
+                    };
+                    return game?.tippingAddedBy === "admin"
+                      ? adminTip
+                      : obj1[game.tipping];
+                  } else {
+                    return question;
+                  }
+                };
+
+                let winingLogo =
+                  game?.winningTeam?.toLowerCase() ===
+                  game?.tipping?.toLowerCase();
+
+                return (
+                  <Box key={index} className="secretCompLogoBox">
+                    <img
+                      src={imgLogo(game) || question}
+                      alt="team logo"
+                      className="logoImg"
+                    />
+                    {game.winningTeam !== "" && (
+                      <span>
+                        <img
+                          src={winingLogo ? circle : close}
+                          alt={winingLogo ? "correct" : "incorrect"}
+                          className="verifiedImg"
+                        />
+                      </span>
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
           );
         },
       },
@@ -190,19 +419,19 @@ const SecretCompetitionContent = () => {
     print: false,
     viewColumns: false,
     pagination: true,
-    rowsPerPage: 10,
+    rowsPerPage: 30,
     selectableRows: false,
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <>
           <CustomPagination
-            total={userAllData?.totalCount}
+            total={filterGameRevelListData?.data?.totalDocs}
             page={page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
-            userList={listAllUserApi}
-            userAllData={userAllData?.data}
+            userList={filterGameRevelListApi}
+            // userAllData={userAllData?.data}
             isLoading={isLoading}
           />
         </>
@@ -216,183 +445,91 @@ const SecretCompetitionContent = () => {
         <ManageUsersWrapper>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <ManageUsersHeading>SecretComp</ManageUsersHeading>
-          </Box>
 
-          <SearchContainer>
-            <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-              <Box
-                style={{
-                  height: "auto",
-                  width: "22%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel inputLabel="Sports" />
-                <FormControl sx={{ m: 1 }} fullWidth {...register("sportId")}>
-                  <Controller
-                    name="sportId"
-                    control={control}
-                    defaultValue={sportData?.data?.[0]?._id}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        displayEmpty
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...register("sportId")}
-                      >
-                        {sportData?.data?.map((sport) => (
-                          <MenuItem
-                            key={sport?._id}
-                            value={sport?._id}
-                            {...register("sportId")}
-                          >
-                            {sport?.sportname}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Box>
-              <Box
-                style={{
-                  height: "auto",
-                  width: "22%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel inputLabel="Round" />
-                <FormControl sx={{ m: 1 }} fullWidth {...register("sportId")}>
-                  <Controller
-                    name="sportId"
-                    control={control}
-                    rules={{ required: "Select Sport is required" }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        displayEmpty
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...register("sportId")}
-                      >
-                        {data?.data?.map((sport) => (
-                          <MenuItem
-                            key={sport?._id}
-                            value={sport?._id}
-                            {...register("sportId")}
-                          >
-                            {sport?.sportname}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Box>
-              <Box
-                style={{
-                  height: "auto",
-                  width: "22%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel inputLabel="Team" />
-                <FormControl sx={{ m: 1 }} fullWidth {...register("teamId")}>
-                  <Controller
-                    name="teamId"
-                    control={control}
-                    rules={{ required: "Select Sport is required" }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        displayEmpty
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...register("teamId")}
-                      >
-                        {selectTeam.length > 0 ? (
-                          selectTeam.map((team) => (
-                            <MenuItem
-                              key={team?._id}
-                              value={team?._id}
-                              {...register("teamId")}
-                            >
-                              {team?.teamname}
-                            </MenuItem>
-                          ))
-                        ) : (
-                          <MenuItem disabled>No home team available</MenuItem>
-                        )}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Box>
-              <Box
-                style={{
-                  height: "auto",
-                  width: "22%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <FormControl sx={{ m: 1 }} fullWidth {...register("sportId")}>
-                  <Controller
-                    name="sportId"
-                    control={control}
-                    rules={{ required: "Select Sport is required" }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        displayEmpty
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...register("sportId")}
-                      >
-                        {data?.data?.map((sport) => (
-                          <MenuItem
-                            key={sport?._id}
-                            value={sport?._id}
-                            {...register("sportId")}
-                          >
-                            {sport?.sportname}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Box>
+            <Box
+              className="selectWrappper"
+              style={{
+                width: "20%",
+              }}
+            >
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedSportId}
+                  onChange={onHandleChange}
+                >
+                  {sportData?.data?.map((sport) => (
+                    <MenuItem key={sport?._id} value={sport?._id}>
+                      {sport?.sportname}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
+            <Box
+              className="selectWrappper"
+              style={{
+                width: "20%",
+              }}
+            >
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={roundsState.selectedRound}
+                  onChange={(e) =>
+                    setRoundsState((prevState) => ({
+                      ...prevState,
+                      selectedRound: e.target.value,
+                    }))
+                  }
+                >
+                  {roundsState?.filteredRounds?.map((round) => (
+                    <MenuItem key={round?._id} value={round?._id}>
+                      {round?.roundname}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box
+              className="selectWrappper"
+              style={{
+                width: "20%",
+              }}
+            >
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedTeamId}
+                  onChange={(e) => setSelectedTeamId(e.target.value)}
+                >
+                  {selectTeam?.map((team) => (
+                    <MenuItem key={team?._id} value={team?._id}>
+                      {team?.teamname}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography>Active Users : {activeUsersData}</Typography>
+            </Box>
+          </Box>
+          <SearchContainer>
             <ManageUserTableWrapper>
               <MUIDataTable
-                data={userAllData?.data}
+                data={filterGameRevelListData?.data?.docs}
                 columns={columns}
                 options={options}
+              />
+
+              <TipDistribution
+                tipDistributionData={tipDistributionData}
+                activeUsersData={activeUsersData}
               />
             </ManageUserTableWrapper>
           </SearchContainer>

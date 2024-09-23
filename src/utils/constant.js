@@ -212,7 +212,6 @@ export const ADD_SPORT_DATA = [
     LABEL: "Round Bonus",
     RMESSAGE: "Please select Bounus type",
     category: "select",
-    // REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
   },
   {
     ID: 6,
@@ -220,6 +219,5 @@ export const ADD_SPORT_DATA = [
     LABEL: "MULTI CALCULATOR STAKE VALUE",
     RMESSAGE: "Please select Bounus type",
     category: "inputDown",
-    // REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
   },
 ];
