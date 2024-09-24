@@ -1,141 +1,183 @@
 import { Box, Paper, Typography } from "@mui/material";
 import adminTip from "../../images/tips_blank.png";
 import React from "react";
+import {
+  TeamsDetails,
+  TeamsHeading,
+  TipDistributionHeading,
+  UserGroupHeading,
+} from "./secretCompetitionStyled";
 
 const TipDistribution = (props) => {
   const { tipDistributionData, activeUsersData } = props;
+  console.log(tipDistributionData, "tipDistributionData");
 
   return (
     <>
-      <Box sx={{ height: "auto", width: "100%", mt: 5 }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "60%",
-          }}
-        >
-          <Typography variant="h5">Tip Distribution</Typography>
-          <Typography variant="h6">User Group</Typography>
-        </Box>
-
-        {tipDistributionData?.data?.gameDetailAndTipping?.map((data) => (
+      {tipDistributionData?.data?.gameDetailAndTipping.length > 0 ? (
+        <Box sx={{ height: "auto", width: "100%", mt: 5 }}>
           <Box
             sx={{
-              height: "300px",
-              width: "50%",
-              margin: "20px auto",
+              display: "flex",
+              justifyContent: "space-between",
+              width: "55%",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Typography>{`${data?.homeTeam?.teamname} VS ${data?.awayTeam?.teamname}`}</Typography>
-            </Box>
-
-            {/*  */}
-            <Paper
-              sx={{
-                height: "80%",
-                width: "100%",
-                borderRadius: "10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <TipDistributionHeading>Tip Distribution</TipDistributionHeading>
+            <UserGroupHeading>User Group</UserGroupHeading>
+          </Box>
+          <Box
+            sx={{
+              height: "auto",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {tipDistributionData?.data?.gameDetailAndTipping?.map((data) => (
               <Box
                 sx={{
-                  height: "90%",
-                  width: "60%",
+                  height: "300px",
+                  width: "50%",
                   display: "flex",
-                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  gap: "10px",
+                  justifyContent: "center",
                 }}
               >
                 <Box
                   sx={{
+                    height: "10%",
+                    width: "100%",
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <Typography>HOME</Typography>
-                  <Box
-                    className="logoBox"
-                    sx={{ height: "50px", width: "50px" }}
-                  >
-                    <img src={data?.homeTeam?.teamLogo} />
-                  </Box>
+                  <TeamsHeading>{`${data?.homeTeam?.teamname} VS ${data?.awayTeam?.teamname}`}</TeamsHeading>
+                </Box>
 
-                  {data?.tippingData?.map((tipping) => {
-                    const id = tipping?._id === "home";
-                    return (
-                      <>
-                        {id ? (
-                          <Typography>{tipping?.count} Tips</Typography>
-                        ) : (
-                          ""
-                        )}
-                      </>
-                    );
-                  })}
-                </Box>
-                <Box
+                {/*  */}
+                <Paper
                   sx={{
+                    height: "80%",
+                    width: "100%",
+                    borderRadius: "10px",
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <Typography>AWAY</Typography>
                   <Box
-                    className="logoBox"
-                    sx={{ height: "50px", width: "50px" }}
+                    sx={{
+                      height: "90%",
+                      width: "60%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    <img src={data?.awayTeam?.teamLogo} />
-                  </Box>
-                  {data?.tippingData?.map((tipping) => {
-                    const isAway = tipping?._id === "away";
-                    const count = tipping?.count || 0;
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <TeamsDetails>HOME</TeamsDetails>
+                      <Box
+                        className="logoBox"
+                        sx={{ height: "50px", width: "50px" }}
+                      >
+                        <img src={data?.homeTeam?.teamLogo} />
+                      </Box>
 
-                    return (
-                      <React.Fragment key={tipping?._id}>
-                        <Typography>{isAway ? count : 0} Tips</Typography>
-                      </React.Fragment>
-                    );
-                  })}
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography>NO TIP</Typography>
-                  <Box
-                    className="logoBox"
-                    sx={{ height: "50px", width: "50px" }}
-                  >
-                    <img src={adminTip} />
+                      {data?.tippingData?.map((tipping) => {
+                        const homeCheck = tipping?._id === "home";
+                        return (
+                          <>
+                            {homeCheck ? (
+                              <>
+                                {tipping?.count ? (
+                                  <TeamsDetails>
+                                    {tipping?.count} Tips
+                                  </TeamsDetails>
+                                ) : (
+                                  0
+                                )}
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      })}
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <TeamsDetails>AWAY</TeamsDetails>
+                      <Box
+                        className="logoBox"
+                        sx={{ height: "50px", width: "50px" }}
+                      >
+                        <img src={data?.awayTeam?.teamLogo} />
+                      </Box>
+                      {data?.tippingData?.map((tipping) => {
+                        const isAway = tipping?._id === "away";
+                        console.log(tipping, "tipping");
+
+                        return (
+                          <>
+                            {isAway ? (
+                              <>
+                                <TeamsDetails>
+                                  {tipping?.count || 0} Tips
+                                </TeamsDetails>
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      })}
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <TeamsDetails>NO TIP</TeamsDetails>
+                      <Box
+                        className="logoBox"
+                        sx={{ height: "50px", width: "50px" }}
+                      >
+                        <img src={adminTip} />
+                      </Box>
+                      <TeamsDetails>
+                        {`${
+                          activeUsersData -
+                          (data?.tippingData[0]?.count +
+                            data?.tippingData[1]?.count)
+                        } `}
+                        Tips
+                      </TeamsDetails>
+                    </Box>
                   </Box>
-                  <Typography>
-                    {`${
-                      activeUsersData -
-                      (data?.tippingData[0]?.count +
-                        data?.tippingData[1]?.count)
-                    } `}{" "}
-                    Tips
-                  </Typography>
-                </Box>
+                </Paper>
               </Box>
-            </Paper>
+            ))}
           </Box>
-        ))}
-      </Box>
+        </Box>
+      ) : (
+        ""
+      )}
     </>
   );
 };

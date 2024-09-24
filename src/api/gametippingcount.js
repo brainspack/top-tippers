@@ -10,8 +10,8 @@ export const gameTippingCountApi = createApi({
         url: "api/game/gametippingcount",
         method: "GET",
         params: {
-          round: round,
           sport: sport,
+          round: round,
         },
         headers: { Authorization: `Bearer${localStorage.token}` },
       }),

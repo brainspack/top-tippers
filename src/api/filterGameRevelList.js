@@ -7,10 +7,10 @@ export const filterGameRevelListApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
     getFilterGameRevelListApiByName: builders.query({
-      query: ({ round, sport, teamId, limit }) => ({
+      query: ({ round, sport, teamId, limit, page }) => ({
         url: "api/ladder/filterGameRevelList",
         method: "GET",
-        params: { round, sport, teamId, limit },
+        params: { round, sport, teamId, limit, page },
         headers: { Authorization: `Bearer ${localStorage.token}` },
       }),
     }),
