@@ -47,6 +47,7 @@ import {
   SELECT_TYPE_ITEM,
   SELECT_USER_TYPE,
 } from "../../utils/constant";
+import { FormInputWrapper } from "./adStyled";
 
 const style = {
   position: "absolute",
@@ -302,16 +303,7 @@ export default function AddAdModal({
             </SportModalHeading>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Box
-              id="modal-modal-description"
-              sx={{
-                mt: 1,
-                padding: "0 15px 12px",
-                height: "auto",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
+            <FormInputWrapper id="modal-modal-description">
               <TextInputBox
                 inputLabel={"Name:"}
                 register={register}
@@ -471,61 +463,6 @@ export default function AddAdModal({
                 menuItems={SELECT_MEDIA_TYPE}
               />
 
-              {/* <div
-                style={{
-                  height: "auto",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <CustomAddSportLabel
-                  requiredInput="*"
-                  inputLabel="Select Media Type:"
-                />
-
-                <FormControl
-                  sx={{ m: 1, minWidth: 353 }}
-                  {...register("mediaType")}
-                >
-                  <Controller
-                    name="mediaType"
-                    control={control}
-                    rules={{ required: "Round Bonus is required" }}
-                    render={({ field }) => (
-                      <Select
-                        displayEmpty
-                        sx={{
-                          fontSize: "14px",
-                          height: "40px",
-                        }}
-                        {...field}
-                        {...register("mediaType")}
-                      >
-                        <MenuItem value="image" {...register("mediaType")}>
-                          image
-                        </MenuItem>
-                        <MenuItem value="gif" {...register("mediaType")}>
-                          gif
-                        </MenuItem>
-                        <MenuItem value="html" {...register("mediaType")}>
-                          html
-                        </MenuItem>
-                        <MenuItem value="json" {...register("mediaType")}>
-                          json
-                        </MenuItem>
-                      </Select>
-                    )}
-                  />
-                  <div className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.mediaType?.message}
-                    </FormHelperText>
-                  </div>
-                </FormControl>
-              </div> */}
-
               <TextInputBox
                 inputLabel={"Redirect Url:"}
                 register={register}
@@ -578,7 +515,7 @@ export default function AddAdModal({
                   </FormHelperText>
                 </div>
               </div>
-            </Box>
+            </FormInputWrapper>
 
             <Box
               sx={{

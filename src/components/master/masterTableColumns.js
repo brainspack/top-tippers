@@ -466,36 +466,36 @@ export const ROUND_TABLE_COLUMNS = (handleEditRound, openModal) => {
   return columns;
 };
 
-export const ROUND_OPTIONS = (roundData, listRoundsApi, teamDataFetching) => {
-  const options = {
-    filter: false,
-    download: false,
-    search: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: false,
-    pagination: true,
-    rowsPerPage: 10,
-    customFooter: (page, rowsPerPage, changeRowsPerPage, changePage) => {
-      return (
-        <>
-          <CustomPagination
-            total={roundData?.totalCount}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            changeRowsPerPage={changeRowsPerPage}
-            changePage={changePage}
-            userList={listRoundsApi}
-            userData={roundData?.data}
-            isLoading={teamDataFetching}
-          />
-        </>
-      );
-    },
-  };
+// export const ROUND_OPTIONS = (roundData, listRoundsApi, teamDataFetching) => {
+//   const options = {
+//     filter: false,
+//     download: false,
+//     search: false,
+//     print: false,
+//     viewColumns: false,
+//     selectableRows: false,
+//     pagination: true,
+//     rowsPerPage: 10,
+//     customFooter: (page, rowsPerPage, changeRowsPerPage, changePage) => {
+//       return (
+//         <>
+//           <CustomPagination
+//             total={roundData?.totalCount}
+//             page={page}
+//             rowsPerPage={rowsPerPage}
+//             changeRowsPerPage={changeRowsPerPage}
+//             changePage={changePage}
+//             userList={listRoundsApi}
+//             userData={roundData?.data}
+//             isLoading={teamDataFetching}
+//           />
+//         </>
+//       );
+//     },
+//   };
 
-  return options;
-};
+//   return options;
+// };
 
 // GAME TABLE
 

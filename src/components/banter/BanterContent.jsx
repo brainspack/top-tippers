@@ -14,7 +14,7 @@ import {
   ManageUserTableWrapper,
   SearchContainer,
 } from "../ManageUsers/ManangeUsersStyled";
-import { BanterFormWrapper, FilterBtn } from "./banterStyled";
+import { BanterFormBox, BanterFormWrapper, FilterBtn } from "./banterStyled";
 import { Controller, useForm } from "react-hook-form";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
 import { MenuItem } from "@mui/material";
@@ -191,7 +191,7 @@ const BanterContent = () => {
 
           <SearchContainer>
             <BanterFormWrapper>
-              <Paper sx={{ width: "70%", height: "200px", padding: "15px" }}>
+              <BanterFormBox>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Box
                     sx={{
@@ -343,7 +343,7 @@ const BanterContent = () => {
                     )}
                   </Box>
                 </form>
-              </Paper>
+              </BanterFormBox>
               {/* <MUIDataTable
                 data={userListContentData?.data}
                 columns={columns}

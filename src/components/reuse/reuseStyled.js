@@ -22,3 +22,10 @@ export const DeleteContent = styled(Typography)(() => ({
   color: "#999 !important",
   fontSize: "20px !important",
 }));
+export const InputWrapperBox = styled(Typography)(() => ({
+  height: "auto",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+}));
