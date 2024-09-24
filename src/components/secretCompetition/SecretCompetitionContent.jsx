@@ -59,6 +59,7 @@ import adminTip from "../../images/tips_blank.png";
 import question from "../../images/ant-design_question.svg";
 import circle from "../../images/cil_check-circle.svg";
 import close from "../../images/close-circle-outline.svg";
+import { PROFILE_IMG_PATH } from "../../utils/constant";
 
 const SecretCompetitionContent = () => {
   const dispatch = useDispatch();
@@ -123,11 +124,6 @@ const SecretCompetitionContent = () => {
   const [selectedTeamId, setSelectedTeamId] = useState("");
   console.log(selectedTeamId, "selectedTeamId");
   const [selectTeam, setSelectTeam] = useState([]);
-
-  // const [teamState, setTeamState] = useState({
-  //   filteredRounds: [],
-  //   selectedRound: "",
-  // });
 
   useEffect(() => {
     if (selectedSportId) {
@@ -271,7 +267,6 @@ const SecretCompetitionContent = () => {
       }
     }
   }, [selectedSportId, roundsState?.selectedRound, listRoundsSuccess]);
-  // const [userCountNumber, setUserCount] = useState(0);
 
   useEffect(() => {
     if (
@@ -285,32 +280,26 @@ const SecretCompetitionContent = () => {
 
   const columns = [
     {
-      name: "profilePhoto",
-      label: "Photo",
-      options: {
-        display: false,
-        customBodyRender: (value, rowData) => {
-          {
-            console.log(rowData, "rowData");
-          }
-          return (
-            <>
-              <Avatar src={value} />
-            </>
-          );
-        },
-        setCellHeaderProps: () => ({
-          style: { backgroundColor: "#e5a842", color: "black" },
-        }),
-      },
-    },
-    {
-      name: "name",
+      name: "userId",
       label: "User",
       options: {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
         }),
+        customBodyRender: (data) => {
+          const user = filterGameRevelListData?.data?.docs?.find(
+            (e) => e?.userId === data
+          );
+
+          return user ? (
+            <Box sx={{ display: "flex", gap: "15px" }}>
+              <Avatar src={PROFILE_IMG_PATH + user?.profilePhoto} />
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography>{user?.name}</Typography>
+              </Box>
+            </Box>
+          ) : null;
+        },
       },
     },
     {
@@ -320,12 +309,15 @@ const SecretCompetitionContent = () => {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
         }),
-        customBodyRender: (value, tableMeta) => {
-          return tableMeta.rowIndex + 1;
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const currentPage = tableMeta.tableState.page;
+          const rowsPerPage = tableMeta.tableState.rowsPerPage;
+          const pageIndex = tableMeta.rowIndex + 1; // Row index on the current page
+          const continuousIndex = currentPage * rowsPerPage + pageIndex;
+          return continuousIndex;
         },
       },
     },
-
     {
       name: "roundpoint",
       label: "Round Point",
@@ -362,7 +354,7 @@ const SecretCompetitionContent = () => {
         }),
         customBodyRender: (ele) => {
           return (
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", gap: "5px" }}>
               {ele.map((game, index) => {
                 const imgLogo = (game) => {
                   if (
@@ -419,25 +411,31 @@ const SecretCompetitionContent = () => {
     print: false,
     viewColumns: false,
     pagination: true,
-    rowsPerPage: 30,
+    rowsPerPage: filterGameRevelListData?.data?.limit,
     selectableRows: false,
+    responsive: "standard",
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <>
           <CustomPagination
             total={filterGameRevelListData?.data?.totalDocs}
-            page={page}
+            page={filterGameRevelListData?.data?.page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
             userList={filterGameRevelListApi}
-            // userAllData={userAllData?.data}
             isLoading={isLoading}
+            round={roundsState?.selectedRound}
+            sport={selectedSportId}
           />
         </>
       );
     },
   };
+
+  useEffect(() => {
+    dispatch(setCurrentModule("secretComp"));
+  }, []);
 
   return (
     <>
