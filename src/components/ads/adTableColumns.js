@@ -110,7 +110,7 @@ export const AD_TABLE_COLUMNS = (handleEditClick, openModal) => {
           console.log();
 
           switch (value) {
-            case "tip":
+            case "Tip":
               return "TIPPING";
             case "Scorecard":
               return "Scorecard";

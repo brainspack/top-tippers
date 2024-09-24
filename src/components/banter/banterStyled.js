@@ -12,6 +12,11 @@ export const BanterFormWrapper = styled(Box)(() => ({
   display: "flex",
   justifyContent: "center",
 }));
+export const BanterFormBox = styled(Box)(() => ({
+  width: "70%",
+  height: "200px",
+  padding: "15px",
+}));
 
 export const FilterBtn = styled(Button)(() => ({
   backgroundColor: "#e08300",

@@ -2,6 +2,7 @@ import React from "react";
 import CustomAddSportLabel from "./CustomAddSportLabel";
 import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { Controller } from "react-hook-form";
+import { InputWrapperBox } from "./reuseStyled";
 
 function CustomSelectInputBox({
   inputLabel,
@@ -18,15 +19,7 @@ function CustomSelectInputBox({
 }) {
   return (
     <>
-      <div
-        style={{
-          height: "auto",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
+      <InputWrapperBox>
         <CustomAddSportLabel requiredInput="*" inputLabel={inputLabel} />
 
         <FormControl sx={{ m: 1 }} fullWidth error={!!errors[name]}>
@@ -62,7 +55,7 @@ function CustomSelectInputBox({
             </FormHelperText>
           </div>
         </FormControl>
-      </div>
+      </InputWrapperBox>
     </>
   );
 }

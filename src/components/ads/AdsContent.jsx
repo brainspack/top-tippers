@@ -30,6 +30,7 @@ import { useDeleteAdByNameMutation } from "../../api/DeleteAd";
 import { useGetAddUpdateAdApiByNameMutation } from "../../api/AddUpdateAd";
 import { setCurrentModule } from "../../slices/manageTeam/manageTeam";
 import { AD_OPTIONS, AD_TABLE_COLUMNS } from "./adTableColumns";
+import { SELECT_PAGE_TYPE } from "../../utils/constant";
 
 const AdsContent = () => {
   const dispatch = useDispatch();
@@ -110,6 +111,10 @@ const AdsContent = () => {
         return e;
       }
     });
+
+    const v = SELECT_PAGE_TYPE.value === "Tip";
+    console.log(v, "bb");
+
     const payload = [
       {
         name: rowData?.rowData[0],
@@ -117,7 +122,7 @@ const AdsContent = () => {
         mediaType: rowData?.rowData[2],
         userType: rowData?.rowData[3],
         sport: sportValue?.length ? sportValue[0]?.sport : "",
-        pages: rowData?.rowData[5],
+        pages: rowData?.rowData[5] === "Tip",
         redirectUrl: sportValue?.length ? sportValue[0]?.redirectUrl : "",
 
         id: rowData?.rowData[6],

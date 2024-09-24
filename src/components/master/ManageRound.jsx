@@ -175,6 +175,116 @@ const ManageRound = () => {
     dispatch(updateModalVisibility(true));
   };
 
+  // const columns = [
+  //   {
+  //     name: "roundno",
+  //     label: "Round No.",
+  //     options: {
+  //       filter: true,
+  //       sort: true,
+
+  //       setCellHeaderProps: () => ({
+  //         style: { backgroundColor: "#e5a842", color: "black" },
+  //       }),
+  //     },
+  //   },
+  //   {
+  //     name: "roundname",
+  //     label: "Round Name",
+  //     options: {
+  //       filter: true,
+  //       sort: true,
+  //       setCellHeaderProps: () => ({
+  //         style: { backgroundColor: "#e5a842", color: "black" },
+  //       }),
+  //     },
+  //   },
+  //   {
+  //     name: "roundtype",
+  //     label: "Type",
+  //     options: {
+  //       filter: true,
+  //       sort: true,
+  //       setCellHeaderProps: () => ({
+  //         style: { backgroundColor: "#e5a842", color: "black" },
+  //       }),
+  //     },
+  //   },
+
+  //   {
+  //     name: "sport",
+  //     label: "Sports",
+  //     options: {
+  //       customBodyRender: (data) => {
+  //         return (
+  //           <>
+  //             <Box>{data?.sportname}</Box>
+  //           </>
+  //         );
+  //       },
+  //       setCellHeaderProps: () => ({
+  //         style: { backgroundColor: "#e5a842", color: "black" },
+  //       }),
+  //     },
+  //   },
+  //   {
+  //     name: "_id",
+  //     label: "Actions",
+  //     options: {
+  //       filter: true,
+  //       sort: true,
+  //       setCellHeaderProps: () => ({
+  //         style: {
+  //           backgroundColor: "#e5a842",
+  //           color: "black",
+  //         },
+  //       }),
+  //       customBodyRender: (value, rowData) => {
+  //         return (
+  //           <>
+  //             <Box display="flex" gap="10px">
+  //               <EditIcon
+  //                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+  //                 onClick={() => handleEditRound(value, rowData)}
+  //               />
+  //               <DeleteIcon
+  //                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
+  //                 onClick={() => openModal(value, "delete")}
+  //               />
+  //             </Box>
+  //           </>
+  //         );
+  //       },
+  //     },
+  //   },
+  // ];
+
+  const options = {
+    filter: false,
+    download: false,
+    search: false,
+    print: false,
+    viewColumns: false,
+    selectableRows: false,
+    pagination: true,
+    rowsPerPage: 10,
+    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      return (
+        <>
+          <CustomPagination
+            total={roundData?.totalCount}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            changeRowsPerPage={changeRowsPerPage}
+            changePage={changePage}
+            userList={listRoundsApi}
+            userData={roundData?.data}
+            isLoading={teamDataFetching}
+          />
+        </>
+      );
+    },
+  };
   useEffect(() => {
     dispatch(setCurrentModule("round"));
   }, []);
@@ -218,11 +328,7 @@ const ManageRound = () => {
               <MUIDataTable
                 data={roundData?.data}
                 columns={ROUND_TABLE_COLUMNS(handleEditRound, openModal)}
-                options={ROUND_OPTIONS(
-                  roundData,
-                  listRoundsApi,
-                  teamDataFetching
-                )}
+                options={options}
               />
             </ManageUserTableWrapper>
             <CustomModal
