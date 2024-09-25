@@ -199,7 +199,6 @@ const BanterContent = () => {
                       height: "50px",
                       display: "flex",
                       justifyContent: "space-between",
-                      // alignItems: "center",
                       gap: "10px",
                     }}
                   >
@@ -235,7 +234,6 @@ const BanterContent = () => {
                                 field.onChange(event);
                                 handleSportChange(event);
                               }}
-                              // {...register("sport")}
                             >
                               <MenuItem disabled>Select Sport</MenuItem>
                               {listSportData?.data?.map((sport) => (

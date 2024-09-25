@@ -185,8 +185,7 @@ const FaqsContent = () => {
   }, []);
 
   /////////////////////// INNOVATION
-  const { isAddFaqsModalVisible, setEditFaqsData, setModeForFaqsEdit } =
-    useSelector(faqsDataSelector);
+  const { setEditFaqsData } = useSelector(faqsDataSelector);
 
   const questionIdFaqs = faqsListTopicData?.data?.filter((e) => {
     if (e.topicname === "FAQs") {

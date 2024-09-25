@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -10,9 +10,6 @@ import {
   Typography,
   Divider,
   Button,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
@@ -24,8 +21,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LogoImage from "../../images/toptippers.svg";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+
 import useWindowWidth from "./useWindowWidth";
 import BasicMenu from "./ProfileMenu";
 import {
@@ -36,9 +32,7 @@ import {
   CMS_LIST,
   MASTER_SUBHEADINGS,
 } from "../../utils/constant";
-import { useMediaQuery } from "@mui/material";
 import CustomAccordion from "../reuse/CustomAccordian";
-// import CustomAccordian from "./AccordianCustom";
 
 const drawerWidth = 240;
 
@@ -82,25 +76,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
 
 const DashboardComponent = ({ content }) => {
-  // const [expanded, setExpanded] = useState(false);
-  // const handleAccordionToggle = (panel) => (event, isExpanded) => {
-  //   setExpanded(isExpanded ? panel : false);
-  // };
-  // const location = useLocation();
-  // useEffect(() => {
-  //   if (MASTER_SUBHEADINGS.some((ele) => ele.route === location.pathname)) {
-  //     setExpanded("masterPanel");
-  //   } else {
-  //     setExpanded(false);
-  //   }
-  // }, [location.pathname]);
-
   const windowWidth = useWindowWidth();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -146,7 +126,6 @@ const DashboardComponent = ({ content }) => {
       sx={{
         width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
         backgroundColor: "#383434",
-        // border: "1px solid red",
       }}
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -216,44 +195,6 @@ const DashboardComponent = ({ content }) => {
             </ListItemButton>
           </NavLink>
         ))}
-        {/* <Accordion
-          className="accordion-master"
-          elevation={0}
-          expanded={expanded === "masterPanel"} // Control expansion based on state
-          onChange={handleAccordionToggle("masterPanel")} // Handle accordion expansion
-        >
-          <AccordionSummary
-            className="accordion-master"
-            expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-            aria-controls="panel1-content"
-            id="panel1-header"
-          >
-            <SpaceDashboardIcon sx={{ color: "white", marginRight: "32px" }} />
-            Master
-          </AccordionSummary>
-          {MASTER_SUBHEADINGS.map((ele) => (
-            <>
-              <NavLink
-                to={ele.route}
-                className={"drawer-routes drawer-nav"}
-                key={ele.label} // Ensure unique key
-                onClick={(e) => e.stopPropagation()}
-                // onClick={() => setExpanded("masterPanel")} // Keep accordion open on click
-              >
-                <AccordionDetails
-                  className="master-subheadings"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {ele.icon}
-
-                  {ele.label}
-                </AccordionDetails>
-              </NavLink>
-            </>
-          ))}
-        </Accordion> */}
-        {/* <CustomAccordian /> */}
-        {/* <CustomAccordion /> */}
       </List>
       <Divider />
     </Box>
@@ -284,7 +225,6 @@ const DashboardComponent = ({ content }) => {
               </>
             ) : (
               <IconButton
-                // style={{color:"green"}}
                 className="icon-bar"
                 color="inherit"
                 aria-label="open drawer"
@@ -337,8 +277,7 @@ const DashboardComponent = ({ content }) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        {/* sx={{ border: "1px solid red" }} */}
-        {/* drawer-nav */}
+
         <List>
           {ADMIN_LIST.map((text, index) => (
             <NavLink
@@ -355,45 +294,7 @@ const DashboardComponent = ({ content }) => {
               </ListItemButton>
             </NavLink>
           ))}
-          {/* <Accordion
-            className="accordion-master"
-            elevation={0}
-            expanded={expanded === "masterPanel"} // Control expansion based on state
-            onChange={handleAccordionToggle("masterPanel")} // Handle accordion expansion
-          >
-            <AccordionSummary
-              className="accordion-master"
-              expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-              aria-controls="panel1-content"
-              id="panel1-header"
-            >
-              <SpaceDashboardIcon
-                sx={{ color: "white", marginRight: "32px" }}
-              />
-              Master
-            </AccordionSummary>
-            {MASTER_SUBHEADINGS.map((ele) => (
-              <>
-                <NavLink
-                  to={ele.route}
-                  className={"drawer-routes drawer-nav"}
-                  key={ele.label}
-                  // onClick={(e) => e.stopPropagation()}
-                  onClick={() => setExpanded("masterPanel")}
-                >
-                  <AccordionDetails
-                    className="master-subheadings"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {ele.icon}
 
-                    {ele.label}
-                  </AccordionDetails>
-                </NavLink>
-              </>
-            ))}
-          </Accordion> */}
-          {/* <CustomAccordian /> */}
           <CustomAccordion
             data={MASTER_SUBHEADINGS}
             accordianHeading={"Master"}

@@ -1,7 +1,8 @@
 import React from "react";
 import CustomAddSportLabel from "./CustomAddSportLabel";
-import { FormHelperText, OutlinedInput } from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 import { InputWrapperBox } from "./reuseStyled";
+import CustomFormHelperText from "./CustomFormHelperText";
 
 function TextInputBox({
   inputLabel,
@@ -55,11 +56,7 @@ function TextInputBox({
           })}
         />
       </InputWrapperBox>
-      <div className="errorMsgParent">
-        <FormHelperText sx={{ color: "#d32f2f" }}>
-          {errors[name]?.message}
-        </FormHelperText>
-      </div>
+      <CustomFormHelperText errors={errors} name={name} />
     </>
   );
 }

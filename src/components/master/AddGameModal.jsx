@@ -7,7 +7,6 @@ import {
   Select,
   Box,
   Modal,
-  Divider,
   FormHelperText,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
@@ -38,16 +37,14 @@ const AddGameModal = (props) => {
     data,
     onClose,
     initialData,
-    gameData,
-    teamData,
+
     allTeamData,
     addGameApi,
     updateGameApi,
   } = props;
 
   const dispatch = useDispatch();
-  const { isModalVisible, modalSportName } = useSelector(userDataSelector);
-  const { sportData } = useSelector(manageSportSelector);
+  const { isModalVisible } = useSelector(userDataSelector);
   const { selectedGameMode, editGameData } = useSelector(manageGameSelector);
   console.log(editGameData, "editGameData");
   const { roundData } = useSelector(manageRoundSelector);
@@ -177,7 +174,6 @@ const AddGameModal = (props) => {
         (round) => round?.sport?._id === selectedSportId
       );
       setFilteredRounds(filtered);
-      // setValue("round", "");
     } else {
       setFilteredRounds([]);
     }
@@ -190,8 +186,6 @@ const AddGameModal = (props) => {
         (team) => team?.sport?._id === selectedSportId
       );
       setSelectTeam(filteredTeams);
-      // setValue("homeTeam", "");
-      // setValue("awayTeam", "");
     }
   }, [selectedSportId, allTeamData, setValue]);
   useEffect(() => {
@@ -552,7 +546,6 @@ const AddGameModal = (props) => {
                         setValue={setValue}
                         watch={watch}
                         clearErrors={clearErrors}
-                        // initialData={initialData}
                         mode="game"
                         selectedGameMode={selectedGameMode}
                       />
@@ -600,7 +593,6 @@ const AddGameModal = (props) => {
                     inputLabel="Home Team Points:"
                   />
                   <OutlinedInput
-                    // type="number"
                     id="outlined-adornment-weight"
                     sx={{
                       width: "100%",
@@ -642,7 +634,6 @@ const AddGameModal = (props) => {
                     inputLabel="Away Team Points:"
                   />
                   <OutlinedInput
-                    // type="number"
                     id="outlined-adornment-weight"
                     sx={{
                       width: "100%",

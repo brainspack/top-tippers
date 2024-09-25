@@ -113,7 +113,10 @@ const AdsContent = () => {
     });
 
     const v = SELECT_PAGE_TYPE.value === "Tip";
-    console.log(v, "bb");
+
+    const pagesValue =
+      rowData?.rowData[5] === "Tip" ? "TIPPING PAGE" : rowData?.rowData[5];
+    console.log(pagesValue, "bb");
 
     const payload = [
       {
@@ -122,7 +125,7 @@ const AdsContent = () => {
         mediaType: rowData?.rowData[2],
         userType: rowData?.rowData[3],
         sport: sportValue?.length ? sportValue[0]?.sport : "",
-        pages: rowData?.rowData[5] === "Tip",
+        pages: pagesValue,
         redirectUrl: sportValue?.length ? sportValue[0]?.redirectUrl : "",
 
         id: rowData?.rowData[6],
@@ -196,7 +199,6 @@ const AdsContent = () => {
               addUpdateAd={addUpdateAd}
               addUpdateAdData={addUpdateAdData}
               listSportData={listSportData}
-              // updataAdSuccess={updataAdSuccess}
             />
           </Box>
 

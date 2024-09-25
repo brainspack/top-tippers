@@ -29,8 +29,14 @@ import { userDataSelector } from "../../slices/userSlice/userSelector";
 import DateRangePicker from "./DatePickerComponent";
 import { Controller, useForm } from "react-hook-form";
 import { handleNotification } from "../../slices/Snackbar";
-import { DEFAULT_SPORT_VALUE, RESET_SPORT_VALUE } from "../../utils/constant";
+import {
+  DEFAULT_SPORT_VALUE,
+  RESET_SPORT_VALUE,
+  SPORT_TYPE_ITEM,
+} from "../../utils/constant";
 import TextInputBox from "../reuse/TextInputBox";
+import CustomSelectInputBox from "../reuse/CustomSelectInputBox";
+import CustomFormHelperText from "../reuse/CustomFormHelperText";
 
 const style = {
   position: "absolute",
@@ -220,7 +226,17 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                   />
                 </Box>
               </div>
-              <div
+
+              <CustomSelectInputBox
+                inputLabel={"Sport Type:"}
+                register={register}
+                name={"type"}
+                required={"Sport Type is required"}
+                errors={errors}
+                control={control}
+                menuItems={SPORT_TYPE_ITEM}
+              />
+              {/* <div
                 style={{
                   height: "auto",
                   width: "100%",
@@ -267,7 +283,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                     </FormHelperText>
                   </div>
                 </FormControl>
-              </div>
+              </div> */}
 
               <div
                 style={{
@@ -311,11 +327,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                       </Select>
                     )}
                   />
-                  <div className="errorMsgParent">
-                    <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                      {errors.bonus?.message}
-                    </FormHelperText>
-                  </div>
+                  <CustomFormHelperText errors={errors} name={"bonus"} />
                 </FormControl>
               </div>
 
