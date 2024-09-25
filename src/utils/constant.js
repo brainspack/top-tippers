@@ -312,3 +312,16 @@ export const SELECT_MEDIA_TYPE = [
     value: "json",
   },
 ];
+
+// SPORT SELECT INPUTS =============
+
+export const SPORT_TYPE_ITEM = [
+  {
+    itemName: "Regular",
+    value: "Regular",
+  },
+  {
+    itemName: "Draw",
+    value: "Draw",
+  },
+];

@@ -110,7 +110,6 @@ function AddArticleForm() {
         const response = await teamListApi({
           count: 1000,
         }).unwrap();
-        // dispatch(updateTeamList(response));
         dispatch(updateAllTeamData(response));
       } catch (err) {
         console.error("Error fetching sports data:", err);
@@ -137,11 +136,7 @@ function AddArticleForm() {
     fetchRound();
   }, []);
 
-  // SPORT API
-  // useEffect(() => {
-  //   if (listSportData && listSportData?.data)
-  //     dispatch(updateSportList(listSportData));
-  // }, [listSportData]);
+ 
 
   // LIST GAME API
   useEffect(() => {
@@ -281,7 +276,6 @@ function AddArticleForm() {
   };
   const navigate = useNavigate();
   const onhandleSubmit = async (data) => {
-    // e.preventDefault();
 
     const formData = new FormData();
     formData.append("title", data?.title);
@@ -327,7 +321,6 @@ function AddArticleForm() {
   ] = useEditArticleByNameMutation();
 
   const onhandleUpdate = async (data) => {
-    // e.preventDefault();
     const formattedDate = moment(data?.publishDateTime).format(
       "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(India Standard Time)]"
     );
@@ -639,11 +632,7 @@ function AddArticleForm() {
                   requiredInput="*"
                   inputLabel="Article Image/Video:"
                 />
-                {/* <Controller
-                  name="file"
-                  control={control}
-                  rules={{ required: "File is required" }}
-                  render={({ field }) => ( */}
+               
                 <>
                   <input
                     accept="image/*"
@@ -651,7 +640,6 @@ function AddArticleForm() {
                     type="file"
                     onChange={handleImageChange}
                     style={{ display: "none" }}
-                    // {...field}
                   />
                   <label
                     htmlFor="upload-image"
@@ -754,7 +742,6 @@ function AddArticleForm() {
                 />
                 <FormControl
                   fullWidth
-                  // error={!!errors.sportId}
                   {...register("sportIdd")}
                 >
                   <Controller

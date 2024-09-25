@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
-import {
-  setModalSportName,
-  updateModalVisibility,
-  updateUserData,
-} from "../../slices/userSlice/user";
+import { updateModalVisibility } from "../../slices/userSlice/user";
 import { handleNotification } from "../../slices/Snackbar";
 import {
   ManageUsersContainer,
@@ -19,32 +13,25 @@ import {
   ManageUserTableWrapper,
   SearchContainer,
 } from "../ManageUsers/ManangeUsersStyled";
-import ControlledSwitches from "../SwitchComponent";
 import CustomModal from "../reuse/CustomModal";
-import CustomPagination from "../reuse/CustomPagination";
 
 import AddIcon from "@mui/icons-material/Add";
 
-import CustomSelect from "./CustomSelect";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
 import {
   setCurrentModule,
   updateSportList,
-  updateTeamList,
 } from "../../slices/manageTeam/manageTeam";
 import AddTeamModal from "./AddTeamModal";
-// import { useTeamListByNameMutation } from "../../api/GetTeamList";
-// import { useListRoundsByNameMutation } from "../../api/ListRounds";
+
 import { useGetUserListCompetitionApiByNameMutation } from "../../api/listCompetition";
-// import { useDeleteRoundByNameMutation } from "../../api/DeleteRound";
+
 import { useDeleteCompetitionByNameMutation } from "../../api/DeleteCompetition";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { useAddTeamByNameMutation } from "../../api/AddNewTeam";
 import { AddSportBtn } from "./masterStyled";
-import EditIcon from "@mui/icons-material/Edit";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
 import { updateRoundList } from "../../slices/manageRound/manageRound";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import {
   COMPETITION_OPTIONS,
   COMPETITION_TABLE_COLUMNS,
@@ -108,29 +95,16 @@ const ManageCompetition = () => {
     {
       data: listCompetitionData,
       isLoading: teamDataFetching,
-      error,
       isSuccess: listCompetitionSuccess,
     },
   ] = useGetUserListCompetitionApiByNameMutation();
 
   const [
     userDeleteApi,
-    {
-      data: userDeleteData,
-      isLoading: userDeleteLoading,
-      error: userDeleteError,
-      isSuccess: userDeleteSuccess,
-    },
+    { data: userDeleteData, isSuccess: userDeleteSuccess },
   ] = useDeleteCompetitionByNameMutation();
-  const [
-    listSportApi,
-    {
-      data: listSportData,
-      isLoading,
-      error: listSportError,
-      success: listSportSuccess,
-    },
-  ] = useGetUserListSportApiByNameMutation();
+  const [listSportApi, { data: listSportData }] =
+    useGetUserListSportApiByNameMutation();
 
   useEffect(() => {
     if (listSportData && listSportData?.data)

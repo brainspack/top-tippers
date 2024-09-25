@@ -21,7 +21,6 @@ export const OpenNotification = () => {
       open={snackbar?.state}
       autoHideDuration={4000}
       onClose={handleSnackbarClose}
-      // anchorOrigin={{ vertical: "top", horizontal: "right" }}
     >
       <Alert
         onClose={handleSnackbarClose}

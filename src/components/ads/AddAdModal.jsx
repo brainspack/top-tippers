@@ -99,25 +99,6 @@ export default function AddAdModal({
     setShowPageType(false);
   };
 
-  //   // LIST SPORT API
-  //   const [
-  //     listSportApi,
-  //     {
-  //       data: listSportData,
-  //       isLoading,
-  //       error: listSportError,
-  //       success: listSportSuccess,
-  //     },
-  //   ] = useGetUserListSportApiByNameMutation();
-
-  //   // SPORT API
-  //   useEffect(() => {
-  //     if (listSportData && listSportData?.data)
-  //       dispatch(updateSportList(listSportData));
-  //   }, [listSportData]);
-
-  // //   console.log(listSportApi);
-
   const {
     register,
     handleSubmit,
@@ -145,7 +126,6 @@ export default function AddAdModal({
     try {
       console.log(userValue, "sjka");
 
-      // Simulate a successful asynchronous operation
       let result = await Promise.resolve({
         name: userValue?.name,
         type: userValue?.type,
@@ -345,57 +325,6 @@ export default function AddAdModal({
                   menuItems={SELECT_PAGE_TYPE}
                 />
               ) : (
-                // <div
-                //   style={{
-                //     height: "auto",
-                //     width: "100%",
-                //     display: "flex",
-                //     flexDirection: "column",
-                //     gap: "10px",
-                //   }}
-                // >
-                //   <CustomAddSportLabel
-                //     requiredInput="*"
-                //     inputLabel="Select Page Type:"
-                //   />
-
-                //   <FormControl
-                //     sx={{ m: 1, minWidth: 353 }}
-                //     {...register("page")}
-                //   >
-                //     <Controller
-                //       name="page"
-                //       control={control}
-                //       rules={{ required: "Pages is required" }}
-                //       render={({ field }) => (
-                //         <Select
-                //           displayEmpty
-                //           sx={{
-                //             fontSize: "14px",
-                //             height: "40px",
-                //           }}
-                //           {...field}
-                //           {...register("page")}
-                //         >
-                //           <MenuItem value="Tip" {...register("page")}>
-                //             TIPPING PAGE
-                //           </MenuItem>
-                //           <MenuItem value="Scorecard" {...register("page")}>
-                //             SCORECARD PAGE
-                //           </MenuItem>
-                //           <MenuItem value="every_page" {...register("page")}>
-                //             EVERY PAGE
-                //           </MenuItem>
-                //         </Select>
-                //       )}
-                //     />
-                //     <div className="errorMsgParent">
-                //       <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
-                //         {errors.page?.message}
-                //       </FormHelperText>
-                //     </div>
-                //   </FormControl>
-                // </div>
                 ""
               )}
 

@@ -23,7 +23,6 @@ import { useAdReportApiByNameMutation } from "../../api/AdReports";
 import moment from "moment/moment";
 import { CSVLink } from "react-csv";
 import { REPORT_OPTIONS, REPORT_TABLE_COLUMNS } from "./reportTableColumns";
-// import { Parser } from "json2csv";
 
 const AdsReportContent = () => {
   const dispatch = useDispatch();

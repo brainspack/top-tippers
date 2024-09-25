@@ -22,8 +22,6 @@ export const SearchWrapper = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-between",
   padding: "15px",
-
-  // border: "1px solid red",
 }));
 
 export const ManageUsersHeading = styled(Typography)(({ theme }) => ({
