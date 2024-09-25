@@ -45,6 +45,9 @@ export const DropDownBox = styled(Box)(() => ({
 export const ManageUserTableWrapper = styled(Box)(() => ({
   width: "100%",
   padding: "15px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "25px",
 }));
 
 export const Search = styled(Paper)(({ theme }) => ({

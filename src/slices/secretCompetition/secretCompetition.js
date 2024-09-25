@@ -22,25 +22,8 @@ export const secretCompetitionSlice = createSlice({
     updateActiveUsersData: (state, { payload }) => {
       state.activeUsersData = payload;
     },
-    // updateSecretAllTeamData: (state, { payload }) => {
-    //   state.secretAllTeamData = payload;
-    // },
-
     updateSecretAllTeamData: (state, { payload }) => {
-      const newData = [
-        {
-          _id: "",
-          teamname: "",
-        },
-        ...payload.data,
-      ];
-      console.log(newData, "newData");
-
-      const newObj = {
-        ...payload,
-        data: newData,
-      };
-      state.secretAllTeamData = newObj;
+      state.secretAllTeamData = payload;
     },
   },
 });

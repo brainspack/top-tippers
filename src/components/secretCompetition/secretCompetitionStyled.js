@@ -1,5 +1,55 @@
-import { Typography, styled } from "@mui/material";
-
+import { Box, Paper, Typography, styled } from "@mui/material";
+////////// TIP DISTRIBUTION
+export const TipDistributionContainer = styled(Box)(() => ({
+  height: "auto",
+  width: "100%",
+}));
+export const TipDistributionHeadingBox = styled(Box)(() => ({
+  width: "55%",
+  display: "flex",
+  justifyContent: "space-between",
+}));
+export const TipDistributionContentContainer = styled(Box)(() => ({
+  height: "auto",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+}));
+export const TipDistributionContentBox = styled(Box)(() => ({
+  height: "300px",
+  width: "50%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  gap: "10px",
+}));
+export const TeamsHeadingBox = styled(Box)(() => ({
+  height: "10%",
+  width: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+export const CustomPaper = styled(Paper)(() => ({
+  height: "80%",
+  width: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "10px",
+}));
+export const CustomPaperContentBox = styled(Box)(() => ({
+  height: "90%",
+  width: "60%",
+  display: "flex",
+  justifyContent: "space-between",
+}));
+export const TippingDetailsBox = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+}));
 export const TipDistributionHeading = styled(Typography)(() => ({
   color: "#073141 !important",
   fontSize: "25px !important",
@@ -11,10 +61,12 @@ export const UserGroupHeading = styled(Typography)(() => ({
   fontWeight: "600 !important",
 }));
 export const TeamsHeading = styled(Typography)(() => ({
-  color: "rgba(0, 0, 0, 0.85) !important",
+  color: "#212529 !important",
   fontSize: "18px !important",
 }));
 export const TeamsDetails = styled(Typography)(() => ({
   color: "#212529 !important",
   fontSize: "17px !important",
 }));
+
+/////////////////////////////////// SECRET COMPETITION

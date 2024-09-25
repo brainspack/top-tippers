@@ -60,6 +60,11 @@ import question from "../../images/ant-design_question.svg";
 import circle from "../../images/cil_check-circle.svg";
 import close from "../../images/close-circle-outline.svg";
 import { PROFILE_IMG_PATH } from "../../utils/constant";
+import {
+  TeamsDetails,
+  TeamsHeading,
+  UserGroupHeading,
+} from "./secretCompetitionStyled";
 
 const SecretCompetitionContent = () => {
   const dispatch = useDispatch();
@@ -122,17 +127,24 @@ const SecretCompetitionContent = () => {
   }, [selectedSportId]);
 
   const [selectedTeamId, setSelectedTeamId] = useState("");
-  console.log(selectedTeamId, "selectedTeamId");
   const [selectTeam, setSelectTeam] = useState([]);
+  const [roundsState, setRoundsState] = useState({
+    filteredRounds: [],
+    selectedRound: "",
+  });
 
   useEffect(() => {
-    if (selectedSportId) {
+    if (
+      selectedSportId &&
+      secretAllTeamData?.data &&
+      roundsState?.selectedRound
+    ) {
       const filteredTeams = secretAllTeamData?.data?.filter(
         (team) => team?.sport?._id === selectedSportId
       );
       setSelectTeam(filteredTeams);
     }
-  }, [selectedSportId, secretAllTeamData]);
+  }, [selectedSportId, secretAllTeamData?.data, roundsState?.selectedRound]);
 
   /// ROUND LIST
 
@@ -166,13 +178,9 @@ const SecretCompetitionContent = () => {
   }, [selectedSportId]);
 
   ///// Round data
-  const [roundsState, setRoundsState] = useState({
-    filteredRounds: [],
-    selectedRound: "",
-  });
 
   useEffect(() => {
-    if (listRoundsSuccess && selectedSportId && roundData?.data?.length > 0) {
+    if (listRoundsSuccess && selectedSportId && roundData?.data) {
       const currentDate = moment().format("YYYY-MM-DD");
 
       const currentRound = roundData?.data?.find((round) => {
@@ -223,28 +231,21 @@ const SecretCompetitionContent = () => {
   ] = useLazyGetFilterGameRevelListApiByNameQuery();
 
   useEffect(() => {
-    if (filterGameRevelListData?.data?.docs?.length > 0) {
+    if (filterGameRevelListData?.data?.docs) {
       dispatch(updateFilterSecretAllData(filterGameRevelListData));
     }
   }, [filterGameRevelListData]);
 
   useEffect(() => {
-    if (listRoundsSuccess) {
-      if (selectedSportId && roundsState?.selectedRound) {
-        filterGameRevelListApi({
-          round: roundsState?.selectedRound,
-          sport: selectedSportId,
-          teamId: selectedTeamId,
-          limit: 30,
-        });
-      }
+    if (selectedSportId && roundsState?.selectedRound) {
+      filterGameRevelListApi({
+        round: roundsState?.selectedRound,
+        sport: selectedSportId,
+        teamId: selectedTeamId,
+        limit: 30,
+      });
     }
-  }, [
-    selectedSportId,
-    roundsState?.selectedRound,
-    listRoundsSuccess,
-    selectedTeamId,
-  ]);
+  }, [selectedSportId, roundsState?.selectedRound, selectedTeamId]);
 
   ////////////////////////// gameTippingCountApi
 
@@ -252,21 +253,19 @@ const SecretCompetitionContent = () => {
     useLazyGetGameTippingCountApiByNameQuery();
   console.log(gameTippingCountData, "gameTippingCountData");
   useEffect(() => {
-    if (gameTippingCountData?.data?.gameDetailAndTipping.length > 0) {
+    if (gameTippingCountData?.data?.gameDetailAndTipping) {
       dispatch(updateTipDistributionData(gameTippingCountData));
     }
   }, [gameTippingCountData]);
 
   useEffect(() => {
-    if (listRoundsSuccess) {
-      if (selectedSportId && roundsState?.selectedRound) {
-        gameTippingCountApi({
-          round: roundsState?.selectedRound,
-          sport: selectedSportId,
-        });
-      }
+    if (selectedSportId && roundsState?.selectedRound) {
+      gameTippingCountApi({
+        round: roundsState?.selectedRound,
+        sport: selectedSportId,
+      });
     }
-  }, [selectedSportId, roundsState?.selectedRound, listRoundsSuccess]);
+  }, [selectedSportId, roundsState?.selectedRound]);
 
   useEffect(() => {
     if (
@@ -309,10 +308,13 @@ const SecretCompetitionContent = () => {
         setCellHeaderProps: () => ({
           style: { backgroundColor: "#e5a842", color: "black" },
         }),
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const currentPage = tableMeta.tableState.page;
-          const rowsPerPage = tableMeta.tableState.rowsPerPage;
-          const pageIndex = tableMeta.rowIndex + 1; // Row index on the current page
+        customBodyRender: (value, rowData) => {
+          console.log(rowData, "rowData");
+          const currentPage = rowData.tableState.page;
+          console.log(currentPage, "currentPage");
+          const rowsPerPage = rowData.tableState.rowsPerPage;
+          console.log(rowsPerPage, "rowsPerPage");
+          const pageIndex = rowData.rowIndex + 1;
           const continuousIndex = currentPage * rowsPerPage + pageIndex;
           return continuousIndex;
         },
@@ -413,13 +415,12 @@ const SecretCompetitionContent = () => {
     pagination: true,
     rowsPerPage: filterGameRevelListData?.data?.limit,
     selectableRows: false,
-    responsive: "standard",
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <>
           <CustomPagination
             total={filterGameRevelListData?.data?.totalDocs}
-            page={filterGameRevelListData?.data?.page}
+            pages={filterGameRevelListData?.data?.page}
             rowsPerPage={rowsPerPage}
             changeRowsPerPage={changeRowsPerPage}
             changePage={changePage}
@@ -505,6 +506,9 @@ const SecretCompetitionContent = () => {
                   value={selectedTeamId}
                   onChange={(e) => setSelectedTeamId(e.target.value)}
                 >
+                  <MenuItem key="" value="">
+                    All Teams
+                  </MenuItem>
                   {selectTeam?.map((team) => (
                     <MenuItem key={team?._id} value={team?._id}>
                       {team?.teamname}
@@ -514,11 +518,33 @@ const SecretCompetitionContent = () => {
               </FormControl>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography>Active Users : {activeUsersData}</Typography>
+              <Typography>Active Users : {activeUsersData || 0}</Typography>
             </Box>
           </Box>
           <SearchContainer>
             <ManageUserTableWrapper>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "45%",
+                  }}
+                >
+                  <TeamsHeading>Ladder</TeamsHeading>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "45%",
+                  }}
+                >
+                  <TeamsHeading>Reveal</TeamsHeading>
+                </Box>
+              </Box>
               <MUIDataTable
                 data={filterGameRevelListData?.data?.docs}
                 columns={columns}
