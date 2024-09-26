@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import MailIcon from "@mui/icons-material/Mail";
 import { useGetUserListByNameMutation } from "../../api/UserList";
 import { useDeactivateUserByNameMutation } from "../../api/DeactivateUser";
 import { useDeleteUserByNameMutation } from "../../api/DeleteUser";
@@ -26,9 +22,7 @@ import {
   SearchWrapper,
   StyledInputBase,
 } from "./ManangeUsersStyled";
-import ControlledSwitches from "../SwitchComponent";
 import CustomModal from "../reuse/CustomModal";
-import CustomPagination from "../reuse/CustomPagination";
 import UserMenu from "./UserMenu";
 import {
   MANAGE_USER_OPTIONS,
@@ -36,7 +30,6 @@ import {
 } from "./manageUserTableColumns";
 
 const ManageUsers = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userData } = useSelector(userDataSelector);
   const [modal, setModal] = useState(false);

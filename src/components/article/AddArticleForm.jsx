@@ -28,10 +28,6 @@ import {
   updateGameList,
 } from "../../slices/manageGame/manageGame";
 import { updateRoundList } from "../../slices/manageRound/manageRound";
-import {
-  updateSportList,
-  updateTeamList,
-} from "../../slices/manageTeam/manageTeam";
 import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
 import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
 import UploadIcon from "@mui/icons-material/Upload";

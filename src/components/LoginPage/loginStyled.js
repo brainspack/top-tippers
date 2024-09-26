@@ -2,7 +2,6 @@ import { Box, Button, Paper, styled, Typography } from "@mui/material";
 import bannerImage from "../../images/login-banner.6b372104.png";
 import LogoImage from "../../images/logo.svg";
 import logInArt from "../../images/login-art.f41b477f.png";
-import zIndex from "@mui/material/styles/zIndex";
 
 export const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -14,7 +13,10 @@ export const MainContainer = styled(Box)(({ theme }) => ({
     alignItems: "center",
   },
   [theme.breakpoints.between("sm", "md")]: {
-    position: "relative",
+    display: "flex",
+    alignItems: "center",
+  },
+  [theme.breakpoints.between("md", "lg")]: {
     display: "flex",
     alignItems: "center",
   },
@@ -34,6 +36,10 @@ export const LoginContainerBox = styled(Box)(({ theme }) => ({
     width: "100%",
     height: "80%",
   },
+  [theme.breakpoints.between("md", "lg")]: {
+    width: "55%",
+    height: "67%",
+  },
 }));
 export const LoginContainerWrapper = styled(Box)(({ theme }) => ({
   width: "95%",
@@ -50,7 +56,7 @@ export const LoginContainerWrapper = styled(Box)(({ theme }) => ({
 }));
 export const LoginContainer = styled(Paper)(({ theme }) => ({
   width: "37%",
-  height: "540px",
+  height: "80%",
   backgroundColor: "white",
   display: "flex",
   justifyContent: "center",
@@ -59,18 +65,26 @@ export const LoginContainer = styled(Paper)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     width: "97%",
     zIndex: 8,
+    height: "60%",
   },
   [theme.breakpoints.between("sm", "md")]: {
     width: "60%",
+    height: "60%",
+  },
+  [theme.breakpoints.between("md", "lg")]: {
+    width: "50%",
+    zIndex: 8,
+    height: "60%",
   },
 }));
 export const LoginContainerInnerWrapper = styled(Box)(() => ({
   width: "85%",
-  height: "480px",
+  height: "85%",
 }));
 export const LogoImageWrapper = styled(Box)(() => ({
   width: "100%",
   height: "80px",
+
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -78,6 +92,7 @@ export const LogoImageWrapper = styled(Box)(() => ({
 export const LogoImageBox = styled(Box)(({ theme }) => ({
   width: "85%",
   height: "40px",
+
   backgroundImage: `url(${LogoImage})`,
   backgroundRepeat: "no-repeat",
   [theme.breakpoints.down("sm")]: {
