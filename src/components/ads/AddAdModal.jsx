@@ -1,27 +1,19 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import {
-  Divider,
   FormControl,
   FormHelperText,
   IconButton,
   MenuItem,
-  OutlinedInput,
   Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
 import UploadIcon from "@mui/icons-material/Upload";
-
-import {
-  getUserDataForEdit,
-  knowWhereHaveToOpenModal,
-  updateModalVisibility,
-} from "../../slices/userSlice/user";
+import { knowWhereHaveToOpenModal } from "../../slices/userSlice/user";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { handleNotification } from "../../slices/Snackbar";
@@ -36,8 +28,6 @@ import {
   BackModalBtn,
   SportModalHeading,
 } from "../master/masterStyled";
-import { updateSportList } from "../../slices/manageTeam/manageTeam";
-import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import { manageSportDataSelector } from "../../slices/manageSport/manageSportSelector";
 import TextInputBox from "../reuse/TextInputBox";
 import CustomSelectInputBox from "../reuse/CustomSelectInputBox";
@@ -60,21 +50,17 @@ const style = {
   height: "584px",
   outline: "none",
   overflow: "scroll",
-  // p: 1,
 };
 
-export default function AddAdModal({
+const AddAdModal = ({
   success,
   addUpdateAdData,
   addUpdateAd,
   listSportData,
-}) {
+}) => {
   const dispatch = useDispatch();
-  const { sportData } = useSelector(manageSportDataSelector);
-
   const { isAdModalVisible, setEditDataForAd, buttonClickedForAdModal } =
     useSelector(adDataSelector);
-
   const [selectedType, setSelectedType] = useState("");
   const [showPageType, setShowPageType] = useState(false);
 
@@ -104,11 +90,9 @@ export default function AddAdModal({
     handleSubmit,
     control,
     formState: { errors },
-
     reset,
   } = useForm({
     mode: "onChange",
-
     defaultValues: {
       name: "",
       type: "",
@@ -124,8 +108,6 @@ export default function AddAdModal({
 
   const onReset = async (userValue) => {
     try {
-      console.log(userValue, "sjka");
-
       let result = await Promise.resolve({
         name: userValue?.name,
         type: userValue?.type,
@@ -135,22 +117,11 @@ export default function AddAdModal({
         pages: userValue?.pages,
         redirectUrl: userValue?.redirectUrl,
       });
-
       setSelectedType(userValue?.type);
       setShowPageType(userValue?.type === "Topsport_banner");
-
       reset(result);
     } catch (error) {
       console.error("Error during reset:", error);
-
-      dispatch(
-        handleNotification({
-          state: true,
-          message:
-            "An error occurred while resetting the form. Please try again.",
-          severity: "error",
-        })
-      );
     }
   };
 
@@ -188,8 +159,6 @@ export default function AddAdModal({
   }, [setEditDataForAd]);
 
   const onSubmit = async (data) => {
-    console.log(data, "data");
-
     const formData = new FormData();
     formData.append("files", teamDetails?.file);
     formData.append("name", data?.name);
@@ -206,7 +175,6 @@ export default function AddAdModal({
 
     try {
       const result = await addUpdateAd(formData).unwrap();
-
       if (result?.code === 200) {
         dispatch(
           handleNotification({
@@ -234,27 +202,10 @@ export default function AddAdModal({
           })
         );
       }
-    } catch (err) {
-      dispatch(
-        handleNotification({
-          state: true,
-          message: addUpdateAdData?.message,
-          severity: addUpdateAdData?.code,
-        })
-      );
-    }
+    } catch (err) {}
   };
-
-  const formatInput = (value) => {
-    if (typeof value === "string") {
-      if (!value) return value;
-      return value.replace(/^\s+/, "").replace(/\s+/g, " ").trim();
-    }
-  };
-
   const handleTypeChange = (event) => {
     const value = event.target.value;
-
     setSelectedType(value);
     setShowPageType(value === "Topsport_banner");
   };
@@ -328,7 +279,7 @@ export default function AddAdModal({
                 ""
               )}
 
-              <div
+              <Box
                 style={{
                   height: "auto",
                   width: "100%",
@@ -374,13 +325,13 @@ export default function AddAdModal({
                       </Select>
                     )}
                   />
-                  <div className="errorMsgParent">
+                  <Box className="errorMsgParent">
                     <FormHelperText sx={{ ml: 0, color: "#d32f2f" }}>
                       {errors.sport?.message}
                     </FormHelperText>
-                  </div>
+                  </Box>
                 </FormControl>
-              </div>
+              </Box>
 
               <CustomSelectInputBox
                 inputLabel={"Select Media Type:"}
@@ -400,7 +351,7 @@ export default function AddAdModal({
                 required={"Redirect Url is required"}
               />
 
-              <div
+              <Box
                 style={{
                   height: "auto",
                   width: "100%",
@@ -437,15 +388,13 @@ export default function AddAdModal({
                     <span style={{ marginLeft: "8px" }}>Click to upload</span>
                   </label>
                 </>
-
-                <div className="errorMsgParent">
+                <Box className="errorMsgParent">
                   <FormHelperText sx={{ color: "#d32f2f" }}>
                     {errors.files?.message}
                   </FormHelperText>
-                </div>
-              </div>
+                </Box>
+              </Box>
             </FormInputWrapper>
-
             <Box
               sx={{
                 display: "flex",
@@ -465,4 +414,5 @@ export default function AddAdModal({
       </Modal>
     </>
   );
-}
+};
+export default AddAdModal;

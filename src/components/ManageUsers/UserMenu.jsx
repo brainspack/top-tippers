@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { DropDownBox } from "./ManangeUsersStyled";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { useDisabledUserByNameMutation } from "../../api/UserDisabled";
-import { useDownlaodCsvByNameMutation } from "../../api/DownloadCsv";
 
 export default function UserMenu() {
   const [disabledUserApi, { data, isLoading, error }] =
@@ -13,7 +11,6 @@ export default function UserMenu() {
 
   const disabledUser = async () => {
     const result = await disabledUserApi();
-    console.log(result, "DISABLED USER");
   };
 
   const [anchorEl, setAnchorEl] = useState(null);

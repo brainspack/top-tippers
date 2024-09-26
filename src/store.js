@@ -41,6 +41,8 @@ import getArticleDetailsApi from "./api/getArticleDetails";
 import adReducer from "./slices/AdSlice/Ad";
 import listContentReducer from "./slices/ListContentSlice/listContent";
 import banterSliceReducer from "./slices/BanterSlice/banterSlice";
+// import deleteModalSliceReducer from "./slices/deleteModal/deleteModal";
+import deleteModalSliceReducer from "./slices/deleteModal/deleteModal";
 import secretCompetitionReducer from "./slices/secretCompetition/secretCompetition";
 import sendSportNotificaticationApi from "./api/SendSportNotificatication";
 import addUpdateQuestionApi from "./api/AddUpdateQuestion";
@@ -78,6 +80,7 @@ export const store = configureStore({
     manageSportSlice: manageSportReducer,
     faqsSlice: faqsReducer,
     articleSlice: articleReducer,
+    deleteModalSlice: deleteModalSliceReducer,
     adSlice: adReducer,
     listContentSlice: listContentReducer,
     messagingSlice: messagingReducer,

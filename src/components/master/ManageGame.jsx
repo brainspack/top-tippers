@@ -59,89 +59,91 @@ import GameDetailsModal from "./GameDetailsModal";
 import { FILTERED_PAYLOAD } from "../../utils/constant";
 import DeclareWinnerModal from "./manageGame/DeclareWinnerModal";
 import { GAME_OPTIONS, GAME_TABLE_COLUMNS } from "./masterTableColumns";
+import { deleteModalSelector } from "../../slices/deleteModal/deleteModalSelector";
+import {
+  updateAction,
+  updateDeleteModalVisibility,
+  updateModalTitle,
+} from "../../slices/deleteModal/deleteModal";
 
 const ManageGame = () => {
   const dispatch = useDispatch();
+  const { deleteModalVisibility, modalTitle, action } =
+    useSelector(deleteModalSelector);
   const { roundData } = useSelector(manageRoundSelector);
   const { gameData, allTeamData, editGameData, selectedGameMode } =
     useSelector(manageGameSelector);
   const { sportData } = useSelector(manageSportSelector);
-  const [modal, setModal] = useState(false);
-  const [modalTitle, setModalContent] = useState("");
-  const [action, setAction] = useState(() => () => {});
+
   const openModal = (id, type, rowData) => {
     if (type === "delete") {
-      setModalContent("Are you sure you want to delete this game.");
-      setAction(() => async () => {
-        try {
-          const response = await userDeleteApi({
-            gameId: id,
-            selectedSeason: "current",
-          }).unwrap();
+      dispatch(updateModalTitle("Are you sure you want to delete this game."));
+      dispatch(
+        updateAction(() => async () => {
+          try {
+            const response = await userDeleteApi({
+              gameId: id,
+              selectedSeason: "current",
+            }).unwrap();
 
-          if (response?.code === 200) {
-            dispatch(
-              handleNotification({
-                state: true,
-                message: response?.message,
-                severity: response?.code,
-              })
-            );
-          } else {
-            dispatch(
-              handleNotification({
-                state: true,
-                message: response?.message,
-                severity: response?.code,
-              })
-            );
-          }
-        } catch (error) {
-          dispatch(
-            handleNotification({
-              state: true,
-              message: userDeleteData?.message,
-              severity: userDeleteData?.code,
-            })
-          );
-        }
-      });
+            if (response?.code === 200) {
+              dispatch(
+                handleNotification({
+                  state: true,
+                  message: response?.message,
+                  severity: response?.code,
+                })
+              );
+            } else {
+              dispatch(
+                handleNotification({
+                  state: true,
+                  message: response?.message,
+                  severity: response?.code,
+                })
+              );
+            }
+          } catch (error) {}
+        })
+      );
     } else if (type === "started") {
-      setModalContent("Are you sure you want to start this game");
-      setAction(() => async () => {
-        try {
-          const response = await addGameApi({
-            gameId: id,
-            selectedSeason: "current",
-            gameState: "started",
-            sportId: rowData?.rowData[0]._id,
-          }).unwrap();
+      dispatch(updateModalTitle("Are you sure you want to start this game"));
+      dispatch(
+        updateAction(() => async () => {
+          try {
+            const response = await addGameApi({
+              gameId: id,
+              selectedSeason: "current",
+              gameState: "started",
+              sportId: rowData?.rowData[0]._id,
+            }).unwrap();
 
-          if (response?.code === 200) {
-            dispatch(
-              handleNotification({
-                state: true,
-                message: response?.message,
-                severity: response?.code,
-              })
-            );
-          } else {
-            dispatch(
-              handleNotification({
-                state: true,
-                message: response?.message,
-                severity: response?.code,
-              })
-            );
-          }
-        } catch (error) {}
-      });
+            if (response?.code === 200) {
+              dispatch(
+                handleNotification({
+                  state: true,
+                  message: response?.message,
+                  severity: response?.code,
+                })
+              );
+            } else {
+              dispatch(
+                handleNotification({
+                  state: true,
+                  message: response?.message,
+                  severity: response?.code,
+                })
+              );
+            }
+          } catch (error) {}
+        })
+      );
     }
 
-    setModal(true);
+    dispatch(updateDeleteModalVisibility(true));
   };
   const closeModal = () => {
-    setModal(false);
+    dispatch(updateDeleteModalVisibility(false));
   };
 
   // ROUND API
@@ -474,7 +476,7 @@ const ManageGame = () => {
               />
             </ManageUserTableWrapper>
             <CustomModal
-              modal={modal}
+              modal={modalTitle}
               closeModal={closeModal}
               content={modalTitle}
               action={action}

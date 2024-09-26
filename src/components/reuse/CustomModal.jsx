@@ -1,14 +1,10 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
-import CancelIcon from "@mui/icons-material/Cancel";
 import {
   CustomCancelButton,
   CustomDeleteButton,
   DeleteContent,
   DeleteHeading,
 } from "./reuseStyled";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import WarningIcon from "@mui/icons-material/Warning";
 
 const style = {
@@ -42,9 +38,7 @@ const CustomModal = (props) => {
               width: 550,
               display: "flex",
               alignItems: "center",
-              // justifyContent: "space-between",
               gap: "20px",
-
               p: 2,
             }}
           >

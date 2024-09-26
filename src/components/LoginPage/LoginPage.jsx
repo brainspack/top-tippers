@@ -103,9 +103,6 @@ const Login = (props) => {
   return (
     <>
       <MainContainer>
-        {/* <LoginContainerBox className="ImageBox">
-          <img src={loginArt} />
-        </LoginContainerBox> */}
         <LoginContainerBox></LoginContainerBox>
         <LoginContainerWrapper>
           <LoginContainer>
