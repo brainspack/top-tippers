@@ -35,8 +35,6 @@ export const AD_TABLE_COLUMNS = (handleEditClick, openModal) => {
           },
         }),
         customBodyRender: (value) => {
-          console.log();
-
           switch (value) {
             case "topsport_banner":
               return "TopSport Banner";
@@ -107,8 +105,6 @@ export const AD_TABLE_COLUMNS = (handleEditClick, openModal) => {
           },
         }),
         customBodyRender: (value) => {
-          console.log();
-
           switch (value) {
             case "Tip":
               return "TIPPING";

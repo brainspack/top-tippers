@@ -5,15 +5,12 @@ export const userListApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}` }),
   endpoints: (builders) => ({
     getUserListByName: builders.mutation({
-      query: (body) => (
-        console.log(body, "body"),
-        {
-          url: "/api/user/listUser",
-          method: "POST",
-          body: body,
-          headers: { Authorization: `Bearer${localStorage.getItem("token")}` },
-        }
-      ),
+      query: (body) => ({
+        url: "/api/user/listUser",
+        method: "POST",
+        body: body,
+        headers: { Authorization: `Bearer${localStorage.getItem("token")}` },
+      }),
     }),
   }),
 });

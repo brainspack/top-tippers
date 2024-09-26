@@ -25,7 +25,6 @@ import { RULES_OPTIONS, RULES_TABLE_COLUMNS } from "./tableColumns";
 const RulesContent = () => {
   const dispatch = useDispatch();
   const { userListContentData } = useSelector(listContentDataSelector);
-  console.log(userListContentData?.data, "useel");
 
   const [
     listContentApi,

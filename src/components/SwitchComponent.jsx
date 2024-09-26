@@ -3,13 +3,7 @@ import Switch from "@mui/material/Switch";
 import { useDispatch } from "react-redux";
 import { handleNotification } from "../slices/Snackbar";
 
-const ControlledSwitches = ({
-  statusChangeApi,
-  value,
-  rowData,
-  deactivateUserData,
-}) => {
-  console.log(rowData, "VALUE");
+const ControlledSwitches = ({ statusChangeApi, value, rowData }) => {
   const [checked, setChecked] = useState(value);
   const dispatch = useDispatch();
   const handleChange = async (event) => {

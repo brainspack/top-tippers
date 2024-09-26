@@ -124,8 +124,6 @@ export default function AddAdModal({
 
   const onReset = async (userValue) => {
     try {
-      console.log(userValue, "sjka");
-
       let result = await Promise.resolve({
         name: userValue?.name,
         type: userValue?.type,
@@ -188,8 +186,6 @@ export default function AddAdModal({
   }, [setEditDataForAd]);
 
   const onSubmit = async (data) => {
-    console.log(data, "data");
-
     const formData = new FormData();
     formData.append("files", teamDetails?.file);
     formData.append("name", data?.name);

@@ -30,16 +30,6 @@ const DateRangePicker = ({
     return true;
   };
 
-  // const handleChangeDate = (date, fieldName) => {
-  //   if (date) {
-  //     // Convert to UTC and set value
-  //     const utcDate = new Date(date.toISOString().split("T")[0]);
-  //     setValue(fieldName, utcDate);
-  //   } else {
-  //     setValue(fieldName, null);
-  //   }
-  // };
-
   useEffect(() => {
     console.log(control?._formValues, "EFFECY");
     if (watchValue) {

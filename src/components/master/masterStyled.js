@@ -51,3 +51,18 @@ export const GameDetailContent = styled(Typography)(() => ({
   color: "#777181 !important",
   fontSize: "14px !important",
 }));
+export const ModalFromWrapper = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 470,
+  backgroundColor: "white",
+  boxShadow: 24,
+  height: "590px",
+  outline: "none",
+  p: 1,
+  [theme.breakpoints.down("sm")]: {
+    width: "400px",
+  },
+}));

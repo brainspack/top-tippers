@@ -5,6 +5,7 @@ import {
   AddSportBtn,
   AddSportSubmitBtn,
   BackModalBtn,
+  ModalFromWrapper,
   SportModalHeading,
 } from "./masterStyled";
 import AddIcon from "@mui/icons-material/Add";
@@ -38,18 +39,18 @@ import TextInputBox from "../reuse/TextInputBox";
 import CustomSelectInputBox from "../reuse/CustomSelectInputBox";
 import CustomFormHelperText from "../reuse/CustomFormHelperText";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 470,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  height: "590px",
-  outline: "none",
-  p: 1,
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 470,
+//   bgcolor: "background.paper",
+//   boxShadow: 24,
+//   height: "590px",
+//   outline: "none",
+//   p: 1,
+// };
 
 export default function AddSportModal({ success, dataSupport, apiFunction }) {
   const dispatch = useDispatch();
@@ -162,7 +163,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <ModalFromWrapper>
           <Box>
             <SportModalHeading
               id="modal-modal-title"
@@ -358,7 +359,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
               </AddSportSubmitBtn>
             </Box>
           </form>
-        </Box>
+        </ModalFromWrapper>
       </Modal>
     </>
   );

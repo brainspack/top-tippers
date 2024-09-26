@@ -39,7 +39,6 @@ const AdsContent = () => {
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
-  console.log(adData, "sjka");
 
   const openModal = (id, type) => {
     if (type === "delete") {
@@ -116,7 +115,6 @@ const AdsContent = () => {
 
     const pagesValue =
       rowData?.rowData[5] === "Tip" ? "TIPPING PAGE" : rowData?.rowData[5];
-    console.log(pagesValue, "bb");
 
     const payload = [
       {
@@ -131,7 +129,6 @@ const AdsContent = () => {
         id: rowData?.rowData[6],
       },
     ];
-    console.log(payload, "payy");
 
     dispatch(getUserAdDataForEdit(payload));
     dispatch(knowWhereHaveToOpenModalForAd("edit"));

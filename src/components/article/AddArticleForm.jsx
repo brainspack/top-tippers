@@ -53,7 +53,6 @@ function AddArticleForm() {
   const { allTeamData, gameData } = useSelector(manageGameSelector);
   const { filteredArticleData, selectArticleType } =
     useSelector(articleDataSelector);
-  console.log(filteredArticleData, "filteredArticleData");
 
   // ROUND API
   const [
@@ -135,8 +134,6 @@ function AddArticleForm() {
 
     fetchRound();
   }, []);
-
- 
 
   // LIST GAME API
   useEffect(() => {
@@ -276,7 +273,6 @@ function AddArticleForm() {
   };
   const navigate = useNavigate();
   const onhandleSubmit = async (data) => {
-
     const formData = new FormData();
     formData.append("title", data?.title);
     formData.append("content", data?.text);
@@ -632,7 +628,7 @@ function AddArticleForm() {
                   requiredInput="*"
                   inputLabel="Article Image/Video:"
                 />
-               
+
                 <>
                   <input
                     accept="image/*"
@@ -740,10 +736,7 @@ function AddArticleForm() {
                   requiredInput="*"
                   inputLabel="Select Sports for team :"
                 />
-                <FormControl
-                  fullWidth
-                  {...register("sportIdd")}
-                >
+                <FormControl fullWidth {...register("sportIdd")}>
                   <Controller
                     name="sportIdd"
                     control={control}

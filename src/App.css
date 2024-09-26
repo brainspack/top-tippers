@@ -125,7 +125,7 @@
 }
 
 #basic-menu .MuiPaper-elevation8 {
-  left: 1108px !important;
+  left: 1345px !important;
 }
 
 .css-6hp17o-MuiList-root-MuiMenu-list {
@@ -239,7 +239,7 @@
 .css-o69gx8-MuiCardMedia-root {
   object-fit: contain !important;
 }
-.logoBox{
+.logoBox {
   height: 50px;
   width: 50px;
 }
@@ -375,19 +375,20 @@ height: 300px !important;
 .accordion-master.collapsed {
   border-top: none; /* Border-top for collapsed state */
 }
-.selectWrappper .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+.selectWrappper
+  .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
   height: 40px !important;
 }
-.secretCompLogoBox{
+.secretCompLogoBox {
   height: 50px !important;
   width: 50px !important;
   position: relative;
 }
-.secretCompLogoBox .logoImg{
+.secretCompLogoBox .logoImg {
   height: 100% !important;
   width: 100% !important;
 }
-.verifiedImg{
+.verifiedImg {
   position: absolute;
   bottom: -10px;
   left: 20px;
