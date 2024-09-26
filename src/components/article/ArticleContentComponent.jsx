@@ -32,14 +32,9 @@ import { RESET_ARTICLE_VALUE } from "../../utils/constant";
 
 const ArticleContent = () => {
   const { reset } = useForm();
-  const { filteredArticleData, selectArticleType } =
-    useSelector(articleDataSelector);
-  console.log(filteredArticleData, "filteredArticleData");
-  console.log(selectArticleType, "selectArticleType");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { articleData } = useSelector(articleDataSelector);
-  console.log(articleData, "articleData");
 
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");

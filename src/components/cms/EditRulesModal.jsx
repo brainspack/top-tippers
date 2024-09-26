@@ -44,19 +44,10 @@ const style = {
 export default function EditRulesModal({
   AddUpdateContentRules,
   AddContentRulesData,
-  //   faqsListTopicData,
 }) {
   const dispatch = useDispatch();
   const { isEditRulesModalVisible, setEditRulesData, setModeForRulesEdit } =
     useSelector(listContentDataSelector);
-  console.log(setEditRulesData, "set");
-  //   const questionIdFaqs = faqsListTopicData?.data?.filter((e) => {
-  //     // console.log(e, "ee");
-  //     if (e.topicname === "FAQs") {
-  //       return e._id;
-  //     }
-  //   });
-  //   console.log(questionIdFaqs, "sett");
 
   const handleFaqsClose = () => {
     // dispatch(getEditRulesData(""));
@@ -73,8 +64,6 @@ export default function EditRulesModal({
   });
 
   const onReset = async (userValue) => {
-    console.log(userValue, "sjkaj");
-
     let result = await Promise.resolve({
       title: userValue?.title,
       content: userValue?.content,
@@ -84,14 +73,10 @@ export default function EditRulesModal({
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
-      console.log(data, "dataaaa");
-
       const result = await AddUpdateContentRules({
         ...data,
         contentId: setEditRulesData[0]?.id,
-        // topicId: questionIdFaqs[0]._id,
       }).unwrap();
       console.log(result, "RESULT_sport");
       if (result?.code === 200) {
@@ -131,8 +116,6 @@ export default function EditRulesModal({
   };
 
   useEffect(() => {
-    // console.log(setEditRulesData[0], "ss");
-
     if (setEditRulesData?.length && setModeForRulesEdit === "edit") {
       onReset(setEditRulesData[0]);
     }

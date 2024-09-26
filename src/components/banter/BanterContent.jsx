@@ -132,8 +132,6 @@ const BanterContent = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data, "data");
-
     const { competition, startDate, endDate } = data;
 
     const formatStartDate = new Date(startDate);
