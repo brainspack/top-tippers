@@ -415,6 +415,7 @@ const SecretCompetitionContent = () => {
     pagination: true,
     rowsPerPage: filterGameRevelListData?.data?.limit,
     selectableRows: false,
+
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <>

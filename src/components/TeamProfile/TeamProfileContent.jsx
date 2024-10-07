@@ -38,15 +38,6 @@ const TeamProfileContent = () => {
     }
     dispatch(updateModalVisibility(true));
   };
-  // useEffect(() => {
-  //   if (teamId) {
-  //     teamDetailsApi({ teamId })
-  //       .unwrap()
-  //       .catch((err) => {
-  //         console.error("Failed to fetch team details:", err);
-  //       });
-  //   }
-  // }, [teamId, teamDetailsApi, updateTeamSuccess]);
   useEffect(() => {
     teamDetailsApi({ teamId });
   }, [teamId, updateTeamSuccess]);
@@ -121,7 +112,9 @@ const TeamProfileContent = () => {
               <Typography gutterBottom variant="h5" component="div">
                 {data.data.teamname}
               </Typography>
-              <Typography variant="h5">{data.data.sport.sportname}</Typography>
+              <Typography variant="h5">
+                {data?.data?.sport?.sportname}
+              </Typography>
               <Box>
                 <EditIcon onClick={handleOpen} style={{ cursor: "pointer" }} />
               </Box>

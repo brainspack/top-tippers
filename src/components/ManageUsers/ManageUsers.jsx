@@ -28,10 +28,13 @@ import {
   MANAGE_USER_OPTIONS,
   MANAGE_USER_TABLE_COLUMNS,
 } from "./manageUserTableColumns";
+import { useDisabledUserByNameMutation } from "../../api/UserDisabled";
+import { useDownloadCsvByNameMutation } from "../../api/DownloadCsv";
 
 const ManageUsers = () => {
   const dispatch = useDispatch();
   const { userData } = useSelector(userDataSelector);
+  console.log(userData, "userData");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -114,6 +117,12 @@ const ManageUsers = () => {
     if (data && data?.data) dispatch(updateUserData(data));
   }, [data, userListSuccess]);
 
+  // disabled user api
+  const [
+    disabledUserApi,
+    { data: userDisabledData, isSuccess: userDisabledSuccess },
+  ] = useDisabledUserByNameMutation();
+
   useEffect(() => {
     const reqParams = {
       search_string: "",
@@ -122,7 +131,23 @@ const ManageUsers = () => {
       sortOrder: "",
     };
     userList(reqParams);
-  }, [deactivateUserSuccess, userDeleteSuccess, verifyUserSuccess]);
+  }, [
+    deactivateUserSuccess,
+    userDeleteSuccess,
+    verifyUserSuccess,
+    userDisabledSuccess,
+  ]);
+
+  const csvData =
+    userData?.data?.map((item) => ({
+      userName: item.name,
+      userEmail: item.user?.email,
+    })) || [];
+
+  const csvHeaders = [
+    { label: "name", key: "userName" },
+    { label: "email", key: "userEmail" },
+  ];
 
   return (
     <>
@@ -147,10 +172,13 @@ const ManageUsers = () => {
                 </Search>
               </Box>
               <DropDownBox>
-                <UserMenu />
+                <UserMenu disabledUserApi={disabledUserApi} />
               </DropDownBox>
             </SearchWrapper>
             <ManageUserTableWrapper>
+              {/* {userDisabledData?.data.length <= 0 ? (
+                ""
+              ) : ( */}
               <MUIDataTable
                 data={userData?.data}
                 columns={MANAGE_USER_TABLE_COLUMNS(
@@ -162,6 +190,7 @@ const ManageUsers = () => {
                 )}
                 options={MANAGE_USER_OPTIONS(userData, userList, isLoading)}
               />
+              {/* )} */}
             </ManageUserTableWrapper>
             <CustomModal
               modal={modal}

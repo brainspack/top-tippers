@@ -9,20 +9,9 @@ export const downloadCsvApi = createApi({
         url: "/api/user/downloadCsv",
         method: "POST",
         headers: { Authorization: `Bearer${localStorage.token}` },
-        responseHandler: async (response) => {
-          if (response.headers.get("Content-Type")?.includes("text/csv")) {
-            return response.text();
-          } else if (
-            response.headers.get("Content-Type")?.includes("application/pdf")
-          ) {
-            return response.blob();
-          } else {
-            return response.json();
-          }
-        },
       }),
     }),
   }),
 });
-export const { useDownlaodCsvByNameMutation } = downloadCsvApi;
+export const { useDownloadCsvByNameMutation } = downloadCsvApi;
 export default downloadCsvApi;
