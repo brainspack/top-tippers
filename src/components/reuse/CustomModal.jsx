@@ -1,4 +1,4 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import {
   CustomCancelButton,
   CustomDeleteButton,
@@ -24,7 +24,7 @@ const CustomModal = (props) => {
   const { modal, closeModal, content, action, heading } = props;
 
   return (
-    <div>
+    <Box>
       <Modal
         open={modal}
         onClose={closeModal}
@@ -74,41 +74,7 @@ const CustomModal = (props) => {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </Box>
   );
 };
 export default CustomModal;
-
-/////////////////////////////////////////////////////////////////////
-{
-  /* <Box>
-              <DeleteForeverIcon sx={{ color: "#f15e5e", fontSize: "90px" }} />
-            </Box>
-            <Box>
-              <Typography>Are You Sure ?</Typography>
-            </Box>
-            <Box>
-              <Typography>{content}</Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                width: "100%",
-              }}
-            >
-              <CustomCancelButton onClick={closeModal}>
-                Cancel
-              </CustomCancelButton>
-              <CustomDeleteButton
-                variant="contained"
-                color="error"
-                onClick={() => {
-                  action();
-                  closeModal();
-                }}
-              >
-                Delete
-              </CustomDeleteButton>
-            </Box> */
-}

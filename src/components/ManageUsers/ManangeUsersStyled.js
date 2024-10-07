@@ -1,13 +1,13 @@
 import { Box, InputBase, Paper, styled, Typography } from "@mui/material";
 
 export const ManageUsersContainer = styled(Box)(() => ({
-  width: "100%",
+  // width: "100%",
   height: "auto",
   border: "1px solid rgba(0, 0, 0, 0.1)",
   borderRadius: "8px",
 }));
 export const ManageUsersWrapper = styled(Box)(() => ({
-  width: "100%",
+  // width: "100%",
   height: "auto",
   padding: "20px",
   display: "flex",

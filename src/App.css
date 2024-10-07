@@ -125,7 +125,10 @@
 }
 
 #basic-menu .MuiPaper-elevation8 {
-  left: 1345px !important;
+  right: 40px !important;
+}
+#user-menu .MuiPaper-elevation8{
+  right: 15px !important;
 }
 
 .css-6hp17o-MuiList-root-MuiMenu-list {

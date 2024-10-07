@@ -4,10 +4,22 @@ export const TipDistributionContainer = styled(Box)(() => ({
   height: "auto",
   width: "100%",
 }));
-export const TipDistributionHeadingBox = styled(Box)(() => ({
+export const TipDistributionHeadingBox = styled(Box)(({ theme }) => ({
   width: "55%",
   display: "flex",
   justifyContent: "space-between",
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+  // [theme.breakpoints.between("sm", "md")]: {
+  //   width: "60%",
+  //   height: "52%",
+  // },
+  // [theme.breakpoints.between("md", "lg")]: {
+  //   width: "50%",
+  //   zIndex: 8,
+  //   height: "70%",
+  // },
 }));
 export const TipDistributionContentContainer = styled(Box)(() => ({
   height: "auto",
@@ -16,13 +28,16 @@ export const TipDistributionContentContainer = styled(Box)(() => ({
   flexDirection: "column",
   alignItems: "center",
 }));
-export const TipDistributionContentBox = styled(Box)(() => ({
+export const TipDistributionContentBox = styled(Box)(({ theme }) => ({
   height: "300px",
   width: "50%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   gap: "10px",
+  [theme.breakpoints.down("sm")]: {
+    width: "60%",
+  },
 }));
 export const TeamsHeadingBox = styled(Box)(() => ({
   height: "10%",

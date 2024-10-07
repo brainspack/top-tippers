@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Skeleton, Pagination } from "@mui/material";
+import { Box, Pagination } from "@mui/material";
 import { useSelector } from "react-redux";
 import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
 const CustomPagination = (props) => {
-  const { total, userList, rowsPerPage, mode, round, sport, pages } = props;
+  const { total, userList, rowsPerPage, mode, round, sport } = props;
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const { selectedSport, currentModule } = useSelector(manageSportSelector);

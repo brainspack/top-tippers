@@ -38,7 +38,7 @@ export const LoginContainerBox = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.between("md", "lg")]: {
     width: "55%",
-    height: "67%",
+    height: "80%",
   },
 }));
 export const LoginContainerWrapper = styled(Box)(({ theme }) => ({
@@ -65,16 +65,16 @@ export const LoginContainer = styled(Paper)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     width: "97%",
     zIndex: 8,
-    height: "60%",
+    height: "55%",
   },
   [theme.breakpoints.between("sm", "md")]: {
     width: "60%",
-    height: "60%",
+    height: "52%",
   },
   [theme.breakpoints.between("md", "lg")]: {
     width: "50%",
     zIndex: 8,
-    height: "60%",
+    height: "70%",
   },
 }));
 export const LoginContainerInnerWrapper = styled(Box)(() => ({
@@ -97,6 +97,9 @@ export const LogoImageBox = styled(Box)(({ theme }) => ({
   backgroundRepeat: "no-repeat",
   [theme.breakpoints.down("sm")]: {
     width: "100%",
+  },
+  [theme.breakpoints.between("sm", "md")]: {
+    width: "86%",
   },
 }));
 export const LoginHeadingWrapper = styled(Box)(() => ({
