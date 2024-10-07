@@ -180,7 +180,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
               sx={{
                 mt: 1,
                 padding: "0 15px 12px",
-                height: "482px",
+                height: "483px",
                 display: "flex",
                 flexDirection: "column",
               }}

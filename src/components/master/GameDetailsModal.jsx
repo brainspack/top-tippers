@@ -21,8 +21,7 @@ import SendIcon from "@mui/icons-material/Send";
 const GameDetailsModal = ({ onClose, handleOpen }) => {
   const { openGameModal, gameModalData, filterdGameData } =
     useSelector(manageGameSelector);
-  // console.log(gameModalData, "gameModalData");
-  // console.log(filterdGameData, "filterdGameData");
+ 
 
   return (
     <div>

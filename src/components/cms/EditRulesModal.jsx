@@ -78,7 +78,6 @@ export default function EditRulesModal({
         ...data,
         contentId: setEditRulesData[0]?.id,
       }).unwrap();
-      console.log(result, "RESULT_sport");
       if (result?.code === 200) {
         dispatch(
           handleNotification({
