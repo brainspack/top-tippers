@@ -56,7 +56,7 @@ export const ModalFromWrapper = styled(Box)(({ theme }) => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 470,
+  width: 474,
   backgroundColor: "white",
   boxShadow: 24,
   height: "590px",
