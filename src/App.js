@@ -1,20 +1,8 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import DashboardComp from "../src/components/Dashboard/Dashboard.jsx";
-import Login from "./components/LoginPage/LoginPage.jsx";
-import { OpenNotification } from "./components/Snackbar.jsx";
+import Routers from "./routers/Routers.js";
 
-function App() {
-  return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<DashboardComp />} />
-      </Routes>
-      <OpenNotification />
-    </div>
-  );
-}
+const App = () => {
+  return <Routers />;
+};
 
 export default App;

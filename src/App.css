@@ -66,6 +66,333 @@
 }
 
 .css-1yo9slo-MuiToolbar-root {
-  width: 98%;
+  width: 100%;
   justify-content: space-between;
+}
+.inputbox input {
+  border: none !important;
+  width: 100%;
+  height: 40px;
+}
+#basic-button {
+  /* background-color: #ddd; */
+  text-transform: none;
+  color: white;
+}
+#basic-button:hover {
+  background-color: #ddd;
+}
+
+.icon-bar {
+  padding: 20px !important;
+}
+
+.favIcon {
+  background-color: #e5a842 !important;
+  /* box-shadow: 0px !important; */
+}
+
+.dashboard-card:hover .favIcon {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+/*================================ selector form control styling =========================== */
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  width: 180px;
+}
+.calender {
+  font-size: 14px !important;
+}
+
+.calender-border .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+/* .active .drawer-nav {
+  background-color: #e5a842;
+} */
+.drawer-routes.active {
+  background-color: #e5a842;
+}
+
+.user-menu {
+  font-size: 14px !important;
+}
+.drawer-routes {
+  text-decoration: none;
+  color: white;
+}
+
+#basic-menu .MuiPaper-elevation8 {
+  right: 40px !important;
+}
+#user-menu .MuiPaper-elevation8{
+  right: 15px !important;
+}
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  padding: 0px !important;
+}
+
+.drawer-nav {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.drawer-nav:hover {
+  background-color: #e5a842 !important;
+  transition: all 300ms ease;
+}
+
+.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper {
+  background-color: #383434;
+}
+
+/*= ======================== drawer top icons styling ========================== */
+
+.drawer-icon-left .MuiSvgIcon-fontSizeMedium:hover {
+  background-color: #e5a842;
+  border-radius: 50%;
+  transition: all 300ms ease;
+}
+
+.MuiSvgIcon-fontSizeMedium {
+  border-radius: 50%;
+}
+
+/* ============= ACCORDIAN STYLIGN ====================== */
+
+.accordion-master {
+  background-color: #383434 !important ;
+  color: white !important;
+}
+
+.accordion-master .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root {
+  min-height: 64px;
+}
+
+.master-subheadings {
+  display: flex;
+}
+
+.MuiAccordion-region .css-15v22id-MuiAccordionDetails-root {
+  padding: 16px 45px 16px 47px !important;
+}
+
+/* =================================== responsive sidebar styling ========================== */
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  background-color: #383434 !important;
+}
+
+.css-rqglhn-MuiTable-root {
+  border-collapse: initial !important;
+}
+.ImageBox img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* =============== ADD SPORT MODAL ==================== */
+
+.close-icon {
+  color: grey;
+  cursor: pointer;
+}
+.close-icon:hover {
+  color: black;
+}
+
+#modal-modal-description .css-lh3xye-MuiFormControl-root {
+  margin: 0px;
+}
+#modal-modal-description .MuiFormControl-root {
+  margin: 0px !important;
+}
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  width: auto !important;
+}
+
+.css-1yuxz6i {
+  margin-top: 8px !important;
+}
+
+#modal-modal-description .css-cxvmgy-MuiInputBase-root-MuiOutlinedInput-root {
+  font-size: 14px;
+  height: 34px;
+}
+
+#modal-modal-description
+  .css-1c63tv3-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  height: 34px;
+}
+#modal-modal-description
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 6.5px 14px;
+  font-size: 14px;
+}
+#modal-modal-description
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 6.5px 14px;
+}
+
+.css-o69gx8-MuiCardMedia-root {
+  object-fit: contain !important;
+}
+.logoBox {
+  height: 50px;
+  width: 50px;
+}
+.logoBox img {
+  height: 100%;
+  width: 100%;
+}
+/* date picker styling */
+
+.customize-date-picker {
+  outline: none;
+  height: 34px;
+  width: 100%;
+  padding-left: 11px;
+}
+
+.react-datepicker__input-container .custom-date-picker {
+  padding-left: 20px !important; /* Adjust padding as needed */
+  box-sizing: border-box;
+}
+
+.css-10vqu3n-MuiFormHelperText-root {
+  margin-top: 0;
+}
+
+.errorMsgParent p {
+  margin-top: 2px;
+  margin-bottom: 5px;
+  height: 15px;
+}
+/* Apply cursor not-allowed to any disabled FormControl */
+.MuiFormControl-root.Mui-disabled {
+  cursor: not-allowed !important;
+  color: red !important;
+}
+
+/* Apply cursor not-allowed to disabled Select component */
+.MuiSelect-root.Mui-disabled,
+.MuiSelect-select.Mui-disabled,
+.MuiOutlinedInput-notchedOutline.Mui-disabled {
+  cursor: not-allowed !important;
+  color: red !important;
+  /* background-color: #f0f0f0;
+  border: 1px solid #ddd; */
+}
+
+/* Apply cursor not-allowed to the notched outline (border) of OutlinedInput when disabled */
+.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  cursor: not-allowed !important;
+  color: red !important;
+  /* background-color: #f0f0f0;
+  border: 1px solid #ddd; */
+}
+
+/* Apply cursor not-allowed to OutlinedInput input area when disabled */
+.MuiOutlinedInput-input.Mui-disabled {
+  cursor: not-allowed !important;
+  color: red !important;
+}
+/* In your CSS file or <style> tag */
+.date-picker-disabled {
+  cursor: not-allowed !important;
+}
+.gameTimePicker .css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root {
+  height: 35px !important;
+  font-size: 14px !important;
+}
+.gameTimePicker .css-i4bv87-MuiSvgIcon-root {
+  height: 20px !important;
+}
+
+/* .gameTimePicker .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+
+  height: 40px !important;
+} */
+.articleTimePicker .css-1nkd6q8-MuiInputBase-root-MuiOutlinedInput-root {
+  height: 35px !important;
+  font-size: 14px !important;
+}
+.articleTimePicker .css-i4bv87-MuiSvgIcon-root {
+  height: 20px !important;
+}
+.articleTimePicker .css-z3c6am-MuiFormControl-root-MuiTextField-root {
+  width: 100% !important;
+}
+
+/* .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root{
+  font-size: 15px !important;
+  top: -9px !important;
+}
+
+.winnerSelect .css-zkuupa-MuiFormLabel-root-MuiInputLabel-root {
+  top: -3px !important;
+}
+.winnerSelect
+  .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  height: 50px !important;
+}
+
+/* time picker in article form */
+
+/* .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0px 0px 0px 14px !important;
+}
+
+.css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root {
+  padding: 0px !important;
+}
+.css-1dba6qr-MuiFormControl-root-MuiTextField-root {
+  width: 100% !important;
+} */
+
+/* @media (max-width: 899.95px) {
+  .tss-1cibt4j-MUIDataTableBodyRow-root-MUIDataTableBody-lastStackedCell
+    td:last-child {
+    border-bottom: 1px solid #e5a842 !important;
+  }
+} */
+
+/* 
+.jodit-container:not(.jodit_inline) .jodit-workplace{
+height: 300px !important;
+} */
+
+.accordion-master {
+  border-top: none; /* Default border-top */
+}
+
+.accordion-master.expanded {
+  border-top: none; /* No border-top when expanded */
+}
+
+.accordion-master.collapsed {
+  border-top: none; /* Border-top for collapsed state */
+}
+.selectWrappper
+  .css-6po23k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  height: 40px !important;
+}
+.secretCompLogoBox {
+  height: 50px !important;
+  width: 50px !important;
+  position: relative;
+}
+.secretCompLogoBox .logoImg {
+  height: 100% !important;
+  width: 100% !important;
+}
+.verifiedImg {
+  position: absolute;
+  bottom: -10px;
+  left: 20px;
 }

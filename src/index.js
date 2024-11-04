@@ -6,8 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./CustomizedTheme/Theme";
 import { BrowserRouter } from "react-router-dom";
+import { theme } from "./customizedTheme/theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
