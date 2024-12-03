@@ -6,7 +6,7 @@ export const versionListApi = createApi({
   endpoints: (builders) => ({
     getVersionListApiByName: builders.mutation({
       query: (body) => ({
-        url: "/api/version/versionList",
+        url: "/version/versionList",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

@@ -52,6 +52,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
       }),
       marginLeft: 0,
     }),
+    overflowY: "auto",
+    height: "calc(100vh - 24px)",
   })
 );
 
@@ -250,6 +252,11 @@ const DashboardComponent = ({ content }) => {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            position: "relative",
+            // height: "fit-content",
+            // height: "100vh",
+            overflow: "hidden",
+            backgroundColor: "#383434",
           },
         }}
         variant="persistent"
@@ -315,7 +322,7 @@ const DashboardComponent = ({ content }) => {
             </NavLink>
           ))}
           <CustomAccordion data={CMS_LIST} accordianHeading={"CMS"} />
-          <CustomAccordion data={ADS_LIST} accordianHeading={"Ad Manage..."} />
+          <CustomAccordion data={ADS_LIST} accordianHeading={"Ad Management"} />
           {ADMIN_LIST_THREE.map((text, index) => (
             <NavLink
               className={"drawer-routes drawer-nav"}

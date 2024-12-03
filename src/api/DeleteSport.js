@@ -6,7 +6,7 @@ export const deleteSportApi = createApi({
   endpoints: (builders) => ({
     deleteSportByName: builders.mutation({
       query: (body) => ({
-        url: "/api/sport/deleteSport",
+        url: "/sports/deleteSport",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

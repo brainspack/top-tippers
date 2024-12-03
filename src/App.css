@@ -127,7 +127,7 @@
 #basic-menu .MuiPaper-elevation8 {
   right: 40px !important;
 }
-#user-menu .MuiPaper-elevation8{
+#user-menu .MuiPaper-elevation8 {
   right: 15px !important;
 }
 
@@ -395,4 +395,12 @@ height: 300px !important;
   position: absolute;
   bottom: -10px;
   left: 20px;
+}
+
+/* Custom Delete Styling */
+
+.delete-close-icon {
+  color: grey;
+  cursor: pointer;
+  font-size: 30px !important;
 }

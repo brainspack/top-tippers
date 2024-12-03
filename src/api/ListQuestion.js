@@ -7,7 +7,7 @@ export const listQuestionApi = createApi({
   endpoints: (builders) => ({
     getListQuestionApiByName: builders.mutation({
       query: (body) => ({
-        url: "api/question/listQuestion",
+        url: "/question/listQuestion",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

@@ -22,6 +22,20 @@ export const SportModalHeading = styled(Typography)(() => ({
   display: "flex",
   justifyContent: "space-between",
 }));
+
+export const DeleteModalHeading = styled(Typography)(() => ({
+  // backgroundColor: "#3834340d",
+  padding: "0px 15px",
+
+  height: "50px",
+  fontSize: "20px",
+  fontWeight: "600",
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+}));
+
 export const BackModalBtn = styled(Button)(() => ({
   outline: "none",
   border: "1px solid black",

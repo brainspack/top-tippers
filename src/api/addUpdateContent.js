@@ -7,7 +7,7 @@ export const addUpdateContentApi = createApi({
   endpoints: (builders) => ({
     getAddUpdateContentApiByName: builders.mutation({
       query: (body) => ({
-        url: "api/content/addupdateContent",
+        url: "/content/addupdateContent",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

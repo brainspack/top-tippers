@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation, NavLink } from "react-router-dom";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
 import { MASTER_SUBHEADINGS } from "../../utils/constant";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
-
 const CustomAccordion = ({ data, accordianHeading }) => {
   const location = useLocation();
   const initialExpanded = data.some((ele) => ele.route === location.pathname)
@@ -42,7 +46,9 @@ const CustomAccordion = ({ data, accordianHeading }) => {
         id="panel1-header"
       >
         <SpaceDashboardIcon sx={{ color: "white", marginRight: "32px" }} />
-        {accordianHeading}
+        <Typography sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {accordianHeading}
+        </Typography>
       </AccordionSummary>
       {data.map((ele) => (
         <NavLink

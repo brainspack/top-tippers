@@ -7,7 +7,7 @@ export const deleteQuestionApi = createApi({
   endpoints: (builders) => ({
     DeleteQuestionApiByName: builders.mutation({
       query: (body) => ({
-        url: "api/question/deleteQuestion",
+        url: "/question/deleteQuestion",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

@@ -151,8 +151,8 @@ const ManageSport = (props) => {
 
   useEffect(() => {
     const reqParams = {
-      search_string: "",
-      page: 0,
+      // search_string: "",
+      page: 1,
       sortValue: "",
       sortOrder: "",
     };

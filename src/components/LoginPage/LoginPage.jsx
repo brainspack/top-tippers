@@ -49,6 +49,9 @@ const Login = (props) => {
     event.preventDefault();
   };
 
+  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
+    useGetAdminLoginByNameMutation();
+
   const {
     register,
     handleSubmit,
@@ -94,8 +97,7 @@ const Login = (props) => {
       navigate("/admin/dashboard");
     }
   };
-  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
-    useGetAdminLoginByNameMutation();
+
   useEffect(() => {
     onHandleNavigate();
   }, [navigate, path]);

@@ -65,7 +65,6 @@ function DashboardContent(props) {
           sortValue: "",
           sortOrder: "",
         };
-
         const [usersResponse, competitionsResponse, sportsResponse] =
           await Promise.all([
             userList(reqParams).unwrap(),
@@ -93,7 +92,6 @@ function DashboardContent(props) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 

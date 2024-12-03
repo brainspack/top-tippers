@@ -42,7 +42,7 @@ const FaqsContent = () => {
 
   const openModal = (id, type) => {
     if (type === "delete") {
-      setModalContent("Do you want to delete this record?");
+      setModalContent("Are you sure you want to delete this record?");
       setAction(() => async () => {
         try {
           const response = await faqsDeleteApi({ questionId: id }).unwrap();

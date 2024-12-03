@@ -7,7 +7,7 @@ export const setInviteAndCompButtonApi = createApi({
   endpoints: (builders) => ({
     getSetInviteAndCompButtonApiByName: builders.mutation({
       query: (body) => ({
-        url: "/api/sport/setInviteAndCompButton",
+        url: "/sports/setInviteAndCompButton",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

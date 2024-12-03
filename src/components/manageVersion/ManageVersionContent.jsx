@@ -114,14 +114,14 @@ const ManageVersionContent = () => {
     dispatch(updateVersionModalVisibility(true));
   };
 
-  useEffect(() => {
-    const reqParams = {
-      page: 0,
-      sortValue: "",
-      sortOrder: "",
-    };
-    versionListApi(reqParams);
-  }, []);
+  // useEffect(() => {
+  //   const reqParams = {
+  //     page: 0,
+  //     sortValue: "",
+  //     sortOrder: "",
+  //   };
+  //   versionListApi(reqParams);
+  // }, []);
 
   useEffect(() => {
     const reqParams = {

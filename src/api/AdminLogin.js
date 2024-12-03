@@ -7,7 +7,7 @@ export const adminLoginApi = createApi({
   endpoints: (builders) => ({
     getAdminLoginByName: builders.mutation({
       query: ({ body }) => ({
-        url: "/api/f/user/userAdminLogin",
+        url: "api/f/user/userAdminLogin",
         method: "POST",
         body: body,
       }),

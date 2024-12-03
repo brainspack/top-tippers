@@ -6,44 +6,79 @@ import {
   DeleteHeading,
 } from "./reuseStyled";
 import WarningIcon from "@mui/icons-material/Warning";
+import CloseIcon from "@mui/icons-material/Close";
+import { DeleteModalHeading } from "../master/masterStyled";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 650,
-  height: 200,
+  width: 550,
+  height: 170,
   bgcolor: "background.paper",
   boxShadow: 24,
   outline: "none",
-  borderRadius: "10px",
+  borderRadius: "4px",
 };
 
 const CustomModal = ({ modal, closeModal, content, action, heading }) => {
   console.log(modal, "MODAL");
   return (
-    <Modal
-      open={modal}
-      onClose={closeModal}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Box
-          sx={{
-            height: 130,
-            width: 550,
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
-            p: 2,
-          }}
-        >
-          <WarningIcon sx={{ color: "#F15E5E", fontSize: "70px" }} />
-          <Box>
-            <DeleteHeading>{heading}</DeleteHeading>
-            <DeleteContent>{content}</DeleteContent>
+    <Box>
+      <Modal
+        open={modal}
+        onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box sx={{}}>
+            <DeleteModalHeading
+              id="modal-modal-title"
+              variant="h6"
+              component="h3"
+            >
+              Delete Confirmation
+              <CloseIcon className="delete-close-icon" onClick={closeModal} />
+            </DeleteModalHeading>
+          </Box>
+          <Box
+            sx={{
+              height: 45,
+              width: 550,
+              display: "flex",
+              alignItems: "center",
+              // justifyContent: "center",
+              gap: "20px",
+              p: 2,
+            }}
+          >
+            <Box>
+              <DeleteContent>{content}</DeleteContent>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: "10px",
+              width: "98%",
+              height: 70,
+            }}
+          >
+            <CustomCancelButton onClick={closeModal}>Cancel</CustomCancelButton>
+            <CustomDeleteButton
+              variant="contained"
+              color="error"
+              onClick={() => {
+                action();
+                closeModal();
+              }}
+            >
+              Delete
+            </CustomDeleteButton>
           </Box>
         </Box>
         <Box
@@ -68,8 +103,8 @@ const CustomModal = ({ modal, closeModal, content, action, heading }) => {
             Delete
           </CustomDeleteButton>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+    </Box>
   );
 };
 
