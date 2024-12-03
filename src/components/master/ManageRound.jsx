@@ -35,7 +35,9 @@ import {
   setSelectedMode,
   updateRoundList,
 } from "../../slices/manageRound/manageRound";
-import AddRoundModal from "./AddRoundModal";
+// import AddRoundModal from "./AddRoundModal";
+import AddRoundModal from "../master/manageRound/AddRoundModal";
+
 import { useAddRoundByNameMutation } from "../../api/AddNewRound";
 import { useUpdateRoundByNameMutation } from "../../api/UpdateRound";
 import { format } from "date-fns";

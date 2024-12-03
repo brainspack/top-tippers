@@ -9,8 +9,7 @@ import {
 } from "../ManageUsers/ManangeUsersStyled";
 import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
 import MUIDataTable from "mui-datatables";
-
-import AddSportModal from "./AddSportModal";
+import AddSportModal from "../master/manageSport/AddSportModal";
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "../reuse/CustomModal";
 import { handleNotification } from "../../slices/Snackbar";

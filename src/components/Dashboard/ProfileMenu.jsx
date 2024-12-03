@@ -4,15 +4,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
-import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 
-export default function BasicMenu() {
-  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
-    useGetAdminLoginByNameMutation();
-
-  // console.log(responseData, "RESPONSEDATA");
-  // console.log(responseData, "RESPONSEDATA");
-
+const BasicMenu = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -27,20 +20,6 @@ export default function BasicMenu() {
     navigate("/admin/");
   };
 
-  const adminName = async (data) => {
-    try {
-      const result = await logIn({ body: data }).unwrap();
-      console.log(result, "RESULT");
-    } catch (err) {
-      console.log(err, "the err");
-    }
-    await responseData;
-  };
-  console.log(responseData, "sjakj");
-
-  useEffect(() => {
-    adminName();
-  }, []);
   return (
     <div>
       <Button
@@ -73,4 +52,5 @@ export default function BasicMenu() {
       </Menu>
     </div>
   );
-}
+};
+export default BasicMenu;

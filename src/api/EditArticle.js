@@ -6,8 +6,8 @@ export const editArticleApi = createApi({
   endpoints: (builders) => ({
     editArticleByName: builders.mutation({
       query: (body) => ({
-        url: "/api//artilce/editeArticle",
-        method: "POST",
+        url: "/api/article/editeArticle",
+        method: "PUT",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },
       }),

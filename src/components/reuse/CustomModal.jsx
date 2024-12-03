@@ -20,61 +20,57 @@ const style = {
   borderRadius: "10px",
 };
 
-const CustomModal = (props) => {
-  const { modal, closeModal, content, action, heading } = props;
-
+const CustomModal = ({ modal, closeModal, content, action, heading }) => {
+  console.log(modal, "MODAL");
   return (
-    <Box>
-      <Modal
-        open={modal}
-        onClose={closeModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box
-            sx={{
-              height: 130,
-              width: 550,
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              p: 2,
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-              <WarningIcon sx={{ color: "#f15e5e", fontSize: "70px" }} />
-            </Box>
-            <Box>
-              <DeleteHeading>{heading}</DeleteHeading>
-              <DeleteContent>{content}</DeleteContent>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              gap: "10px",
-              width: "98%",
-              height: 70,
-            }}
-          >
-            <CustomCancelButton onClick={closeModal}>Cancel</CustomCancelButton>
-            <CustomDeleteButton
-              variant="contained"
-              color="error"
-              onClick={() => {
-                action();
-                closeModal();
-              }}
-            >
-              Delete
-            </CustomDeleteButton>
+    <Modal
+      open={modal}
+      onClose={closeModal}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <Box
+          sx={{
+            height: 130,
+            width: 550,
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            p: 2,
+          }}
+        >
+          <WarningIcon sx={{ color: "#F15E5E", fontSize: "70px" }} />
+          <Box>
+            <DeleteHeading>{heading}</DeleteHeading>
+            <DeleteContent>{content}</DeleteContent>
           </Box>
         </Box>
-      </Modal>
-    </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "10px",
+            width: "98%",
+            height: 70,
+          }}
+        >
+          <CustomCancelButton onClick={closeModal}>Cancel</CustomCancelButton>
+          <CustomDeleteButton
+            variant="contained"
+            color="error"
+            onClick={() => {
+              action && action();
+              closeModal();
+            }}
+          >
+            Delete
+          </CustomDeleteButton>
+        </Box>
+      </Box>
+    </Modal>
   );
 };
+
 export default CustomModal;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import DashboardComponent from "../../components/Dashboard/Dashboard";
-import ManageGame from "../../components/master/ManageGame";
+import ManageGame from "../../components/master/manageGame/ManageGame";
 
 const ManageGameComponent = (props) => {
   return (

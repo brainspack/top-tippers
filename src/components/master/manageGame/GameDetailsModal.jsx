@@ -4,8 +4,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useSelector } from "react-redux";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
+import { userDataSelector } from "../../../slices/userSlice/userSelector";
+import { manageGameSelector } from "../../../slices/manageGame/manageGameSelector";
 import {
   AddSportSubmitBtn,
   BackModalBtn,
@@ -13,7 +13,7 @@ import {
   GameDetailsHeading,
   GameDetailsTitle,
   SportModalHeading,
-} from "./masterStyled";
+} from "../masterStyled";
 import CloseIcon from "@mui/icons-material/Close";
 import { Divider } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
@@ -21,7 +21,6 @@ import SendIcon from "@mui/icons-material/Send";
 const GameDetailsModal = ({ onClose, handleOpen }) => {
   const { openGameModal, gameModalData, filterdGameData } =
     useSelector(manageGameSelector);
- 
 
   return (
     <div>

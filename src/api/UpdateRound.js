@@ -7,7 +7,7 @@ export const updateRoundApi = createApi({
     updateRoundByName: builders.mutation({
       query: ({ body }) => ({
         url: "/api/round/updateRound",
-        method: "POST",
+        method: "PUT",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },
       }),

@@ -41,6 +41,7 @@ export const ARTICLE_TABLE_COLUMNS = (
           },
         }),
         customBodyRender: (value, rowData) => {
+          console.log(value, "INSIDE VALUE");
           return (
             <>
               <ControlledSwitches
@@ -48,8 +49,6 @@ export const ARTICLE_TABLE_COLUMNS = (
                 rowData={rowData}
                 statusChangeApi={articleDeleteApi}
                 deactivateUserData={articleDeleteData}
-
-                //   userList={userList}
               />
             </>
           );
@@ -79,7 +78,10 @@ export const ARTICLE_TABLE_COLUMNS = (
               ></EditIcon>
               <DeleteIcon
                 sx={{ cursor: "pointer", color: "#9f8e8ede" }}
-                onClick={() => openModal(value, "delete")}
+                onClick={() => {
+                  console.log("Opening modal for delete");
+                  openModal(value, "delete");
+                }}
               />
             </Box>
           </>
