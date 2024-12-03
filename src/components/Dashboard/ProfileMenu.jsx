@@ -7,8 +7,8 @@ import { Avatar } from "@mui/material";
 import { useGetAdminLoginByNameMutation } from "../../api/AdminLogin";
 
 export default function BasicMenu() {
-  const [logIn, { data: responseData, isLoading, error, isSuccess }] =
-    useGetAdminLoginByNameMutation();
+  // const [logIn, { data: responseData, isLoading, error, isSuccess }] =
+  //   useGetAdminLoginByNameMutation();
 
   // console.log(responseData, "RESPONSEDATA");
   // console.log(responseData, "RESPONSEDATA");
@@ -27,20 +27,20 @@ export default function BasicMenu() {
     navigate("/admin/");
   };
 
-  const adminName = async (data) => {
-    try {
-      const result = await logIn({ body: data }).unwrap();
-      console.log(result, "RESULT");
-    } catch (err) {
-      console.log(err, "the err");
-    }
-    await responseData;
-  };
-  console.log(responseData, "sjakj");
+  // const adminName = async (data) => {
+  //   try {
+  //     const result = await logIn({ body: data }).unwrap();
+  //     console.log(result, "RESULT");
+  //   } catch (err) {
+  //     console.log(err, "the err");
+  //   }
+  //   await responseData;
+  // };
+  // console.log(responseData, "sjakj");
 
-  useEffect(() => {
-    adminName();
-  }, []);
+  // useEffect(() => {
+  //   adminName();
+  // }, []);
   return (
     <div>
       <Button

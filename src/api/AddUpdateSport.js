@@ -7,7 +7,7 @@ export const addUpdateSportApi = createApi({
   endpoints: (builders) => ({
     getAddUpdateSportApiByName: builders.mutation({
       query: (body) => ({
-        url: "api/sport/addupdateSport",
+        url: "sports/addupdateSport",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

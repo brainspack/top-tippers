@@ -1,14 +1,17 @@
 import { Button, styled, Typography } from "@mui/material";
 
 export const CustomCancelButton = styled(Button)(() => ({
-  backgroundColor: "#C1C1C1 !important",
-  color: "#FFFFFF !important",
+  // backgroundColor: "#C1C1C1 !important",
+  color: "black !important",
   padding: "7px 20px",
   fontSize: "14px !important",
   fontWeight: "550 !important",
+  "&:hover": {
+    backgroundColor: "#c1c1c1ba !important",
+  },
 }));
 export const CustomDeleteButton = styled(Button)(() => ({
-  backgroundColor: "#f15e5e !important",
+  backgroundColor: "#e5a842 !important",
   color: "#FFFFFF !important",
   padding: "7px 20px",
   fontSize: "14px !important",
@@ -19,6 +22,7 @@ export const DeleteHeading = styled(Typography)(() => ({
   fontSize: "25px !important",
 }));
 export const DeleteContent = styled(Typography)(() => ({
+  width: "100%",
   color: "#999 !important",
   fontSize: "20px !important",
 }));

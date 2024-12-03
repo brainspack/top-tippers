@@ -7,7 +7,7 @@ export const getArticleDetailsApi = createApi({
   endpoints: (builders) => ({
     getArticleDetailsApiByName: builders.query({
       query: ({ _id }) => ({
-        url: "api/article/getArticalDetails",
+        url: "api/article/getArticleDetails",
         method: "GET",
         params: {
           _id: _id,

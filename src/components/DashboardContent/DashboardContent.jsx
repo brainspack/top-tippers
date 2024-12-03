@@ -58,64 +58,41 @@ function DashboardContent(props) {
     setDate(event.target.value);
   };
 
-  //   total user
-
-  const TotalUserCount = async (data) => {
-    try {
-      const result = await userList({ body: data }).unwrap();
-      let tempData = [...dataCount];
-      if (result) {
-        tempData[0].countNumber = result.totalCount;
-        setDataCount([...tempData]);
-      }
-    } catch (err) {}
-    await responseData;
-  };
-
-  //   sport
-
-  const TotalUserSport = async (data) => {
-    try {
-      const result = await userListSport({ body: data }).unwrap();
-      let tempData = [...dataCount];
-
-      if (result) {
-        tempData[1].countNumber = result.totalCount;
-        setDataCount([...tempData]);
-      }
-    } catch (err) {
-      console.log(err, "the err");
-    }
-    await listSportData;
-  };
-
-  //   competition
-
-  const TotalUserCompetition = async (data) => {
-    try {
-      const result = await userListCompetition({ body: data }).unwrap();
-      let tempData = [...dataCount];
-
-      if (result) {
-        tempData[2].countNumber = result.totalCount;
-        setDataCount([...tempData]);
-      }
-    } catch (err) {
-      console.log(err, "the err");
-    }
-    await listCompetitionData;
-  };
-
   useEffect(() => {
-    const reqParams = {
-      search_string: "",
-      page: 0,
-      sortValue: "",
-      sortOrder: "",
+    const fetchData = async () => {
+      try {
+        const reqParams = {
+          search_string: "",
+          page: 0,
+          sortValue: "",
+          sortOrder: "",
+        };
+        const [usersResponse, competitionsResponse, sportsResponse] =
+          await Promise.all([
+            userList(reqParams).unwrap(),
+            userListCompetition(reqParams).unwrap(),
+            userListSport(reqParams).unwrap(),
+          ]);
+        const totalUsers = usersResponse?.totalCount || 0;
+        const totalSports = sportsResponse?.totalCount || 0;
+        const totalCompetitions = competitionsResponse?.totalCount || 0;
+        setDataCount((prevData) =>
+          prevData.map((card) => {
+            if (card.heading === "Total Users") {
+              return { ...card, countNumber: totalUsers };
+            } else if (card.heading === "Total Sports") {
+              return { ...card, countNumber: totalSports };
+            } else if (card.heading === "Total Competitions") {
+              return { ...card, countNumber: totalCompetitions };
+            }
+            return card;
+          })
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    TotalUserCount(reqParams);
-    TotalUserSport(reqParams);
-    TotalUserCompetition(reqParams);
+    fetchData();
   }, []);
 
   return (

@@ -108,7 +108,7 @@ const BanterContent = () => {
     const selectedSportId = event.target.value;
 
     const reqParams = {
-      count: "1000",
+      count: 1000,
       sportId: selectedSportId,
     };
     banterCompetitionListApi(reqParams);

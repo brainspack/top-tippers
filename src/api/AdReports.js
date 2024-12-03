@@ -7,7 +7,7 @@ export const adReportApi = createApi({
   endpoints: (builders) => ({
     adReportApiByName: builders.mutation({
       query: (body) => ({
-        url: "/api/ad/adReports",
+        url: "/ad/adReports",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

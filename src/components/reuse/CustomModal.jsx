@@ -6,18 +6,20 @@ import {
   DeleteHeading,
 } from "./reuseStyled";
 import WarningIcon from "@mui/icons-material/Warning";
+import CloseIcon from "@mui/icons-material/Close";
+import { DeleteModalHeading } from "../master/masterStyled";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 650,
-  height: 200,
+  width: 550,
+  height: 170,
   bgcolor: "background.paper",
   boxShadow: 24,
   outline: "none",
-  borderRadius: "10px",
+  borderRadius: "4px",
 };
 
 const CustomModal = (props) => {
@@ -32,21 +34,28 @@ const CustomModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+          <Box sx={{}}>
+            <DeleteModalHeading
+              id="modal-modal-title"
+              variant="h6"
+              component="h3"
+            >
+              Delete Confirmation
+              <CloseIcon className="delete-close-icon" onClick={closeModal} />
+            </DeleteModalHeading>
+          </Box>
           <Box
             sx={{
-              height: 130,
+              height: 45,
               width: 550,
               display: "flex",
               alignItems: "center",
+              // justifyContent: "center",
               gap: "20px",
               p: 2,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-              <WarningIcon sx={{ color: "#f15e5e", fontSize: "70px" }} />
-            </Box>
             <Box>
-              <DeleteHeading>{heading}</DeleteHeading>
               <DeleteContent>{content}</DeleteContent>
             </Box>
           </Box>

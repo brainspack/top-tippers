@@ -6,7 +6,7 @@ export const userListSportApi = createApi({
   endpoints: (builders) => ({
     getUserListSportApiByName: builders.mutation({
       query: (body) => ({
-        url: "/api/sport/listSport",
+        url: "api/sport/listSport",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.getItem("token")}` },

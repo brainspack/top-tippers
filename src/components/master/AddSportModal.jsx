@@ -340,7 +340,7 @@ export default function AddSportModal({ success, dataSupport, apiFunction }) {
                 required={"Stack Value is required"}
                 placeholder={"Stack Value"}
                 mode={"stack"}
-                patternValue={"/^d+$/"}
+                patternValue={"^\\d+$"}
               />
             </Box>
 

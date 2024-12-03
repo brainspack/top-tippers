@@ -7,7 +7,7 @@ export const getDownloadApi = createApi({
   endpoints: (builders) => ({
     getUserGetDownloadByName: builders.query({
       query: ({ compId, startDate, endDate }) => ({
-        url: "api/chat/getdownload",
+        url: "api/competition/getdownload",
         method: "GET",
         params: {
           compId,

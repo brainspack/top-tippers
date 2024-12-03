@@ -6,7 +6,7 @@ export const deleteVersionApi = createApi({
   endpoints: (builders) => ({
     deleteVersionByName: builders.mutation({
       query: (body) => ({
-        url: "/api/version/deleteversion",
+        url: "/version/deleteversion",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.token}` },

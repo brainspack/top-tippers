@@ -6,7 +6,7 @@ export const userListContentApi = createApi({
   endpoints: (builders) => ({
     getUserListContentApiByName: builders.mutation({
       query: (body) => ({
-        url: "api/content/listContent",
+        url: "/content/listContent",
         method: "POST",
         body: body,
         headers: { Authorization: `Bearer${localStorage.getItem("token")}` },
