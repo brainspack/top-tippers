@@ -17,15 +17,15 @@ import {
   AddSportSubmitBtn,
   BackModalBtn,
   SportModalHeading,
-} from "./masterStyled";
-import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import { updateModalVisibility } from "../../slices/userSlice/user";
-import { handleNotification } from "../../slices/Snackbar";
+} from "../masterStyled";
+import CustomAddSportLabel from "../../reuse/CustomAddSportLabel";
+import { userDataSelector } from "../../../slices/userSlice/userSelector";
+import { updateModalVisibility } from "../../../slices/userSlice/user";
+import { handleNotification } from "../../../slices/Snackbar";
 import { Controller, useForm } from "react-hook-form";
-import DateRangePicker from "./DatePickerComponent";
-import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
-import { setSelectedMode } from "../../slices/manageRound/manageRound";
+import DateRangePicker from "../DatePickerComponent";
+import { manageRoundSelector } from "../../../slices/manageRound/manageRoundSelector";
+import { setSelectedMode } from "../../../slices/manageRound/manageRound";
 import AddIcon from "@mui/icons-material/Add";
 
 const AddRoundModal = (props) => {
@@ -71,7 +71,6 @@ const AddRoundModal = (props) => {
       sportId: "",
       startDate: "",
       endDate: "",
-      roundId: "",
     },
     mode: "onChange",
     criteriaMode: "all",
@@ -117,7 +116,6 @@ const AddRoundModal = (props) => {
     const response = await updateRoundApi({
       body: body,
     }).unwrap();
-    console.log(response, "RESPOSNE");
     if (response?.code === 200) {
       dispatch(
         handleNotification({
@@ -145,7 +143,6 @@ const AddRoundModal = (props) => {
       setValue("sportId", initialData[0]?.sportId);
       setValue("startDate", initialData[0]?.startDate);
       setValue("endDate", initialData[0]?.endDate);
-      setValue("roundId", initialData[0]?.roundId);
     } else {
       reset();
     }
@@ -164,7 +161,6 @@ const AddRoundModal = (props) => {
       sportId: "",
       startDate: "",
       endDate: "",
-      roundId: "",
     });
     dispatch(setSelectedMode("round"));
     dispatch(updateModalVisibility(true));

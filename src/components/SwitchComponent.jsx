@@ -11,30 +11,12 @@ const ControlledSwitches = ({ statusChangeApi, value, rowData }) => {
     const userId = rowData.rowData[5];
     const teamId = rowData.rowData[4];
     const articleId = rowData.rowData[2];
-    if (articleId) {
-      const response = await statusChangeApi({
-        _id: articleId,
-        isActive: isChecked,
-      }).unwrap();
-      dispatch(
-        handleNotification({
-          state: true,
-          message: response?.message,
-          severity: response?.code,
-        })
-      );
-    }
-    // if (userId) {
-    //
-    //   if (response?.code === 200) {
-    //     dispatch(
-    //       handleNotification({
-    //         state: true,
-    //         message: response?.message,
-    //         severity: response?.code,
-    //       })
-    //     );
-    //   } else {
+    // if (articleId) {
+    //   const response = await statusChangeApi({
+    //     _id: articleId,
+    //     isActive: isChecked,
+    //   }).unwrap();
+    //   if (response.code === 200) {
     //     dispatch(
     //       handleNotification({
     //         state: true,
@@ -44,17 +26,29 @@ const ControlledSwitches = ({ statusChangeApi, value, rowData }) => {
     //     );
     //   }
     // }
-    // else if (teamId) {
+    if (userId) {
+      const response = await statusChangeApi({ userId: userId }).unwrap();
+      if (response?.code === 200) {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: response?.message,
+            severity: response?.code,
+          })
+        );
+      } else {
+        dispatch(
+          handleNotification({
+            state: true,
+            message: response?.message,
+            severity: response?.code,
+          })
+        );
+      }
+    }
+    //  else {
     //   const response = await statusChangeApi({ teamId: teamId }).unwrap();
     //   if (response?.code === 200) {
-    //     dispatch(
-    //       handleNotification({
-    //         state: true,
-    //         message: response?.message,
-    //         severity: response?.code,
-    //       })
-    //     );
-    //   } else {
     //     dispatch(
     //       handleNotification({
     //         state: true,

@@ -7,7 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
-import AddTeamModal from "../master/AddTeamModal";
+import { PROFILE_IMG_PATH } from "../../utils/constant";
 
 const UserProfileContent = () => {
   const [userDetails, { data, isLoading, error, isSuccess }] =
@@ -27,7 +27,7 @@ const UserProfileContent = () => {
             <CardMedia
               component="img"
               height="140"
-              image={data?.data?.profilePhoto}
+              image={PROFILE_IMG_PATH + data?.data?.profilePhoto}
               alt="profile"
             />
             <CardContent>

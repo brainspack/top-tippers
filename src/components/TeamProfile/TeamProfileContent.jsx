@@ -17,7 +17,7 @@ import {
 } from "../../slices/userSlice/user";
 import { useTeamDetailsByNameMutation } from "../../api/TeamDetail";
 import { userDataSelector } from "../../slices/userSlice/userSelector";
-import AddTeamModal from "../master/AddTeamModal";
+import AddTeamModal from "../master/manageTeam/AddTeamModal";
 import { useUpdateTeamByNameMutation } from "../../api/UpdateTeam";
 import { handleNotification } from "../../slices/Snackbar";
 

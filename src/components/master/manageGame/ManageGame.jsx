@@ -7,38 +7,38 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SendIcon from "@mui/icons-material/Send";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { updateModalVisibility } from "../../slices/userSlice/user";
-import { handleNotification } from "../../slices/Snackbar";
+import { updateModalVisibility } from "../../../slices/userSlice/user";
+import { handleNotification } from "../../../slices/Snackbar";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
   ManageUsersWrapper,
   ManageUserTableWrapper,
   SearchContainer,
-} from "../ManageUsers/ManangeUsersStyled";
-import CustomModal from "../reuse/CustomModal";
-import CustomPagination from "../reuse/CustomPagination";
-import CustomSelect from "./CustomSelect";
-import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
+} from "../../ManageUsers/ManangeUsersStyled";
+import CustomModal from "../../reuse/CustomModal";
+import CustomPagination from "../../reuse/CustomPagination";
+import CustomSelect from "../CustomSelect";
+import { manageSportSelector } from "../../../slices/manageTeam/manageTeamSelector";
 import {
   setCurrentModule,
   updateSportList,
   updateTeamList,
-} from "../../slices/manageTeam/manageTeam";
-import { useListRoundsByNameMutation } from "../../api/ListRounds";
-import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
+} from "../../../slices/manageTeam/manageTeam";
+import { useListRoundsByNameMutation } from "../../../api/ListRounds";
+import { useGetUserListSportApiByNameMutation } from "../../../api/listSport";
 import EditIcon from "@mui/icons-material/Edit";
-import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
+import { manageRoundSelector } from "../../../slices/manageRound/manageRoundSelector";
 import {
   getRoundsDataForEdit,
   setSelectedMode,
   updateRoundList,
-} from "../../slices/manageRound/manageRound";
-import { useDeleteGameByNameMutation } from "../../api/DeleteGame";
-import { useListGamesByNameMutation } from "../../api/ListGames";
-import { useTeamListByNameMutation } from "../../api/GetTeamList";
+} from "../../../slices/manageRound/manageRound";
+import { useDeleteGameByNameMutation } from "../../../api/DeleteGame";
+import { useListGamesByNameMutation } from "../../../api/ListGames";
+import { useTeamListByNameMutation } from "../../../api/GetTeamList";
 import moment from "moment";
-import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
+import { manageGameSelector } from "../../../slices/manageGame/manageGameSelector";
 import {
   getGameDataForEdit,
   setSelectedGameMode,
@@ -49,101 +49,72 @@ import {
   updateGameList,
   updateGameModalData,
   updateGameModalState,
-} from "../../slices/manageGame/manageGame";
-import AddGameModal from "./AddGameModal";
-import { useAddGameByNameMutation } from "../../api/AddNewGame";
-import { useUpdateGameByNameMutation } from "../../api/UpdateGame";
-import { useSendGameNotificationApiByNameMutation } from "../../api/SendGameStartNotification";
+} from "../../../slices/manageGame/manageGame";
+import { useAddGameByNameMutation } from "../../../api/AddNewGame";
+import { useUpdateGameByNameMutation } from "../../../api/UpdateGame";
+import { useSendGameNotificationApiByNameMutation } from "../../../api/SendGameStartNotification";
 import { isDayjs } from "dayjs";
+import AddGameModal from "./AddGameModal";
 import GameDetailsModal from "./GameDetailsModal";
-import { FILTERED_PAYLOAD } from "../../utils/constant";
-import DeclareWinnerModal from "./manageGame/DeclareWinnerModal";
-import { GAME_OPTIONS, GAME_TABLE_COLUMNS } from "./masterTableColumns";
-import { deleteModalSelector } from "../../slices/deleteModal/deleteModalSelector";
-import {
-  updateAction,
-  updateDeleteModalVisibility,
-  updateModalTitle,
-} from "../../slices/deleteModal/deleteModal";
+import { FILTERED_PAYLOAD } from "../../../utils/constant";
+import DeclareWinnerModal from "./DeclareWinnerModal";
+import { GAME_OPTIONS, GAME_TABLE_COLUMNS } from "../masterTableColumns";
+// import { deleteModalSelector } from "../../slices/deleteModal/deleteModalSelector";
+// import {
+//   updateAction,
+//   updateDeleteModalVisibility,
+//   updateModalTitle,
+// } from "../../slices/deleteModal/deleteModal";
 
 const ManageGame = () => {
   const dispatch = useDispatch();
-  const { deleteModalVisibility, modalTitle, action } =
-    useSelector(deleteModalSelector);
+  // const { deleteModalVisibility, modalTitle, action } =
+  //   useSelector(deleteModalSelector);
   const { roundData } = useSelector(manageRoundSelector);
   const { gameData, allTeamData, editGameData, selectedGameMode } =
     useSelector(manageGameSelector);
   const { sportData } = useSelector(manageSportSelector);
 
-  const openModal = (id, type, rowData) => {
+  const [modal, setModal] = useState(false);
+  const [modalTitle, setModalContent] = useState("");
+  const [action, setAction] = useState(() => () => {});
+  const openModal = (id, type) => {
     if (type === "delete") {
-      dispatch(updateModalTitle("Are you sure you want to delete this game."));
-      dispatch(
-        updateAction(() => async () => {
-          try {
-            const response = await userDeleteApi({
-              gameId: id,
-              selectedSeason: "current",
-            }).unwrap();
+      setModalContent("Do you want to delete this record?");
+      setAction(() => async () => {
+        try {
+          const response = await userDeleteApi({
+            gameId: id,
+            selectedSeason: "current",
+          }).unwrap();
 
-            if (response?.code === 200) {
-              dispatch(
-                handleNotification({
-                  state: true,
-                  message: response?.message,
-                  severity: response?.code,
-                })
-              );
-            } else {
-              dispatch(
-                handleNotification({
-                  state: true,
-                  message: response?.message,
-                  severity: response?.code,
-                })
-              );
-            }
-          } catch (error) {}
-        })
-      );
-    } else if (type === "started") {
-      dispatch(updateModalTitle("Are you sure you want to start this game"));
-      dispatch(
-        updateAction(() => async () => {
-          try {
-            const response = await addGameApi({
-              gameId: id,
-              selectedSeason: "current",
-              gameState: "started",
-              sportId: rowData?.rowData[0]._id,
-            }).unwrap();
-
-            if (response?.code === 200) {
-              dispatch(
-                handleNotification({
-                  state: true,
-                  message: response?.message,
-                  severity: response?.code,
-                })
-              );
-            } else {
-              dispatch(
-                handleNotification({
-                  state: true,
-                  message: response?.message,
-                  severity: response?.code,
-                })
-              );
-            }
-          } catch (error) {}
-        })
-      );
+          if (response?.code === 200) {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          } else {
+            dispatch(
+              handleNotification({
+                state: true,
+                message: response?.message,
+                severity: response?.code,
+              })
+            );
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
     }
 
-    dispatch(updateDeleteModalVisibility(true));
+    setModal(true);
   };
   const closeModal = () => {
-    dispatch(updateDeleteModalVisibility(false));
+    setModal(false);
   };
 
   // ROUND API

@@ -14,8 +14,6 @@ function TextInputBox({
   placeholder,
   patternValue,
 }) {
-  console.log(name, "nn");
-
   const formatInput = (value) => {
     if (typeof value === "string") {
       if (!value) return value;

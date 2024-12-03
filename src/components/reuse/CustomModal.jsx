@@ -22,9 +22,8 @@ const style = {
   borderRadius: "4px",
 };
 
-const CustomModal = (props) => {
-  const { modal, closeModal, content, action, heading } = props;
-
+const CustomModal = ({ modal, closeModal, content, action, heading }) => {
+  console.log(modal, "MODAL");
   return (
     <Box>
       <Modal
@@ -82,8 +81,31 @@ const CustomModal = (props) => {
             </CustomDeleteButton>
           </Box>
         </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "10px",
+            width: "98%",
+            height: 70,
+          }}
+        >
+          <CustomCancelButton onClick={closeModal}>Cancel</CustomCancelButton>
+          <CustomDeleteButton
+            variant="contained"
+            color="error"
+            onClick={() => {
+              action && action();
+              closeModal();
+            }}
+          >
+            Delete
+          </CustomDeleteButton>
+        </Box>
       </Modal>
     </Box>
   );
 };
+
 export default CustomModal;

@@ -34,7 +34,6 @@ import { useDownloadCsvByNameMutation } from "../../api/DownloadCsv";
 const ManageUsers = () => {
   const dispatch = useDispatch();
   const { userData } = useSelector(userDataSelector);
-  console.log(userData, "userData");
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
@@ -86,6 +85,8 @@ const ManageUsers = () => {
 
   const [userList, { data, isLoading, isSuccess: userListSuccess }] =
     useGetUserListByNameMutation();
+
+    
 
   const [
     deactivateUser,

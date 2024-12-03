@@ -14,16 +14,16 @@ import {
   AddSportSubmitBtn,
   BackModalBtn,
   SportModalHeading,
-} from "./masterStyled";
-import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import ImageUploader from "./ImageUploader";
+} from "../masterStyled";
+import CustomAddSportLabel from "../../reuse/CustomAddSportLabel";
+import { userDataSelector } from "../../../slices/userSlice/userSelector";
+import ImageUploader from "../ImageUploader";
 import {
   setModalSportName,
   updateModalVisibility,
-} from "../../slices/userSlice/user";
-import { useAddTeamByNameMutation } from "../../api/AddNewTeam";
-import { handleNotification } from "../../slices/Snackbar";
+} from "../../../slices/userSlice/user";
+import { useAddTeamByNameMutation } from "../../../api/AddNewTeam";
+import { handleNotification } from "../../../slices/Snackbar";
 
 const AddTeamModal = (props) => {
   const {

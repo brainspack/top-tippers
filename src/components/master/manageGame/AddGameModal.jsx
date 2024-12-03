@@ -16,20 +16,20 @@ import {
   AddSportSubmitBtn,
   BackModalBtn,
   SportModalHeading,
-} from "./masterStyled";
-import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import { updateModalVisibility } from "../../slices/userSlice/user";
-import { handleNotification } from "../../slices/Snackbar";
+} from "../masterStyled";
+import CustomAddSportLabel from "../../reuse/CustomAddSportLabel";
+import { userDataSelector } from "../../../slices/userSlice/userSelector";
+import { updateModalVisibility } from "../../../slices/userSlice/user";
+import { handleNotification } from "../../../slices/Snackbar";
 import { Controller, useForm } from "react-hook-form";
-import DateRangePicker from "./DatePickerComponent";
-import { manageRoundSelector } from "../../slices/manageRound/manageRoundSelector";
-import { setSelectedMode } from "../../slices/manageRound/manageRound";
+import DateRangePicker from "../DatePickerComponent";
+import { manageRoundSelector } from "../../../slices/manageRound/manageRoundSelector";
+import { setSelectedMode } from "../../../slices/manageRound/manageRound";
 import AddIcon from "@mui/icons-material/Add";
-import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
-import CustomTimePicker from "../reuse/CustomTimePicker";
-import { setSelectedGameMode } from "../../slices/manageGame/manageGame";
-import { manageGameSelector } from "../../slices/manageGame/manageGameSelector";
+import { manageSportSelector } from "../../../slices/manageTeam/manageTeamSelector";
+import CustomTimePicker from "../../reuse/CustomTimePicker";
+import { setSelectedGameMode } from "../../../slices/manageGame/manageGame";
+import { manageGameSelector } from "../../../slices/manageGame/manageGameSelector";
 import moment from "moment";
 
 const AddGameModal = (props) => {

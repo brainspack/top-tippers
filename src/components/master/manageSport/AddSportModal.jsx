@@ -7,7 +7,7 @@ import {
   BackModalBtn,
   ModalFromWrapper,
   SportModalHeading,
-} from "./masterStyled";
+} from "../masterStyled";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -19,25 +19,25 @@ import {
   Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import CustomAddSportLabel from "../reuse/CustomAddSportLabel";
+import CustomAddSportLabel from "../../reuse/CustomAddSportLabel";
 import {
   getUserDataForEdit,
   knowWhereHaveToOpenModal,
   updateModalVisibility,
-} from "../../slices/userSlice/user";
+} from "../../../slices/userSlice/user";
 import { useDispatch, useSelector } from "react-redux";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
-import DateRangePicker from "./DatePickerComponent";
+import { userDataSelector } from "../../../slices/userSlice/userSelector";
+import DateRangePicker from "../DatePickerComponent";
 import { Controller, useForm } from "react-hook-form";
-import { handleNotification } from "../../slices/Snackbar";
+import { handleNotification } from "../../../slices/Snackbar";
 import {
   DEFAULT_SPORT_VALUE,
   RESET_SPORT_VALUE,
   SPORT_TYPE_ITEM,
-} from "../../utils/constant";
-import TextInputBox from "../reuse/TextInputBox";
-import CustomSelectInputBox from "../reuse/CustomSelectInputBox";
-import CustomFormHelperText from "../reuse/CustomFormHelperText";
+} from "../../../utils/constant";
+import TextInputBox from "../../reuse/TextInputBox";
+import CustomSelectInputBox from "../../reuse/CustomSelectInputBox";
+import CustomFormHelperText from "../../reuse/CustomFormHelperText";
 
 // const style = {
 //   position: "absolute",

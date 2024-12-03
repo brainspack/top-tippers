@@ -22,7 +22,7 @@ import {
   setCurrentModule,
   updateSportList,
 } from "../../slices/manageTeam/manageTeam";
-import AddTeamModal from "./AddTeamModal";
+// import AddTeamModal from "./AddTeamModal";
 
 import { useGetUserListCompetitionApiByNameMutation } from "../../api/listCompetition";
 
@@ -36,6 +36,7 @@ import {
   COMPETITION_OPTIONS,
   COMPETITION_TABLE_COLUMNS,
 } from "./masterTableColumns";
+import AddTeamModal from "./manageTeam/AddTeamModal";
 const ManageCompetition = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

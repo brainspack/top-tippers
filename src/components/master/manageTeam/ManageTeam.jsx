@@ -3,55 +3,64 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import { userDataSelector } from "../../slices/userSlice/userSelector";
+import { userDataSelector } from "../../../slices/userSlice/userSelector";
 import {
   setModalSportName,
   updateModalVisibility,
   updateUserData,
-} from "../../slices/userSlice/user";
-import { handleNotification } from "../../slices/Snackbar";
+} from "../../../slices/userSlice/user";
+import { handleNotification } from "../../../slices/Snackbar";
 import {
   ManageUsersContainer,
   ManageUsersHeading,
   ManageUsersWrapper,
   ManageUserTableWrapper,
   SearchContainer,
-} from "../ManageUsers/ManangeUsersStyled";
-import ControlledSwitches from "../SwitchComponent";
-import CustomModal from "../reuse/CustomModal";
-import CustomPagination from "../reuse/CustomPagination";
-import { useTeamListByNameMutation } from "../../api/GetTeamList";
-import { useBlockTeamByNameMutation } from "../../api/BlockTeam";
-import { useDeleteTeamByNameMutation } from "../../api/DeleteTeam";
+} from "../../ManageUsers/ManangeUsersStyled";
+import ControlledSwitches from "../../SwitchComponent";
+import CustomModal from "../../reuse/CustomModal";
+import CustomPagination from "../../reuse/CustomPagination";
+import { useTeamListByNameMutation } from "../../../api/GetTeamList";
+import { useBlockTeamByNameMutation } from "../../../api/BlockTeam";
+import { useDeleteTeamByNameMutation } from "../../../api/DeleteTeam";
 import AddIcon from "@mui/icons-material/Add";
 
-import CustomSelect from "./CustomSelect";
-import { manageSportSelector } from "../../slices/manageTeam/manageTeamSelector";
+import CustomSelect from "../CustomSelect";
+import { manageSportSelector } from "../../../slices/manageTeam/manageTeamSelector";
 import {
   setCurrentModule,
   updateSportList,
   updateTeamList,
-} from "../../slices/manageTeam/manageTeam";
+} from "../../../slices/manageTeam/manageTeam";
+// import AddTeamModal from "./AddTeamModal";
 import AddTeamModal from "./AddTeamModal";
-import { useGetUserListSportApiByNameMutation } from "../../api/listSport";
-import { AddSportBtn } from "./masterStyled";
-import { useAddTeamByNameMutation } from "../../api/AddNewTeam";
-import { TEAM_OPTIONS, TEAM_TABLE_COLUMNS } from "./masterTableColumns";
+import { useGetUserListSportApiByNameMutation } from "../../../api/listSport";
+import { AddSportBtn } from "../masterStyled";
+import { useAddTeamByNameMutation } from "../../../api/AddNewTeam";
+import { TEAM_OPTIONS, TEAM_TABLE_COLUMNS } from "../masterTableColumns";
+// import {
+//   openDeleteModal,
+//   updateAction,
+//   updateDeleteModalVisibility,
+//   updateModalTitle,
+// } from "../../../slices/deleteModal/deleteModal";
+// import { deleteModalSelector } from "../../../slices/deleteModal/deleteModalSelector";
 
 const ManageTeam = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { teamData, sportData } = useSelector(manageSportSelector);
-
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalContent] = useState("");
   const [action, setAction] = useState(() => () => {});
   const openModal = (id, type) => {
+    console.log(type, "TYPE");
     if (type === "delete") {
       setModalContent("Do you want to delete this record?");
       setAction(() => async () => {
         try {
           const response = await userDeleteApi({ teamId: id }).unwrap();
+
           if (response?.code === 200) {
             dispatch(
               handleNotification({
@@ -86,6 +95,7 @@ const ManageTeam = () => {
   const closeModal = () => {
     setModal(false);
   };
+
   const handleOpen = () => {
     dispatch(updateModalVisibility(true));
   };

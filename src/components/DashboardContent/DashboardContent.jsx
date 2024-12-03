@@ -50,8 +50,6 @@ function DashboardContent(props) {
   const [userListSport, { data: listSportData }] =
     useGetUserListSportApiByNameMutation();
 
-  // state of selectors
-
   const [Date, setDate] = React.useState("");
 
   const handleChange = (event) => {
@@ -73,9 +71,11 @@ function DashboardContent(props) {
             userListCompetition(reqParams).unwrap(),
             userListSport(reqParams).unwrap(),
           ]);
+
         const totalUsers = usersResponse?.totalCount || 0;
         const totalSports = sportsResponse?.totalCount || 0;
         const totalCompetitions = competitionsResponse?.totalCount || 0;
+
         setDataCount((prevData) =>
           prevData.map((card) => {
             if (card.heading === "Total Users") {
